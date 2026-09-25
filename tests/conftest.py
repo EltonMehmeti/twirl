@@ -87,3 +87,34 @@ def committed(engine):
     tables = ", ".join(t.name for t in Base.metadata.sorted_tables)
     with engine.begin() as conn:
         conn.execute(text(f"TRUNCATE {tables} RESTART IDENTITY CASCADE"))
+
+
+from tests.factories import make_shop, make_shop_user  # noqa: E402
+from tests.helpers import PASSWORD, login  # noqa: E402
+from twirl.auth.passwords import hash_password  # noqa: E402
+
+_PASSWORD_HASH = hash_password(PASSWORD)
+
+
+@pytest.fixture
+def shop(db):
+    return make_shop(db, name="Bella", slug="bella")
+
+
+@pytest.fixture
+def owner(db, shop):
+    return make_shop_user(db, shop, role="owner", password_hash=_PASSWORD_HASH)
+
+
+@pytest.fixture
+def owner_client(client, owner):
+    login(client, owner.email)
+    return client
+
+
+@pytest.fixture
+def staff_client(app, db, shop):
+    staff = make_shop_user(db, shop, role="staff", password_hash=_PASSWORD_HASH)
+    with TestClient(app) as c:
+        login(c, staff.email)
+        yield c

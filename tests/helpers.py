@@ -14,3 +14,17 @@ def post(client, path: str, data: dict | None = None, files=None):
     return client.post(
         path, data={**(data or {}), "csrf_token": token}, files=files, follow_redirects=False
     )
+
+
+PASSWORD = "pw-123456"
+
+
+def login(client, email: str, password: str = PASSWORD):
+    token = csrf_from(client, "/login")
+    response = client.post(
+        "/login",
+        data={"email": email, "password": password, "csrf_token": token, "next": "/shop"},
+        follow_redirects=False,
+    )
+    assert response.status_code == 303, response.text
+    return response

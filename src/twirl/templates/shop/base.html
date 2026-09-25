@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block nav %}
+<a href="/shop">{{ _("Today") }}</a>
+<a href="/shop/calendar">{{ _("Calendar") }}</a>
+<a href="/shop/walk-in">{{ _("Walk-in") }}</a>
+<a href="/shop/styles">{{ _("Dresses") }}</a>
+{% if ctx.is_owner %}<a href="/shop/settings">{{ _("Settings") }}</a>{% endif %}
+<form method="post" action="/logout" class="inline">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+  <button>{{ _("Log out") }}</button>
+</form>
+{% endblock %}
