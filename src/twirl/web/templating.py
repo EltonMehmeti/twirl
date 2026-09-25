@@ -52,6 +52,11 @@ def _build_env() -> Environment:
 templates = Jinja2Templates(env=_build_env())
 
 
+def _brand(request: Request) -> str:
+    settings = getattr(request.app.state, "settings", None)
+    return settings.brand_name if settings is not None else "Vesha"
+
+
 def render(
     request: Request, name: str, context: dict | None = None, *, status_code: int = 200
 ) -> HTMLResponse:
@@ -59,7 +64,10 @@ def render(
     token = _current.set(get_translations(locale))
     try:
         return templates.TemplateResponse(
-            request, name, {"locale": locale, **(context or {})}, status_code=status_code
+            request,
+            name,
+            {"locale": locale, "brand": _brand(request), **(context or {})},
+            status_code=status_code,
         )
     finally:
         _current.reset(token)

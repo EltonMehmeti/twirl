@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token(request) }}">
-  <title>{% block title %}Twirl{% endblock %}</title>
+  <title>{% block title %}{{ brand }}{% endblock %}</title>
   {% block head %}{% endblock %}
   <link rel="stylesheet" href="{{ url_for('static', path='app.css') }}">
   <script src="{{ url_for('static', path='htmx.min.js') }}" defer></script>
 </head>
 <body hx-headers='{"X-CSRF-Token": "{{ csrf_token(request) }}"}'>
   <header class="topbar">
-    <a href="/" class="brand">Twirl</a>
+    <a href="/" class="brand">{% include "_logo.html" %} {{ brand }}</a>
     <nav>{% block nav %}{% endblock %}</nav>
     <span class="lang">
       <a href="/lang/sq?next={{ request.url.path }}">SQ</a> ·

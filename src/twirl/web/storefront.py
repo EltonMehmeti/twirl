@@ -121,7 +121,7 @@ def confirmation(request: Request, slug: str, ref: str, db: Session = Depends(ge
     )
     if booking is None:
         raise HTTPException(status_code=404)
-    text = quote(f"Përshëndetje! Kam një kërkesë në Twirl me kodin {booking.ref}.")
+    text = quote(f"Përshëndetje! Kam një kërkesë në Vesha me kodin {booking.ref}.")
     return render(
         request,
         "storefront/confirmation.html",

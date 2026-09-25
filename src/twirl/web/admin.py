@@ -171,7 +171,7 @@ def mount_admin(app: FastAPI, db: Database, settings: Settings) -> Admin:
         engine=db.engine,
         session_maker=db.sessionmaker,
         base_url="/admin",
-        title="Twirl admin",
+        title=f"{settings.brand_name} admin",
         authentication_backend=AdminAuth(settings.secret_key, db),
     )
     for view in (

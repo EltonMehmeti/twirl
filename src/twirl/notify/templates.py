@@ -9,9 +9,9 @@ def _new_request_shop(p: dict, base_url: str) -> Rendered:
     pending = p.get("status") == "pending_shop"
     subject = f"Kërkesë e re: {p['style_name']}, masa {p['size']} ({p['ref']})"
     lines = [
-        "Keni një kërkesë të re për rezervim në Twirl."
+        "Keni një kërkesë të re për rezervim në Vesha."
         if pending
-        else "Keni një rezervim të ri në Twirl.",
+        else "Keni një rezervim të ri në Vesha.",
         "",
         f"Fustani: {p['style_name']} ({p['style_code']}), masa {p['size']}, kodi {p['item_code']}",
         f"Data e eventit: {p['event_date']}",

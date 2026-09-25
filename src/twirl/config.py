@@ -11,13 +11,15 @@ class Settings(BaseSettings):
     secret_key: str = "dev-insecure-change-me"
     https_only: bool = False
     base_url: str = "http://localhost:8000"
+    brand_name: str = "Vesha"
+    sms_dev_echo: bool = False
     media_root: Path = Path("var/media")
     run_scheduler: bool = False
     smtp_host: str = ""
     smtp_port: int = 587
     smtp_user: str = ""
     smtp_password: str = ""
-    mail_from: str = "Twirl <no-reply@twirl.local>"
+    mail_from: str = "Vesha <no-reply@vesha.local>"
     telegram_bot_token: str = ""
     telegram_admin_chat_id: str = ""
     trust_cf_connecting_ip: bool = False
