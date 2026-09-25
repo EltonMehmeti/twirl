@@ -1,0 +1,20 @@
+:root { font-family: system-ui, sans-serif; line-height: 1.4; }
+body { margin: 0; }
+main { max-width: 960px; margin: 0 auto; padding: 1rem; }
+.topbar { display: flex; gap: 1rem; align-items: center; padding: .5rem 1rem; border-bottom: 1px solid #ddd; flex-wrap: wrap; }
+.topbar nav { display: flex; gap: .75rem; flex: 1; flex-wrap: wrap; }
+.brand { font-weight: 700; text-decoration: none; }
+label { display: block; margin: .5rem 0; }
+input, select, textarea, button { font: inherit; min-height: 44px; }
+button { padding: 0 1rem; }
+.inline { display: inline; }
+.error { color: #a00; font-weight: 600; }
+.muted { color: #666; }
+.hp { position: absolute; left: -10000px; }
+table { border-collapse: collapse; width: 100%; }
+td, th { border: 1px solid #ddd; padding: .25rem .5rem; text-align: left; }
+.calendar td[data-kind] { background: #e8f0ff; }
+.calendar td[data-kind="block"] { background: #eee; }
+.calendar td[data-status="pending_shop"] { background: #fff4d6; }
+.sizes .taken { color: #999; text-decoration: line-through; }
+.actions form { display: inline-block; margin: .25rem; }
