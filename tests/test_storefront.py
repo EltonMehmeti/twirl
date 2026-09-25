@@ -121,3 +121,15 @@ def test_requests_are_rate_limited(client, db, shop):
 def test_fixed_paths_are_not_shadowed(client):
     assert client.get("/login").status_code == 200
     assert client.get("/healthz").status_code == 200
+
+
+def test_style_page_shows_promise_and_verified_badge(client, db, shop):
+    from twirl import clock as _clock
+
+    style, _, _ = _dress(db, shop)
+    page = client.get(f"/bella/{style.code}").text
+    assert "Si në foto." not in page and "Sallon i verifikuar" not in page
+    shop.terms_accepted_at = shop.verified_at = _clock.now()
+    db.flush()
+    page = client.get(f"/bella/{style.code}").text
+    assert "Si në foto." in page and "Sallon i verifikuar" in page

@@ -1,0 +1,36 @@
+{% extends "layouts/vesha.html" %}
+{% block title %}{{ _("List your clothes") }} · {{ brand }}{% endblock %}
+{% block main %}
+<div class="v-eyebrow">{{ _("First step") }}</div>
+<h1 class="v-title v-title--hero">{{ _("Who is renting the clothes out?") }}</h1>
+<p class="v-lede v-lede--hero">{{ _("Two separate paths. Contact, handover and checks differ, so this choice decides the next questions.") }}</p>
+<form method="post" action="/listo" class="v-choices">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+  <button class="v-choice" type="submit" name="path" value="individual">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7.5V6.2a2.1 2.1 0 1 1 2.1-2.1"/><path d="M12 7.5 3.6 15.6a1 1 0 0 0 .7 1.7h15.4a1 1 0 0 0 .7-1.7L12 7.5Z"/></svg>
+    <div>
+      <div class="v-choice__title">{{ _("My own clothes") }}</div>
+      <p class="v-choice__text">{{ _("A dress I have worn, or two. I list it myself and hand it over myself.") }}</p>
+    </div>
+    <div class="v-choice__facts">
+      <span class="v-fact">{{ _("Paid at handover") }}</span>
+      <span class="v-fact">{{ _("I set the price and the dates") }}</span>
+      <span class="v-fact v-fact--muted">{{ _("Only a phone number") }}</span>
+    </div>
+  </button>
+  <button class="v-choice" type="submit" name="path" value="salon">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 8.5h11l1.3 11.5H5.2L6.5 8.5Z"/><path d="M9.2 8.5V6.8a2.8 2.8 0 0 1 5.6 0v1.7"/></svg>
+    <div>
+      <div class="v-choice__title">{{ _("Salon or business") }}</div>
+      <p class="v-choice__text">{{ _("Numbered stock. Address, opening hours and fittings in the salon.") }}</p>
+    </div>
+    <div class="v-choice__facts">
+      <span class="v-fact">{{ _("Paid in the salon") }}</span>
+      <span class="v-fact">{{ _("Address, hours, WhatsApp") }}</span>
+      <span class="v-fact v-fact--muted">{{ _("Verified badge after a check") }}</span>
+    </div>
+  </button>
+</form>
+<p class="v-note">{{ _("Not sure? Choose “My own clothes”. If you open a salon later, write to us and we move your listings across.") }}</p>
+<p class="v-row"><a class="v-textbtn" href="/login/telefoni">{{ _("Already listing? Log in") }}</a></p>
+{% endblock %}

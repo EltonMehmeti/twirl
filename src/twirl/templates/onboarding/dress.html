@@ -1,0 +1,48 @@
+{% extends "layouts/vesha.html" %}
+{% from "_macros.html" import hint, nav with context %}
+{% block main %}
+<div class="v-eyebrow">{{ _(path_label) }} · {{ _("first item") }}</div>
+<h1 class="v-title">{{ _("The first item") }}</h1>
+<p class="v-lede">{% if is_salon %}{{ _("One piece now, the rest from your dashboard. Photos must show the piece you hand over, not the maker's catalogue.") }}{% else %}{{ _("Three photos do the job: front, side, and a close-up of the embroidery or fabric.") }}{% endif %}</p>
+<div class="v-fields">
+  {% include "onboarding/_photos.html" %}
+</div>
+<form method="post" action="/listo/veshja" novalidate>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+  <div class="v-fields">
+    <fieldset class="v-field{% if errors.category %} v-field--error{% endif %}" style="border:0;padding:0;margin:0">
+      <legend class="v-label">{{ _("Category") }}</legend>
+      <div class="v-chips">
+        {% for value, label in categories %}
+        <label class="v-chip"><input type="radio" name="category" value="{{ value }}"{% if values.category == value %} checked{% endif %}><span>{{ _(label) }}</span></label>
+        {% endfor %}
+      </div>
+      {{ hint(errors, "category", _("One category per listing.")) }}
+    </fieldset>
+    <fieldset class="v-field{% if errors.sizes %} v-field--error{% endif %}" style="border:0;padding:0;margin:0">
+      <legend class="v-label">{% if is_salon %}{{ _("Sizes in stock") }}{% else %}{{ _("Size") }}{% endif %}</legend>
+      <div class="v-chips">
+        {% for value, label in sizes %}
+        <label class="v-chip v-chip--size"><input type="{{ 'checkbox' if is_salon else 'radio' }}" name="sizes" value="{{ value }}"{% if value in values.sizes %} checked{% endif %}><span>{{ _(label) }}</span></label>
+        {% endfor %}
+      </div>
+      {{ hint(errors, "sizes", _("Pick every size the salon physically has.") if is_salon else _("If a tailor altered it, pick the current size.")) }}
+    </fieldset>
+    <div class="v-grid-2{% if is_salon %} v-grid-2--wide-first{% endif %}">
+      <div class="v-field">
+        <label class="v-label" for="v-desc">{{ _("Description") }}</label>
+        <textarea class="v-input" id="v-desc" name="description" maxlength="2000" placeholder="Fustan mbrëmjeje, qëndisje dore në pjesën e sipërme, mëngë tre-të-katërtat. Veshur dy herë.">{{ values.description }}</textarea>
+        <span class="v-hint">{{ _("Fabric, length, how often it was worn. No sales adjectives.") }}</span>
+      </div>
+      {% if is_salon %}
+      <div class="v-field">
+        <label class="v-label" for="v-ref">{{ _("Internal code") }}</label>
+        <input class="v-input" id="v-ref" name="internal_ref" maxlength="20" value="{{ values.internal_ref }}" placeholder="NR-38">
+        <span class="v-hint">{{ _("Optional. Only the salon sees it, on the rack and on orders.") }}</span>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {{ nav("/listo/profili", _("Continue")) }}
+</form>
+{% endblock %}

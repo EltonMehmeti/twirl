@@ -1,0 +1,34 @@
+{% extends "layouts/vesha.html" %}
+{% from "_macros.html" import hint, nav with context %}
+{% block main %}
+<form method="post" action="/listo/permbledhja" novalidate>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+  <div class="v-eyebrow">{{ _(path_label) }}</div>
+  <h1 class="v-title">{{ _("Final check") }}</h1>
+  <p class="v-lede">{{ _("This is what people see. Every line can be changed after publishing too.") }}</p>
+  <div class="v-review">
+    {% for row in rows %}
+    <div class="v-review__row">
+      <div class="v-review__key">{{ _(row.key) }}</div>
+      <div class="v-review__value{% if row.mono %} v-review__value--mono{% endif %}">
+        {%- if row.hours -%}
+          {{ _("Mon–Fri") }} {{ row.hours.weekday_open.strftime("%H:%M") }}–{{ row.hours.weekday_close.strftime("%H:%M") }} · {{ _("Sat") }} {{ row.hours.saturday_open.strftime("%H:%M") }}–{{ row.hours.saturday_close.strftime("%H:%M") }} · {{ _("Sun") }} {{ _("closed") if row.hours.sunday_closed else _("open") }}
+        {%- elif row.busy is defined -%}
+          {% if row.busy %}{% for d in row.busy %}{{ d|date }}{% if not loop.last %}, {% endif %}{% endfor %}{% else %}{{ _("No busy dates") }}{% endif %}
+        {%- elif row.category is defined -%}
+          {{ _(row.category) }} · {{ row.value }}
+        {%- else -%}
+          {{ row.value }}{% if row.verified %} · {{ _("verified") }}{% endif %}
+        {%- endif -%}
+      </div>
+    </div>
+    {% endfor %}
+    <label class="v-check">
+      <input type="checkbox" name="terms" value="yes" required aria-describedby="terms-hint">
+      <span><strong>{{ _("As pictured.") }}</strong> {{ _("The item is handed over as in the photos and in the stated size. If it isn't, the renter may refuse it and owes nothing.") }}</span>
+    </label>
+  </div>
+  <p>{{ hint(errors, "terms", _("This line also shows on the listing page.")) }}</p>
+  {{ nav("/listo/cmimi", _("Publish the item")) }}
+</form>
+{% endblock %}

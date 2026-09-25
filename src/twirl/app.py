@@ -14,7 +14,16 @@ from twirl.notify.senders import LogSender
 from twirl.ratelimit import RateLimiter
 from twirl.scheduler import start_scheduler
 from twirl.storage import LocalStorage
-from twirl.web import auth, health, pages, shop_bookings, shop_catalog, shop_settings, storefront
+from twirl.web import (
+    auth,
+    health,
+    onboarding,
+    pages,
+    shop_bookings,
+    shop_catalog,
+    shop_settings,
+    storefront,
+)
 from twirl.web.admin import mount_admin
 
 STATIC_DIR = Path(__file__).parent / "static"
@@ -66,6 +75,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         shop_settings.router,
     ):
         app.include_router(router)
+    app.include_router(onboarding.router)
     mount_admin(app, app.state.db, settings)
     app.include_router(storefront.router)  # last: /{slug} matches any single segment
     return app

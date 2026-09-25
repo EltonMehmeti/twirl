@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  twirl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-25 23:23+0200\n"
+"POT-Creation-Date: 2026-09-25 23:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: sq\n"
@@ -25,6 +25,11 @@ msgstr "Merr fustanin me qira, pa e blerë."
 #: src/twirl/templates/home.html:4
 msgid "Dress rental shops in Kosovo, bookable online."
 msgstr "Dyqanet e fustaneve me qira në Kosovë, me rezervim online."
+
+#: src/twirl/templates/auth/code.html:3 src/twirl/templates/auth/phone.html:3
+#: src/twirl/templates/layouts/vesha.html:16 src/twirl/templates/onboarding/fork.html:2
+msgid "List your clothes"
+msgstr "Listo veshjen"
 
 #: src/twirl/templates/auth/code.html:3 src/twirl/templates/auth/phone.html:3 src/twirl/web/auth.py:73
 #: src/twirl/web/auth.py:139
@@ -93,7 +98,7 @@ msgstr "Hyr me numrin e telefonit"
 msgid "New here? List your clothes"
 msgstr "I ri këtu? Listo veshjen"
 
-#: src/twirl/templates/auth/phone.html:8
+#: src/twirl/templates/auth/phone.html:8 src/twirl/web/onboarding.py:203
 msgid "Phone number"
 msgstr "Numri i telefonit"
 
@@ -109,10 +114,6 @@ msgstr "Nuk shfaqet publikisht. Shërben për kodin dhe për rezervimet."
 msgid "Send the code"
 msgstr "Dërgo kodin"
 
-#: src/twirl/templates/layouts/vesha.html:16
-msgid "List your clothes"
-msgstr "Listo veshjen"
-
 #: src/twirl/templates/layouts/vesha.html:22 src/twirl/templates/layouts/vesha.html:24
 msgid "Steps"
 msgstr "Hapat"
@@ -121,6 +122,438 @@ msgstr "Hapat"
 msgid "for providers"
 msgstr "për ofruesit"
 
+#: src/twirl/templates/onboarding/_photos.html:2 src/twirl/templates/shop/style_edit.html:17
+#: src/twirl/web/onboarding.py:817
+msgid "Photos"
+msgstr "Fotot"
+
+#: src/twirl/templates/onboarding/_photos.html:9
+msgid "Remove photo"
+msgstr "Hiq foton"
+
+#: src/twirl/templates/onboarding/_photos.html:16
+msgid "Add a photo"
+msgstr "Shto foto"
+
+#: src/twirl/templates/onboarding/_photos.html:22
+msgid "At least 3 photos. Daylight, no filters: the “as pictured” promise is judged against these."
+msgstr "Së paku 3 foto. Dritë dite, pa filtra — garancia «si në foto» matet me këto."
+
+#: src/twirl/templates/onboarding/done.html:4 src/twirl/templates/storefront/style.html:43
+msgid "Verified salon"
+msgstr "Sallon i verifikuar"
+
+#: src/twirl/templates/onboarding/done.html:4
+msgid "Salon check · within 48h"
+msgstr "Verifikimi i sallonit · në shqyrtim 48h"
+
+#: src/twirl/templates/onboarding/done.html:5
+msgid "The salon's listing is live."
+msgstr "Listimi i sallonit është live."
+
+#: src/twirl/templates/onboarding/done.html:6
+msgid "It shows in search on free dates. The “Verified salon” badge is added once we check the address."
+msgstr "Shfaqet në kërkim për datat e lira. Shenja «Sallon i verifikuar» shtohet pasi kontrollohet adresa."
+
+#: src/twirl/templates/onboarding/done.html:8
+msgid "Number verified"
+msgstr "Numri i verifikuar"
+
+#: src/twirl/templates/onboarding/done.html:9
+msgid "Your item is live."
+msgstr "Veshja është live."
+
+#: src/twirl/templates/onboarding/done.html:10
+msgid "It shows in search on free dates. Requests arrive with an exact date."
+msgstr "Shfaqet në kërkim për datat e lira. Kërkesat vijnë me datë të saktë."
+
+#: src/twirl/templates/onboarding/done.html:26
+msgid "We check the salon within 48 hours. Until then the listing is live without the badge."
+msgstr "Verifikimi i sallonit kryhet brenda 48 orëve; deri atje listimi është live pa shenjën."
+
+#: src/twirl/templates/onboarding/done.html:27
+msgid "Bookings reach your dashboard, and customers can message your WhatsApp."
+msgstr "Rezervimet vijnë në panel, dhe klientët të shkruajnë në WhatsApp."
+
+#: src/twirl/templates/onboarding/done.html:28
+msgid "Add the rest of your stock. The internal code keeps the racks tidy."
+msgstr "Shto pjesën tjetër të inventarit — kodi i brendshëm i mban raftet të pastra."
+
+#: src/twirl/templates/onboarding/done.html:30
+msgid "Requests arrive with an exact date. You accept or decline, no reason needed."
+msgstr "Kërkesat vijnë me datë të saktë; pranon ose refuzon pa shpjegim."
+
+#: src/twirl/templates/onboarding/done.html:31
+msgid "The renter pays you at handover. Agree any deposit face to face."
+msgstr "Qiramarrësi të paguan në dorëzim. Kaparen, nëse do, e merrni vesh ballë për ballë."
+
+#: src/twirl/templates/onboarding/done.html:32
+msgid "Take photos before and after each handover. They are the only proof that counts."
+msgstr "Bëj foto para dhe pas dorëzimit — është e vetmja provë që numëron."
+
+#: src/twirl/templates/onboarding/done.html:35
+msgid "Add another item"
+msgstr "Shto veshje tjetër"
+
+#: src/twirl/templates/onboarding/done.html:36
+msgid "Go to my dashboard"
+msgstr "Shko te paneli"
+
+#: src/twirl/templates/onboarding/dress.html:4 src/twirl/templates/onboarding/price.html:6
+msgid "first item"
+msgstr "veshja e parë"
+
+#: src/twirl/templates/onboarding/dress.html:5
+msgid "The first item"
+msgstr "Veshja e parë"
+
+#: src/twirl/templates/onboarding/dress.html:6
+msgid ""
+"One piece now, the rest from your dashboard. Photos must show the piece you hand over, not the "
+"maker's catalogue."
+msgstr ""
+"Një copë tani, pjesa tjetër nga paneli. Fotot e sallonit duhet të tregojnë veshjen që dorëzohet, "
+"jo katalogun e prodhuesit."
+
+#: src/twirl/templates/onboarding/dress.html:6
+msgid "Three photos do the job: front, side, and a close-up of the embroidery or fabric."
+msgstr "Tri foto e mbyllin punën: përpara, anash, dhe një detaj i qëndisjes ose i pëlhurës."
+
+#: src/twirl/templates/onboarding/dress.html:14
+msgid "Category"
+msgstr "Kategoria"
+
+#: src/twirl/templates/onboarding/dress.html:20
+msgid "One category per listing."
+msgstr "Një kategori për listim."
+
+#: src/twirl/templates/onboarding/dress.html:23
+msgid "Sizes in stock"
+msgstr "Madhësitë në stok"
+
+#: src/twirl/templates/onboarding/dress.html:23 src/twirl/templates/shop/style_edit.html:29
+#: src/twirl/templates/shop/style_edit.html:63 src/twirl/templates/storefront/style.html:30
+msgid "Size"
+msgstr "Masa"
+
+#: src/twirl/templates/onboarding/dress.html:29
+msgid "Pick every size the salon physically has."
+msgstr "Zgjidh çdo madhësi që salloni e ka fizikisht."
+
+#: src/twirl/templates/onboarding/dress.html:29
+msgid "If a tailor altered it, pick the current size."
+msgstr "Nëse është ndryshuar nga rrobaqepësi, zgjidh madhësinë e tanishme."
+
+#: src/twirl/templates/onboarding/dress.html:33 src/twirl/templates/shop/_style_fields.html:5
+msgid "Description"
+msgstr "Përshkrimi"
+
+#: src/twirl/templates/onboarding/dress.html:35
+msgid "Fabric, length, how often it was worn. No sales adjectives."
+msgstr "Materiali, gjatësia, sa herë është veshur. Pa mbiemra reklamues."
+
+#: src/twirl/templates/onboarding/dress.html:39
+msgid "Internal code"
+msgstr "Kodi i brendshëm"
+
+#: src/twirl/templates/onboarding/dress.html:41
+msgid "Optional. Only the salon sees it, on the rack and on orders."
+msgstr "Opsionale. Shfaqet vetëm për sallonin, në raft dhe në porosi."
+
+#: src/twirl/templates/onboarding/dress.html:46 src/twirl/templates/onboarding/profile.html:79
+msgid "Continue"
+msgstr "Vazhdo"
+
+#: src/twirl/templates/onboarding/fork.html:4
+msgid "First step"
+msgstr "Hapi i parë"
+
+#: src/twirl/templates/onboarding/fork.html:5
+msgid "Who is renting the clothes out?"
+msgstr "Kush e jep veshjen me qera?"
+
+#: src/twirl/templates/onboarding/fork.html:6
+msgid ""
+"Two separate paths. Contact, handover and checks differ, so this choice decides the next "
+"questions."
+msgstr ""
+"Dy rrugë të ndara. Kontakti, dorëzimi dhe verifikimi ndryshojnë — zgjedhja e tashme përcakton "
+"pyetjet e radhës."
+
+#: src/twirl/templates/onboarding/fork.html:12 src/twirl/web/onboarding.py:242
+#: src/twirl/web/onboarding.py:297 src/twirl/web/onboarding.py:363
+msgid "My own clothes"
+msgstr "Veshjet e mia"
+
+#: src/twirl/templates/onboarding/fork.html:13
+msgid "A dress I have worn, or two. I list it myself and hand it over myself."
+msgstr "Një fustan që e kam veshur, ose dy. E listoj vetë, e dorëzoj vetë."
+
+#: src/twirl/templates/onboarding/fork.html:16
+msgid "Paid at handover"
+msgstr "Pagesa në dorëzim"
+
+#: src/twirl/templates/onboarding/fork.html:17
+msgid "I set the price and the dates"
+msgstr "Çmimin dhe datat i caktoj unë"
+
+#: src/twirl/templates/onboarding/fork.html:18
+msgid "Only a phone number"
+msgstr "Vetëm numri i telefonit"
+
+#: src/twirl/templates/onboarding/fork.html:24 src/twirl/web/onboarding.py:242
+#: src/twirl/web/onboarding.py:297 src/twirl/web/onboarding.py:363
+msgid "Salon or business"
+msgstr "Sallon ose biznes"
+
+#: src/twirl/templates/onboarding/fork.html:25
+msgid "Numbered stock. Address, opening hours and fittings in the salon."
+msgstr "Inventar me numër. Adresa, orari dhe provat në sallon."
+
+#: src/twirl/templates/onboarding/fork.html:28
+msgid "Paid in the salon"
+msgstr "Pagesa në sallon"
+
+#: src/twirl/templates/onboarding/fork.html:29
+msgid "Address, hours, WhatsApp"
+msgstr "Adresa, orari, WhatsApp"
+
+#: src/twirl/templates/onboarding/fork.html:30
+msgid "Verified badge after a check"
+msgstr "Shenja e verifikimit pas kontrollit"
+
+#: src/twirl/templates/onboarding/fork.html:34
+msgid ""
+"Not sure? Choose “My own clothes”. If you open a salon later, write to us and we move your "
+"listings across."
+msgstr ""
+"Nuk ke vendosur? Zgjidh «Veshjet e mia». Nëse hap sallon më vonë, na shkruaj dhe i kalojmë "
+"listimet."
+
+#: src/twirl/templates/onboarding/fork.html:35
+msgid "Already listing? Log in"
+msgstr "Ke listime? Hyr"
+
+#: src/twirl/templates/onboarding/price.html:7 src/twirl/web/onboarding.py:206
+msgid "Price and dates"
+msgstr "Çmimi dhe datat"
+
+#: src/twirl/templates/onboarding/price.html:8
+msgid "Set the rent and mark the days the item can't go out. Every other day shows as free in search."
+msgstr ""
+"Cakto qeranë dhe shëno ditët kur veshja nuk mund të merret. Të tjerat shfaqen si të lira në "
+"kërkim."
+
+#: src/twirl/templates/onboarding/price.html:12
+msgid "Rent per booking (€)"
+msgstr "Qeraja për rezervim (€)"
+
+#: src/twirl/templates/onboarding/price.html:14
+msgid "Pickup two days before the event, return the day after. Cleaning included."
+msgstr "Merret dy ditë para eventit, kthehet një ditë pas. Pastrimi përfshihet."
+
+#: src/twirl/templates/onboarding/price.html:17
+msgid "Payment"
+msgstr "Pagesa"
+
+#: src/twirl/templates/onboarding/price.html:18
+msgid "In the salon"
+msgstr "Në sallon"
+
+#: src/twirl/templates/onboarding/price.html:18
+msgid "At handover"
+msgstr "Në dorëzim"
+
+#: src/twirl/templates/onboarding/price.html:19
+msgid "The customer reserves online and pays in the salon, as today. You keep your own deposit rules."
+msgstr "Klienti rezervon online dhe paguan në sallon, si sot. Rregullat e kapares mbeten tuajat."
+
+#: src/twirl/templates/onboarding/price.html:19
+msgid "The renter pays you when picking the item up. Agree any deposit between you."
+msgstr "Qiramarrësi të paguan kur e merr veshjen. Kaparen, nëse do, e caktoni mes jush."
+
+#: src/twirl/templates/onboarding/price.html:23 src/twirl/web/onboarding.py:819
+msgid "Busy dates"
+msgstr "Datat e zëna"
+
+#: src/twirl/templates/onboarding/price.html:36
+msgid "Free"
+msgstr "E lirë"
+
+#: src/twirl/templates/onboarding/price.html:36
+msgid "Busy"
+msgstr "E zënë"
+
+#: src/twirl/templates/onboarding/price.html:40
+msgid "Tap the days when the item can't be picked up. You can change them any time."
+msgstr "Prek datat kur veshja nuk mund të merret. Mund t'i ndryshosh kurdo."
+
+#: src/twirl/templates/onboarding/price.html:43
+msgid "See the summary"
+msgstr "Shiko përmbledhjen"
+
+#: src/twirl/templates/onboarding/profile.html:8
+msgid "The salon, address and hours"
+msgstr "Salloni, adresa, orari"
+
+#: src/twirl/templates/onboarding/profile.html:9
+msgid ""
+"This is what customers check before they set off: where you are and when you are open. The hours "
+"show on every listing."
+msgstr ""
+"Kjo është pjesa që kërkojnë klientët përpara se të nisen: ku je dhe kur hapesh. Orari shfaqet në "
+"çdo listim."
+
+#: src/twirl/templates/onboarding/profile.html:12
+msgid "Salon name"
+msgstr "Emri i sallonit"
+
+#: src/twirl/templates/onboarding/profile.html:14
+msgid "The name on your sign and on your receipts."
+msgstr "Emri që shkruhet në tabelë dhe në fatura."
+
+#: src/twirl/templates/onboarding/profile.html:18
+msgid "Street and number"
+msgstr "Rruga dhe numri"
+
+#: src/twirl/templates/onboarding/profile.html:20
+msgid "Shown on your listings so customers can find you."
+msgstr "Shfaqet në listime që klientët të të gjejnë."
+
+#: src/twirl/templates/onboarding/profile.html:23 src/twirl/templates/onboarding/profile.html:70
+#: src/twirl/web/onboarding.py:801
+msgid "City"
+msgstr "Qyteti"
+
+#: src/twirl/templates/onboarding/profile.html:25 src/twirl/templates/onboarding/profile.html:72
+msgid "Choose the city"
+msgstr "Zgjidh qytetin"
+
+#: src/twirl/templates/onboarding/profile.html:28 src/twirl/templates/onboarding/profile.html:75
+msgid "Search is filtered by city."
+msgstr "Kërkimi filtrohet me qytetin."
+
+#: src/twirl/templates/onboarding/profile.html:32
+msgid "Salon WhatsApp"
+msgstr "WhatsApp i sallonit"
+
+#: src/twirl/templates/onboarding/profile.html:34
+msgid "The “Message on WhatsApp” button opens this number."
+msgstr "Butoni «Shkruaj në WhatsApp» hapet drejt këtij numri."
+
+#: src/twirl/templates/onboarding/profile.html:37
+msgid "Opening hours"
+msgstr "Orari"
+
+#: src/twirl/templates/onboarding/profile.html:39 src/twirl/templates/onboarding/review.html:15
+msgid "Mon–Fri"
+msgstr "Hënë–Premte"
+
+#: src/twirl/templates/onboarding/profile.html:40
+msgid "Mon–Fri opens"
+msgstr "Hënë–Premte hapet"
+
+#: src/twirl/templates/onboarding/profile.html:42
+msgid "Mon–Fri closes"
+msgstr "Hënë–Premte mbyllet"
+
+#: src/twirl/templates/onboarding/profile.html:45 src/twirl/web/shop_settings.py:26
+msgid "Saturday"
+msgstr "E shtunë"
+
+#: src/twirl/templates/onboarding/profile.html:46
+msgid "Saturday opens"
+msgstr "E shtunë hapet"
+
+#: src/twirl/templates/onboarding/profile.html:48
+msgid "Saturday closes"
+msgstr "E shtunë mbyllet"
+
+#: src/twirl/templates/onboarding/profile.html:51 src/twirl/templates/onboarding/profile.html:52
+#: src/twirl/web/shop_settings.py:27
+msgid "Sunday"
+msgstr "E diel"
+
+#: src/twirl/templates/onboarding/profile.html:53
+msgid "Open"
+msgstr "Hapur"
+
+#: src/twirl/templates/onboarding/profile.html:54
+msgid "Closed"
+msgstr "Mbyllur"
+
+#: src/twirl/templates/onboarding/profile.html:57
+msgid "Fittings are accepted within these hours. On Sundays the salon keeps Saturday's hours."
+msgstr "Provat pranohen brenda orarit. Të dielën vlen orari i së shtunës."
+
+#: src/twirl/templates/onboarding/profile.html:61
+msgid "Who you are and where"
+msgstr "Kush je dhe ku je"
+
+#: src/twirl/templates/onboarding/profile.html:62
+msgid "Only your name and city are public. Your address is shared only after a booking is confirmed."
+msgstr "Publikohen vetëm emri dhe qyteti. Adresa jepet vetëm pasi rezervimi konfirmohet."
+
+#: src/twirl/templates/onboarding/profile.html:65
+msgid "First and last name"
+msgstr "Emri dhe mbiemri"
+
+#: src/twirl/templates/onboarding/profile.html:67
+msgid "Shown as the owner's name on the listing."
+msgstr "Shfaqet si emri i pronares në listim."
+
+#: src/twirl/templates/onboarding/review.html:7
+msgid "Final check"
+msgstr "Kontrolli i fundit"
+
+#: src/twirl/templates/onboarding/review.html:8
+msgid "This is what people see. Every line can be changed after publishing too."
+msgstr "Kjo është ajo që shihet publikisht. Çdo rresht mund të ndryshohet edhe pas publikimit."
+
+#: src/twirl/templates/onboarding/review.html:15 src/twirl/web/onboarding.py:85
+msgid "Sat"
+msgstr "Sht"
+
+#: src/twirl/templates/onboarding/review.html:15 src/twirl/web/onboarding.py:85
+msgid "Sun"
+msgstr "Die"
+
+#: src/twirl/templates/onboarding/review.html:15
+msgid "closed"
+msgstr "mbyllur"
+
+#: src/twirl/templates/onboarding/review.html:15
+msgid "open"
+msgstr "hapur"
+
+#: src/twirl/templates/onboarding/review.html:17
+msgid "No busy dates"
+msgstr "Asnjë datë e zënë"
+
+#: src/twirl/templates/onboarding/review.html:21
+msgid "verified"
+msgstr "i verifikuar"
+
+#: src/twirl/templates/onboarding/review.html:28 src/twirl/templates/storefront/style.html:40
+msgid "As pictured."
+msgstr "Si në foto."
+
+#: src/twirl/templates/onboarding/review.html:28 src/twirl/templates/storefront/style.html:40
+msgid ""
+"The item is handed over as in the photos and in the stated size. If it isn't, the renter may "
+"refuse it and owes nothing."
+msgstr ""
+"Veshja dorëzohet si në foto dhe në masën e shkruar. Nëse nuk është, qiramarrësi mund ta refuzojë "
+"pa paguar asgjë."
+
+#: src/twirl/templates/onboarding/review.html:31
+msgid "This line also shows on the listing page."
+msgstr "Ky rresht shfaqet edhe në faqen e listimit."
+
+#: src/twirl/templates/onboarding/review.html:32
+msgid "Publish the item"
+msgstr "Publiko veshjen"
+
 #: src/twirl/templates/shop/_style_fields.html:1 src/twirl/templates/shop/styles.html:6
 msgid "Name"
 msgstr "Emri"
@@ -128,10 +561,6 @@ msgstr "Emri"
 #: src/twirl/templates/shop/_style_fields.html:3
 msgid "Price per rental (€)"
 msgstr "Çmimi për një qira (€)"
-
-#: src/twirl/templates/shop/_style_fields.html:5
-msgid "Description"
-msgstr "Përshkrimi"
 
 #: src/twirl/templates/shop/_style_fields.html:6
 msgid "Occasions"
@@ -305,10 +734,6 @@ msgstr "Shto mbyllje"
 msgid "All dresses"
 msgstr "Të gjitha fustanet"
 
-#: src/twirl/templates/shop/style_edit.html:17
-msgid "Photos"
-msgstr "Fotot"
-
 #: src/twirl/templates/shop/style_edit.html:24
 msgid "Upload photos"
 msgstr "Ngarkoni fotot"
@@ -320,11 +745,6 @@ msgstr "Fustanet fizike"
 #: src/twirl/templates/shop/style_edit.html:29
 msgid "Code"
 msgstr "Kodi"
-
-#: src/twirl/templates/shop/style_edit.html:29 src/twirl/templates/shop/style_edit.html:63
-#: src/twirl/templates/storefront/style.html:30
-msgid "Size"
-msgstr "Masa"
 
 #: src/twirl/templates/shop/style_edit.html:29
 msgid "Status"
@@ -459,6 +879,7 @@ msgid "Customer name"
 msgstr "Emri i klientit"
 
 #: src/twirl/templates/shop/walk_in.html:27 src/twirl/templates/storefront/style.html:35
+#: src/twirl/web/onboarding.py:804
 msgid "Phone"
 msgstr "Telefoni"
 
@@ -510,7 +931,7 @@ msgstr "Çmimi, paguhet në dyqan"
 msgid "Shop"
 msgstr "Dyqani"
 
-#: src/twirl/templates/storefront/confirmation.html:14 src/twirl/templates/storefront/style.html:44
+#: src/twirl/templates/storefront/confirmation.html:14 src/twirl/templates/storefront/style.html:45
 msgid "Shop terms"
 msgstr "Kushtet e dyqanit"
 
@@ -566,15 +987,15 @@ msgstr "Email ose fjalëkalim i gabuar."
 msgid "We send a six-digit code to the number you listed with."
 msgstr "Dërgojmë një kod me gjashtë numra në numrin me të cilin je regjistruar."
 
-#: src/twirl/web/auth.py:114
+#: src/twirl/web/auth.py:114 src/twirl/web/onboarding.py:102
 msgid "Write the number like 044 123 456."
 msgstr "Shkruaj numrin si 044 123 456."
 
-#: src/twirl/web/auth.py:125
+#: src/twirl/web/auth.py:125 src/twirl/web/onboarding.py:342
 msgid "Too many codes for this number. Try again in an hour."
 msgstr "Shumë kode për këtë numër. Provo përsëri pas një ore."
 
-#: src/twirl/web/auth.py:190
+#: src/twirl/web/auth.py:190 src/twirl/web/onboarding.py:103
 msgid "That code is not right or has expired."
 msgstr "Ky kod nuk është i saktë ose ka skaduar."
 
@@ -658,6 +1079,263 @@ msgstr "Dyqani është i mbyllur rreth asaj date."
 msgid "Those dates do not work for this shop."
 msgstr "Këto data nuk funksionojnë për këtë dyqan."
 
+#: src/twirl/web/onboarding.py:77 src/twirl/web/shop_catalog.py:35
+msgid "Evening"
+msgstr "Mbrëmje"
+
+#: src/twirl/web/onboarding.py:78
+msgid "Bridal"
+msgstr "Nusërie"
+
+#: src/twirl/web/onboarding.py:79 src/twirl/web/shop_catalog.py:32
+msgid "Engagement"
+msgstr "Fejesë"
+
+#: src/twirl/web/onboarding.py:80
+msgid "Men's suit"
+msgstr "Kostum burrash"
+
+#: src/twirl/web/onboarding.py:81
+msgid "Traditional"
+msgstr "Tradicionale"
+
+#: src/twirl/web/onboarding.py:84
+msgid "Front"
+msgstr "Përpara"
+
+#: src/twirl/web/onboarding.py:84
+msgid "Side"
+msgstr "Anash"
+
+#: src/twirl/web/onboarding.py:84
+msgid "Detail"
+msgstr "Detaji"
+
+#: src/twirl/web/onboarding.py:85
+msgid "Mon"
+msgstr "Hën"
+
+#: src/twirl/web/onboarding.py:85
+msgid "Tue"
+msgstr "Mar"
+
+#: src/twirl/web/onboarding.py:85
+msgid "Wed"
+msgstr "Mër"
+
+#: src/twirl/web/onboarding.py:85
+msgid "Thu"
+msgstr "Enj"
+
+#: src/twirl/web/onboarding.py:85
+msgid "Fri"
+msgstr "Pre"
+
+#: src/twirl/web/onboarding.py:87
+msgid "January"
+msgstr "Janar"
+
+#: src/twirl/web/onboarding.py:88
+msgid "February"
+msgstr "Shkurt"
+
+#: src/twirl/web/onboarding.py:89
+msgid "March"
+msgstr "Mars"
+
+#: src/twirl/web/onboarding.py:90
+msgid "April"
+msgstr "Prill"
+
+#: src/twirl/web/onboarding.py:91
+msgid "May"
+msgstr "Maj"
+
+#: src/twirl/web/onboarding.py:92
+msgid "June"
+msgstr "Qershor"
+
+#: src/twirl/web/onboarding.py:93
+msgid "July"
+msgstr "Korrik"
+
+#: src/twirl/web/onboarding.py:94
+msgid "August"
+msgstr "Gusht"
+
+#: src/twirl/web/onboarding.py:95
+msgid "September"
+msgstr "Shtator"
+
+#: src/twirl/web/onboarding.py:96
+msgid "October"
+msgstr "Tetor"
+
+#: src/twirl/web/onboarding.py:97
+msgid "November"
+msgstr "Nëntor"
+
+#: src/twirl/web/onboarding.py:98
+msgid "December"
+msgstr "Dhjetor"
+
+#: src/twirl/web/onboarding.py:104
+msgid "Write your first and last name."
+msgstr "Shkruaj emrin dhe mbiemrin."
+
+#: src/twirl/web/onboarding.py:105
+msgid "Write the name as it appears on your sign."
+msgstr "Shkruaj emrin si në tabelë."
+
+#: src/twirl/web/onboarding.py:106
+msgid "Write the street and number."
+msgstr "Shkruaj rrugën dhe numrin."
+
+#: src/twirl/web/onboarding.py:107
+msgid "Choose the city."
+msgstr "Zgjidh qytetin."
+
+#: src/twirl/web/onboarding.py:108
+msgid "Write the WhatsApp number like 044 123 456."
+msgstr "Shkruaj numrin e WhatsApp si 044 123 456."
+
+#: src/twirl/web/onboarding.py:109
+msgid "Closing time must be after opening time."
+msgstr "Ora e mbylljes duhet të jetë pas orës së hapjes."
+
+#: src/twirl/web/onboarding.py:110
+msgid "Add at least 3 photos: front, side and a detail."
+msgstr "Duhen së paku 3 foto: përpara, anash, detaji."
+
+#: src/twirl/web/onboarding.py:111
+msgid "Choose a category."
+msgstr "Zgjidh një kategori."
+
+#: src/twirl/web/onboarding.py:112
+msgid "Choose the size."
+msgstr "Zgjidh madhësinë."
+
+#: src/twirl/web/onboarding.py:113
+msgid "Choose at least one size."
+msgstr "Zgjidh së paku një madhësi."
+
+#: src/twirl/web/onboarding.py:114
+msgid "Write the rent in euros, digits only, from 5 to 2000."
+msgstr "Shkruaj qeranë në euro, vetëm numra — nga 5 deri 2000."
+
+#: src/twirl/web/onboarding.py:115
+msgid "Confirm the promise before publishing."
+msgstr "Konfirmo garancinë para publikimit."
+
+#: src/twirl/web/onboarding.py:120
+msgid "Made to measure"
+msgstr "Me masë"
+
+#: src/twirl/web/onboarding.py:204
+msgid "Salon and hours"
+msgstr "Salloni dhe orari"
+
+#: src/twirl/web/onboarding.py:204
+msgid "Profile"
+msgstr "Profili"
+
+#: src/twirl/web/onboarding.py:205
+msgid "First item"
+msgstr "Veshja e parë"
+
+#: src/twirl/web/onboarding.py:207
+msgid "Publishing"
+msgstr "Publikimi"
+
+#: src/twirl/web/onboarding.py:231
+msgid "How renters pay"
+msgstr "Si paguhet"
+
+#: src/twirl/web/onboarding.py:233
+msgid "Customers pay in the salon, as they do today. Online payment comes later."
+msgstr "Klientët paguajnë në sallon, si sot. Pagesa online vjen më vonë."
+
+#: src/twirl/web/onboarding.py:236
+msgid "The renter pays you when they pick the item up. Vesha takes no payment for now."
+msgstr "Qiramarrësi të paguan kur e merr veshjen. Vesha nuk merr pagesa për momentin."
+
+#: src/twirl/web/onboarding.py:244
+msgid "Path: salon · paid in the salon"
+msgstr "Rruga: sallon · pagesa në sallon"
+
+#: src/twirl/web/onboarding.py:246
+msgid "Path: individual · paid at handover"
+msgstr "Rruga: individ · pagesa në dorëzim"
+
+#: src/twirl/web/onboarding.py:257
+msgid "Published"
+msgstr "Publikuar"
+
+#: src/twirl/web/onboarding.py:258
+#, python-brace-format
+msgid "Step {n} / {total}"
+msgstr "Hapi {n} / {total}"
+
+#: src/twirl/web/onboarding.py:300
+msgid "The salon owner's number. The salon's WhatsApp is added separately in the next step."
+msgstr "Numri i pronarit të sallonit. WhatsApp-in e sallonit e shtojmë veçmas në hapin tjetër."
+
+#: src/twirl/web/onboarding.py:303
+msgid "A verified number is the only check needed to list an item."
+msgstr "Verifikimi me numër është i vetmi që kërkohet për të listuar një veshje."
+
+#: src/twirl/web/onboarding.py:529
+msgid "Extra"
+msgstr "Shtesë"
+
+#: src/twirl/web/onboarding.py:541
+msgid "Add"
+msgstr "Shto"
+
+#: src/twirl/web/onboarding.py:617 src/twirl/web/shop_catalog.py:70
+msgid "That photo is larger than 15 MB."
+msgstr "Kjo foto është më e madhe se 15 MB."
+
+#: src/twirl/web/onboarding.py:618 src/twirl/web/shop_catalog.py:71
+msgid "That file is not a photo."
+msgstr "Ky skedar nuk është foto."
+
+#: src/twirl/web/onboarding.py:619 src/twirl/web/shop_catalog.py:72
+msgid "Use JPEG, PNG or WebP photos."
+msgstr "Përdorni foto JPEG, PNG ose WebP."
+
+#: src/twirl/web/onboarding.py:620 src/twirl/web/shop_catalog.py:73
+msgid "A dress can have at most 8 photos."
+msgstr "Një fustan mund të ketë më së shumti 8 foto."
+
+#: src/twirl/web/onboarding.py:785
+msgid "Salon"
+msgstr "Salloni"
+
+#: src/twirl/web/onboarding.py:785
+msgid "Owner"
+msgstr "Pronarja"
+
+#: src/twirl/web/onboarding.py:789
+msgid "Address"
+msgstr "Adresa"
+
+#: src/twirl/web/onboarding.py:792
+msgid "Hours"
+msgstr "Orari"
+
+#: src/twirl/web/onboarding.py:798
+msgid "WhatsApp"
+msgstr "WhatsApp"
+
+#: src/twirl/web/onboarding.py:812
+msgid "Item"
+msgstr "Veshja"
+
+#: src/twirl/web/onboarding.py:818
+msgid "Rent"
+msgstr "Qera"
+
 #: src/twirl/web/shop_bookings.py:28
 msgid "Accept"
 msgstr "Prano"
@@ -718,10 +1396,6 @@ msgstr "Ky numër telefoni nuk duket i saktë."
 msgid "Wedding"
 msgstr "Dasmë"
 
-#: src/twirl/web/shop_catalog.py:32
-msgid "Engagement"
-msgstr "Fejesë"
-
 #: src/twirl/web/shop_catalog.py:33
 msgid "Matura"
 msgstr "Maturë"
@@ -729,10 +1403,6 @@ msgstr "Maturë"
 #: src/twirl/web/shop_catalog.py:34
 msgid "Henna night"
 msgstr "Nata e kanës"
-
-#: src/twirl/web/shop_catalog.py:35
-msgid "Evening"
-msgstr "Mbrëmje"
 
 #: src/twirl/web/shop_catalog.py:38
 msgid "Black"
@@ -826,22 +1496,6 @@ msgstr "Shkruani të dyja datat dhe arsyen e bllokimit."
 msgid "This dress still has upcoming bookings. Swap them to another dress."
 msgstr "Ky fustan ka ende rezervime të ardhshme. Kalojini ato në një fustan tjetër."
 
-#: src/twirl/web/shop_catalog.py:70
-msgid "That photo is larger than 15 MB."
-msgstr "Kjo foto është më e madhe se 15 MB."
-
-#: src/twirl/web/shop_catalog.py:71
-msgid "That file is not a photo."
-msgstr "Ky skedar nuk është foto."
-
-#: src/twirl/web/shop_catalog.py:72
-msgid "Use JPEG, PNG or WebP photos."
-msgstr "Përdorni foto JPEG, PNG ose WebP."
-
-#: src/twirl/web/shop_catalog.py:73
-msgid "A dress can have at most 8 photos."
-msgstr "Një fustan mund të ketë më së shumti 8 foto."
-
 #: src/twirl/web/shop_catalog.py:341
 msgid "Enter a size and a quantity from 1 to 20."
 msgstr "Shkruani masën dhe një sasi nga 1 deri në 20."
@@ -865,14 +1519,6 @@ msgstr "E enjte"
 #: src/twirl/web/shop_settings.py:25
 msgid "Friday"
 msgstr "E premte"
-
-#: src/twirl/web/shop_settings.py:26
-msgid "Saturday"
-msgstr "E shtunë"
-
-#: src/twirl/web/shop_settings.py:27
-msgid "Sunday"
-msgstr "E diel"
 
 #: src/twirl/web/storefront.py:30
 msgid "The shop will confirm your request within 24 hours."

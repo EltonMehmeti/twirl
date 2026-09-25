@@ -1,0 +1,40 @@
+{% extends "layouts/vesha.html" %}
+{% block main %}
+{% if is_salon %}
+<span class="v-badge{% if not verified %} v-badge--pending{% endif %}">{% if verified %}{{ _("Verified salon") }}{% else %}{{ _("Salon check · within 48h") }}{% endif %}</span>
+<h1 class="v-title v-title--hero">{{ _("The salon's listing is live.") }}</h1>
+<p class="v-lede">{{ _("It shows in search on free dates. The “Verified salon” badge is added once we check the address.") }}</p>
+{% else %}
+<span class="v-badge">{{ _("Number verified") }}</span>
+<h1 class="v-title v-title--hero">{{ _("Your item is live.") }}</h1>
+<p class="v-lede">{{ _("It shows in search on free dates. Requests arrive with an exact date.") }}</p>
+{% endif %}
+<div class="v-done">
+  <a class="v-card" href="{{ listing_url }}" style="text-decoration:none">
+    <div class="v-card__top">
+      <span class="v-card__brand">{% include "_logo.html" %}{{ brand }}</span>
+      <span class="v-card__meta">{{ style.internal_ref or ("Nr. " ~ style.code) }} · {{ shop.city }}</span>
+    </div>
+    <div class="v-card__img">{% if thumb %}<img src="{{ thumb }}" alt="{{ style.name }}" loading="lazy">{% endif %}</div>
+    <div class="v-card__bottom">
+      <span class="v-card__title">{{ style.name }}</span>
+      <span class="v-card__price">{{ style.price_cents|money(locale) }}</span>
+    </div>
+  </a>
+  <ol class="v-steps">
+    {% if is_salon %}
+    <li><span class="v-steps__num">01</span>{{ _("We check the salon within 48 hours. Until then the listing is live without the badge.") }}</li>
+    <li><span class="v-steps__num">02</span>{{ _("Bookings reach your dashboard, and customers can message your WhatsApp.") }}</li>
+    <li><span class="v-steps__num">03</span>{{ _("Add the rest of your stock. The internal code keeps the racks tidy.") }}</li>
+    {% else %}
+    <li><span class="v-steps__num">01</span>{{ _("Requests arrive with an exact date. You accept or decline, no reason needed.") }}</li>
+    <li><span class="v-steps__num">02</span>{{ _("The renter pays you at handover. Agree any deposit face to face.") }}</li>
+    <li><span class="v-steps__num">03</span>{{ _("Take photos before and after each handover. They are the only proof that counts.") }}</li>
+    {% endif %}
+    <li class="v-row" style="border:0">
+      <form method="post" action="/listo/veshja/e-re"><input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}"><button class="v-btn v-btn--small" type="submit">{{ _("Add another item") }}</button></form>
+      <a class="v-btn v-btn--small v-btn--ghost" href="/shop">{{ _("Go to my dashboard") }}</a>
+    </li>
+  </ol>
+</div>
+{% endblock %}

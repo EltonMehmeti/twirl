@@ -1,0 +1,81 @@
+{% extends "layouts/vesha.html" %}
+{% from "_macros.html" import hint, nav with context %}
+{% block main %}
+<form method="post" action="/listo/profili" novalidate>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+  <div class="v-eyebrow">{{ _(path_label) }}</div>
+  {% if is_salon %}
+  <h1 class="v-title">{{ _("The salon, address and hours") }}</h1>
+  <p class="v-lede">{{ _("This is what customers check before they set off: where you are and when you are open. The hours show on every listing.") }}</p>
+  <div class="v-fields">
+    <div class="v-field{% if errors.salon_name %} v-field--error{% endif %}">
+      <label class="v-label" for="v-salon">{{ _("Salon name") }}</label>
+      <input class="v-input" id="v-salon" name="name" value="{{ values.name }}" placeholder="Sallon Nusërie Dea" required aria-describedby="salon_name-hint">
+      {{ hint(errors, "salon_name", _("The name on your sign and on your receipts.")) }}
+    </div>
+    <div class="v-grid-2 v-grid-2--wide-first">
+      <div class="v-field{% if errors.address %} v-field--error{% endif %}">
+        <label class="v-label" for="v-addr">{{ _("Street and number") }}</label>
+        <input class="v-input" id="v-addr" name="address" value="{{ values.address }}" placeholder="Rr. Bill Clinton 14" required aria-describedby="address-hint">
+        {{ hint(errors, "address", _("Shown on your listings so customers can find you.")) }}
+      </div>
+      <div class="v-field{% if errors.city %} v-field--error{% endif %}">
+        <label class="v-label" for="v-city">{{ _("City") }}</label>
+        <select class="v-input" id="v-city" name="city" required aria-describedby="city-hint">
+          <option value="">{{ _("Choose the city") }}</option>
+          {% for city in cities %}<option value="{{ city }}"{% if values.city == city %} selected{% endif %}>{{ city }}</option>{% endfor %}
+        </select>
+        {{ hint(errors, "city", _("Search is filtered by city.")) }}
+      </div>
+    </div>
+    <div class="v-field{% if errors.whatsapp %} v-field--error{% endif %}">
+      <label class="v-label" for="v-wa">{{ _("Salon WhatsApp") }}</label>
+      <input class="v-input v-input--tel" id="v-wa" name="whatsapp" type="tel" inputmode="tel" value="{{ values.whatsapp }}" placeholder="044 123 456" required aria-describedby="whatsapp-hint">
+      {{ hint(errors, "whatsapp", _("The “Message on WhatsApp” button opens this number.")) }}
+    </div>
+    <fieldset class="v-hours{% if errors.hours %} v-field--error{% endif %}">
+      <legend class="v-label">{{ _("Opening hours") }}</legend>
+      <div class="v-hours__row">
+        <span class="v-hours__day">{{ _("Mon–Fri") }}</span>
+        <input class="v-input v-input--time" type="time" name="wd_open" value="{{ values.wd_open }}" aria-label="{{ _('Mon–Fri opens') }}">
+        <span aria-hidden="true">–</span>
+        <input class="v-input v-input--time" type="time" name="wd_close" value="{{ values.wd_close }}" aria-label="{{ _('Mon–Fri closes') }}">
+      </div>
+      <div class="v-hours__row">
+        <span class="v-hours__day">{{ _("Saturday") }}</span>
+        <input class="v-input v-input--time" type="time" name="sat_open" value="{{ values.sat_open }}" aria-label="{{ _('Saturday opens') }}">
+        <span aria-hidden="true">–</span>
+        <input class="v-input v-input--time" type="time" name="sat_close" value="{{ values.sat_close }}" aria-label="{{ _('Saturday closes') }}">
+      </div>
+      <div class="v-hours__row">
+        <span class="v-hours__day">{{ _("Sunday") }}</span>
+        <div class="v-toggle" role="radiogroup" aria-label="{{ _('Sunday') }}">
+          <label><input type="radio" name="sunday" value="open"{% if values.sunday == "open" %} checked{% endif %}><span>{{ _("Open") }}</span></label>
+          <label><input type="radio" name="sunday" value="closed"{% if values.sunday != "open" %} checked{% endif %}><span>{{ _("Closed") }}</span></label>
+        </div>
+      </div>
+      {{ hint(errors, "hours", _("Fittings are accepted within these hours. On Sundays the salon keeps Saturday's hours.")) }}
+    </fieldset>
+  </div>
+  {% else %}
+  <h1 class="v-title">{{ _("Who you are and where") }}</h1>
+  <p class="v-lede">{{ _("Only your name and city are public. Your address is shared only after a booking is confirmed.") }}</p>
+  <div class="v-fields v-grid-2">
+    <div class="v-field{% if errors.name %} v-field--error{% endif %}">
+      <label class="v-label" for="v-name">{{ _("First and last name") }}</label>
+      <input class="v-input" id="v-name" name="name" value="{{ values.name }}" placeholder="Elira Krasniqi" autocomplete="name" required aria-describedby="name-hint">
+      {{ hint(errors, "name", _("Shown as the owner's name on the listing.")) }}
+    </div>
+    <div class="v-field{% if errors.city %} v-field--error{% endif %}">
+      <label class="v-label" for="v-city">{{ _("City") }}</label>
+      <select class="v-input" id="v-city" name="city" required aria-describedby="city-hint">
+        <option value="">{{ _("Choose the city") }}</option>
+        {% for city in cities %}<option value="{{ city }}"{% if values.city == city %} selected{% endif %}>{{ city }}</option>{% endfor %}
+      </select>
+      {{ hint(errors, "city", _("Search is filtered by city.")) }}
+    </div>
+  </div>
+  {% endif %}
+  {{ nav(None, _("Continue")) }}
+</form>
+{% endblock %}

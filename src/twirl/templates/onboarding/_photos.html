@@ -1,0 +1,23 @@
+<div id="v-photos" class="v-field{% if errors.photos %} v-field--error{% endif %}">
+  <span class="v-label" id="photos-label">{{ _("Photos") }}</span>
+  <div class="v-photos" role="group" aria-labelledby="photos-label">
+    {% for slot in photo_slots %}
+      {% if slot.image %}
+      <div class="v-photo v-photo--filled">
+        <img src="{{ slot.url }}" alt="{{ _(slot.label) }}" width="104" height="128">
+        <span class="v-photo__label">✓ {{ _(slot.label) }}</span>
+        <button type="button" class="v-photo__remove" aria-label="{{ _('Remove photo') }}"
+          hx-post="/listo/veshja/foto/{{ slot.image.id }}/fshi" hx-target="#v-photos" hx-swap="outerHTML">×</button>
+      </div>
+      {% else %}
+      <label class="v-photo">
+        <span class="v-photo__mark" aria-hidden="true">+</span>
+        <span>{{ _(slot.label) }}</span>
+        <input type="file" name="photo" accept="image/jpeg,image/png,image/webp" aria-label="{{ _('Add a photo') }}: {{ _(slot.label) }}"
+          hx-post="/listo/veshja/foto" hx-encoding="multipart/form-data" hx-target="#v-photos" hx-swap="outerHTML" hx-trigger="change">
+      </label>
+      {% endif %}
+    {% endfor %}
+  </div>
+  <span class="v-hint{% if errors.photos %} v-hint--error{% endif %}" role="status">{{ _(errors.photos) if errors.photos else _("At least 3 photos. Daylight, no filters: the “as pictured” promise is judged against these.") }}</span>
+</div>

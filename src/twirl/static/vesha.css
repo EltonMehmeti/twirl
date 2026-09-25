@@ -69,6 +69,7 @@
 .v-fields { display: flex; flex-direction: column; gap: 22px; margin-top: 26px; }
 .v-grid-2 { display: grid; grid-template-columns: 1fr; gap: 22px; }
 .v-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+legend.v-label { padding: 0; margin-bottom: 6px; }
 .v-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--color-muted); }
 .v-input { font-size: 17px; color: var(--color-ink); background: var(--color-paper); border: 1px solid var(--color-line); border-radius: 10px; padding: 13px 14px; width: 100%; }
 .v-input:focus { outline: 2px solid var(--color-gold); outline-offset: 2px; border-color: transparent; }
@@ -120,7 +121,7 @@ select.v-input { appearance: none; background-image: linear-gradient(45deg, tran
 /* ── salon hours ── */
 .v-hours { display: flex; flex-direction: column; gap: 10px; border: 1px solid var(--color-line); padding: 16px 16px 18px; }
 .v-hours__row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.v-hours__day { width: 92px; font-size: 15px; }
+.v-hours__day { width: 112px; font-size: 15px; }
 .v-toggle { display: inline-flex; border: 1px solid var(--color-line); border-radius: 999px; overflow: hidden; }
 .v-toggle label { position: relative; }
 .v-toggle input { position: absolute; opacity: 0; }

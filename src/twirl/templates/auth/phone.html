@@ -1,6 +1,6 @@
 {% extends "layouts/vesha.html" %}
 {% from "_macros.html" import hint, nav with context %}
-{% block tagline %}{{ _("Provider login") }}{% endblock %}
+{% block tagline %}{% if step %}{{ _("List your clothes") }}{% else %}{{ _("Provider login") }}{% endif %}{% endblock %}
 {% block main %}
 <form method="post" action="{{ action }}" class="v-narrow" novalidate>
   <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">

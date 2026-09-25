@@ -69,3 +69,16 @@ def test_style_image_limit(db, tmp_path):
 def test_storage_refuses_path_traversal(tmp_path):
     with pytest.raises(ValueError):
         LocalStorage(tmp_path).put("../escape.txt", b"x", "text/plain")
+
+
+def test_delete_style_image_removes_files_and_renumbers(db, tmp_path):
+    from twirl.catalog import delete_style_image
+
+    storage = LocalStorage(tmp_path)
+    style = make_style(db, make_shop(db))
+    first = save_style_image(db, storage, style, png_bytes(60, 80))
+    second = save_style_image(db, storage, style, png_bytes(60, 80))
+    delete_style_image(db, storage, first)
+    assert not (tmp_path / f"{first.storage_key}-thumb.webp").exists()
+    db.refresh(second)
+    assert second.position == 0

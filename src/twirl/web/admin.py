@@ -60,7 +60,16 @@ class AdminAuth(AuthenticationBackend):
 
 
 class ShopAdmin(ModelView, model=Shop):
-    column_list = [Shop.id, Shop.slug, Shop.name, Shop.city, Shop.status, Shop.booking_mode]
+    column_list = [
+        Shop.id,
+        Shop.slug,
+        Shop.name,
+        Shop.kind,
+        Shop.city,
+        Shop.status,
+        Shop.verified_at,
+        Shop.booking_mode,
+    ]
     column_searchable_list = [Shop.slug, Shop.name]
     form_columns = [
         Shop.name,
@@ -71,6 +80,8 @@ class ShopAdmin(ModelView, model=Shop):
         Shop.viber,
         Shop.instagram,
         Shop.status,
+        Shop.kind,
+        Shop.verified_at,
         Shop.booking_mode,
         Shop.pickup_lead_days,
         Shop.return_after_days,

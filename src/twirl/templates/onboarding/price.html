@@ -1,0 +1,45 @@
+{% extends "layouts/vesha.html" %}
+{% from "_macros.html" import hint, nav with context %}
+{% block main %}
+<form method="post" action="/listo/cmimi" novalidate>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+  <div class="v-eyebrow">{{ _(path_label) }} · {{ _("first item") }}</div>
+  <h1 class="v-title">{{ _("Price and dates") }}</h1>
+  <p class="v-lede">{{ _("Set the rent and mark the days the item can't go out. Every other day shows as free in search.") }}</p>
+  <div class="v-fields">
+    <div class="v-price">
+      <div class="v-field{% if errors.price %} v-field--error{% endif %}">
+        <label class="v-label" for="v-price">{{ _("Rent per booking (€)") }}</label>
+        <input class="v-input v-input--tel" id="v-price" name="price" inputmode="numeric" value="{{ price }}" placeholder="55" required aria-describedby="price-hint">
+        {{ hint(errors, "price", _("Pickup two days before the event, return the day after. Cleaning included.")) }}
+      </div>
+      <div class="v-panel">
+        <div class="v-eyebrow">{{ _("Payment") }}</div>
+        <div class="v-panel__figure">{% if is_salon %}{{ _("In the salon") }}{% else %}{{ _("At handover") }}{% endif %}</div>
+        <p>{% if is_salon %}{{ _("The customer reserves online and pays in the salon, as today. You keep your own deposit rules.") }}{% else %}{{ _("The renter pays you when picking the item up. Agree any deposit between you.") }}{% endif %}</p>
+      </div>
+    </div>
+    <fieldset class="v-field" style="border:0;padding:0;margin:0">
+      <legend class="v-label">{{ _("Busy dates") }}</legend>
+      <div class="v-months">
+        {% for month in months %}
+        <div class="v-cal">
+          <p class="v-cal__month">{{ _(month.label) }} {{ month.year }}</p>
+          <div class="v-cal__grid">
+            {% for wd in weekdays %}<div class="v-cal__wd" aria-hidden="true">{{ _(wd) }}</div>{% endfor %}
+            {% for cell in month.cells %}
+              {% if cell %}
+              <label class="v-day"><input type="checkbox" name="busy" value="{{ cell.iso }}"{% if cell.busy %} checked{% endif %}{% if cell.past %} disabled{% endif %} aria-label="{{ cell.date|date }}"><span>{{ cell.date.day }}</span></label>
+              {% else %}<span aria-hidden="true"></span>{% endif %}
+            {% endfor %}
+          </div>
+          <div class="v-legend"><span><span class="v-swatch"></span>{{ _("Free") }}</span><span><span class="v-swatch v-swatch--busy"></span>{{ _("Busy") }}</span></div>
+        </div>
+        {% endfor %}
+      </div>
+      <span class="v-hint">{{ _("Tap the days when the item can't be picked up. You can change them any time.") }}</span>
+    </fieldset>
+  </div>
+  {{ nav("/listo/veshja", _("See the summary")) }}
+</form>
+{% endblock %}

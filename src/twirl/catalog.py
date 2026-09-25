@@ -122,3 +122,18 @@ def save_style_image(session: Session, storage: Storage, style: Style, data: byt
 
 def image_url(storage: Storage, image: StyleImage, variant: str = "thumb") -> str:
     return storage.url(f"{image.storage_key}-{variant}.webp")
+
+
+def delete_style_image(session: Session, storage: Storage, image: StyleImage) -> None:
+    """Remove a photo and its files, then close the gap in positions."""
+    style_id = image.style_id
+    for variant in ("thumb", "detail"):
+        storage.delete(f"{image.storage_key}-{variant}.webp")
+    session.delete(image)
+    session.flush()
+    remaining = session.scalars(
+        select(StyleImage).where(StyleImage.style_id == style_id).order_by(StyleImage.position)
+    ).all()
+    for position, row in enumerate(remaining):
+        row.position = position
+    session.flush()

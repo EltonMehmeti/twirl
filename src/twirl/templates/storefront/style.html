@@ -37,9 +37,10 @@
   <div class="hp" aria-hidden="true"><label>Website <input name="website" tabindex="-1" autocomplete="off"></label></div>
   <button>{{ _("Request this dress") }}</button>
   <p class="muted">{{ _("No payment now. The shop confirms your request, then you pick up and pay in the shop.") }}</p>
+  {% if shop.terms_accepted_at %}<p><strong>{{ _("As pictured.") }}</strong> {{ _("The item is handed over as in the photos and in the stated size. If it isn't, the renter may refuse it and owes nothing.") }}</p>{% endif %}
 </form>
 
-<h2>{{ shop.name }}</h2>
+<h2>{{ shop.name }}{% if shop.verified_at %} · {{ _("Verified salon") }}{% endif %}</h2>
 <p>{% if shop.address %}{{ shop.address }}, {% endif %}{{ shop.city }}</p>
 {% if shop.terms_text %}<h3>{{ _("Shop terms") }}</h3><p>{{ shop.terms_text }}</p>{% endif %}
 {% endblock %}

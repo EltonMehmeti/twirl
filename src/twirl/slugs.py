@@ -1,7 +1,7 @@
 import re
 
 RESERVED_SLUGS = frozenset(
-    {"admin", "api", "healthz", "lang", "login", "logout", "media", "r", "shop", "static"}
+    {"admin", "api", "healthz", "lang", "listo", "login", "logout", "media", "r", "shop", "static"}
 )
 _SLUG_RE = re.compile(r"[a-z0-9](?:[a-z0-9-]{0,58}[a-z0-9])")
 

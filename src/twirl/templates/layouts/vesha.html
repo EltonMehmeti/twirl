@@ -14,7 +14,7 @@
   <div class="v-frame">
     <header class="v-header">
       <a class="v-brand" href="/">{% include "_logo.html" %}<span class="v-brand__name">{{ brand }}</span><span class="v-brand__tag">{% block tagline %}{{ _("List your clothes") }}{% endblock %}</span></a>
-      {% if counter %}<span class="v-counter">{{ counter }}</span>{% endif %}
+      {% if counter %}<span class="v-counter">{{ _(counter.text).replace("{n}", counter.n).replace("{total}", counter.total) }}</span>{% endif %}
     </header>
     {% if show_progress %}<div class="v-progress" aria-hidden="true"><div class="v-progress__bar" style="width: {{ progress }}%"></div></div>{% endif %}
     <div class="v-body{% if rail %} v-body--rail{% endif %}">
