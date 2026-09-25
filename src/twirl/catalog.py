@@ -82,3 +82,35 @@ def add_items(session: Session, style: Style, *, size: str, quantity: int) -> li
         session.flush()
         items.append(item)
     return items
+
+
+from uuid import uuid4  # noqa: E402
+
+from twirl.images import InvalidImage, process_image  # noqa: E402
+from twirl.models import StyleImage  # noqa: E402
+from twirl.storage import Storage  # noqa: E402
+
+MAX_IMAGES_PER_STYLE = 8
+
+
+def save_style_image(session: Session, storage: Storage, style: Style, data: bytes) -> StyleImage:
+    count = session.scalar(
+        select(func.count()).select_from(StyleImage).where(StyleImage.style_id == style.id)
+    ) or 0
+    if count >= MAX_IMAGES_PER_STYLE:
+        raise InvalidImage("too_many")
+    processed = process_image(data)
+    key = f"styles/{style.id}/{uuid4().hex}"
+    for variant, blob in processed.variants.items():
+        storage.put(f"{key}-{variant}.webp", blob, "image/webp")
+    image = StyleImage(
+        style_id=style.id, position=count, storage_key=key,
+        width=processed.width, height=processed.height,
+    )
+    session.add(image)
+    session.flush()
+    return image
+
+
+def image_url(storage: Storage, image: StyleImage, variant: str = "thumb") -> str:
+    return storage.url(f"{image.storage_key}-{variant}.webp")

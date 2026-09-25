@@ -28,3 +28,14 @@ def login(client, email: str, password: str = PASSWORD):
     )
     assert response.status_code == 303, response.text
     return response
+
+
+import io  # noqa: E402
+
+from PIL import Image  # noqa: E402
+
+
+def png_bytes(width: int = 600, height: int = 800) -> bytes:
+    buffer = io.BytesIO()
+    Image.new("RGB", (width, height), (200, 30, 60)).save(buffer, "PNG")
+    return buffer.getvalue()

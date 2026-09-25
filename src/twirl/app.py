@@ -12,6 +12,7 @@ from twirl.config import Settings, get_settings
 from twirl.db import Database
 from twirl.ratelimit import RateLimiter
 from twirl.scheduler import start_scheduler
+from twirl.storage import LocalStorage
 from twirl.web import auth, health, pages, shop_home, shop_settings
 
 STATIC_DIR = Path(__file__).parent / "static"
@@ -38,6 +39,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app = FastAPI(title="Twirl", docs_url=None, redoc_url=None, openapi_url=None, lifespan=lifespan)
     app.state.settings = settings
     app.state.db = Database(settings.database_url)
+    settings.media_root.mkdir(parents=True, exist_ok=True)
+    app.state.storage = LocalStorage(settings.media_root, "/media")
     app.state.login_limiter = RateLimiter(10, 15 * 60)
     app.state.request_limiter = RateLimiter(settings.request_rate_limit_per_hour, 3600)
     app.add_middleware(
@@ -50,6 +53,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
     app.add_exception_handler(LoginRequired, _login_redirect)
     app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+    app.mount("/media", StaticFiles(directory=settings.media_root), name="media")
     for router in (health.router, pages.router, auth.router, shop_home.router, shop_settings.router):
         app.include_router(router)
     return app
