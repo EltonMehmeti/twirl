@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-25 23:55+0200\n"
+"POT-Creation-Date: 2026-09-26 00:01+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -303,6 +303,18 @@ msgstr ""
 #: src/twirl/templates/onboarding/dress.html:46
 #: src/twirl/templates/onboarding/profile.html:79
 msgid "Continue"
+msgstr ""
+
+#: src/twirl/templates/onboarding/dress.html:48
+#: src/twirl/templates/onboarding/price.html:45
+#: src/twirl/templates/onboarding/review.html:34
+msgid "Finish later"
+msgstr ""
+
+#: src/twirl/templates/onboarding/dress.html:48
+#: src/twirl/templates/onboarding/price.html:45
+#: src/twirl/templates/onboarding/review.html:34
+msgid "What you have saved stays. Continue any time from your dashboard."
 msgstr ""
 
 #: src/twirl/templates/onboarding/fork.html:4
@@ -903,54 +915,67 @@ msgstr ""
 msgid "New walk-in"
 msgstr ""
 
-#: src/twirl/templates/shop/today.html:9 src/twirl/templates/shop/today.html:16
-msgid "Requests waiting for you"
+#: src/twirl/templates/shop/today.html:10
+msgid "Your shop isn't public yet."
 msgstr ""
 
 #: src/twirl/templates/shop/today.html:10
-#: src/twirl/templates/shop/today.html:18
-msgid "Pickups today"
+msgid "Add your first item and it goes live in search."
 msgstr ""
 
 #: src/twirl/templates/shop/today.html:11
-#: src/twirl/templates/shop/today.html:19
-msgid "Returns today"
+msgid "Add your first item"
 msgstr ""
 
-#: src/twirl/templates/shop/today.html:13
-msgid "Need attention"
+#: src/twirl/templates/shop/today.html:15
+#: src/twirl/templates/shop/today.html:22
+msgid "Requests waiting for you"
 msgstr ""
 
 #: src/twirl/templates/shop/today.html:16
-msgid "No requests waiting."
+#: src/twirl/templates/shop/today.html:24
+msgid "Pickups today"
 msgstr ""
 
 #: src/twirl/templates/shop/today.html:17
-msgid "At risk: find another dress"
-msgstr ""
-
-#: src/twirl/templates/shop/today.html:17
-msgid "Nothing at risk."
-msgstr ""
-
-#: src/twirl/templates/shop/today.html:18
-msgid "No pickups today."
+#: src/twirl/templates/shop/today.html:25
+msgid "Returns today"
 msgstr ""
 
 #: src/twirl/templates/shop/today.html:19
+msgid "Need attention"
+msgstr ""
+
+#: src/twirl/templates/shop/today.html:22
+msgid "No requests waiting."
+msgstr ""
+
+#: src/twirl/templates/shop/today.html:23
+msgid "At risk: find another dress"
+msgstr ""
+
+#: src/twirl/templates/shop/today.html:23
+msgid "Nothing at risk."
+msgstr ""
+
+#: src/twirl/templates/shop/today.html:24
+msgid "No pickups today."
+msgstr ""
+
+#: src/twirl/templates/shop/today.html:25
 msgid "No returns today."
 msgstr ""
 
-#: src/twirl/templates/shop/today.html:20
+#: src/twirl/templates/shop/today.html:26
 msgid "Overdue pickups"
 msgstr ""
 
-#: src/twirl/templates/shop/today.html:20
-#: src/twirl/templates/shop/today.html:21
+#: src/twirl/templates/shop/today.html:26
+#: src/twirl/templates/shop/today.html:27
 msgid "None."
 msgstr ""
 
-#: src/twirl/templates/shop/today.html:21
+#: src/twirl/templates/shop/today.html:27
 msgid "Overdue returns"
 msgstr ""
 
@@ -1470,35 +1495,35 @@ msgstr ""
 msgid "Remove block"
 msgstr ""
 
-#: src/twirl/web/shop_bookings.py:179
+#: src/twirl/web/shop_bookings.py:184
 msgid "That dress is taken on these dates. Pick another one."
 msgstr ""
 
-#: src/twirl/web/shop_bookings.py:181
+#: src/twirl/web/shop_bookings.py:186
 msgid "That action is not possible for this booking any more."
 msgstr ""
 
-#: src/twirl/web/shop_bookings.py:187
+#: src/twirl/web/shop_bookings.py:192
 msgid "Please give a reason."
 msgstr ""
 
-#: src/twirl/web/shop_bookings.py:189
+#: src/twirl/web/shop_bookings.py:194
 msgid "Check the form and try again."
 msgstr ""
 
-#: src/twirl/web/shop_bookings.py:280
+#: src/twirl/web/shop_bookings.py:285
 msgid "Check the highlighted fields."
 msgstr ""
 
-#: src/twirl/web/shop_bookings.py:290
+#: src/twirl/web/shop_bookings.py:295
 msgid "No dress with this code in your shop."
 msgstr ""
 
-#: src/twirl/web/shop_bookings.py:317
+#: src/twirl/web/shop_bookings.py:322
 msgid "This dress is already booked on those dates."
 msgstr ""
 
-#: src/twirl/web/shop_bookings.py:327 src/twirl/web/storefront.py:222
+#: src/twirl/web/shop_bookings.py:332 src/twirl/web/storefront.py:222
 msgid "That phone number does not look right."
 msgstr ""
 

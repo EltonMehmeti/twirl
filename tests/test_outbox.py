@@ -56,7 +56,8 @@ def test_booking_payload_and_every_template_render(db):
     assert payload["shop_name"] == "Bella"
     assert payload["customer_name"] == "Arta"
     assert payload["path"] == f"/shop/bookings/{booking.id}"
-    for name in (t for t in TEMPLATES if t != "provider_published_admin"):
+    provider_alerts = {"provider_published_admin", "provider_signed_up_admin"}
+    for name in (t for t in TEMPLATES if t not in provider_alerts):
         subject, body = render(
             name, {**payload, "reason": "r", "hours": 24}, base_url="https://twirl.test"
         )

@@ -221,6 +221,7 @@ def save_provider(
         raise OnboardingError(errors[0])
     name = _clean_name(name)
     shop = provider_shop(session, user)
+    is_new = shop is None
     if shop is None:
         shop = Shop(
             slug=unique_slug(session, name),
@@ -243,6 +244,17 @@ def save_provider(
         shop.address = ""
         shop.whatsapp = user.phone
         user.name = name
+    if is_new:
+        notify_admin(
+            session,
+            "provider_signed_up_admin",
+            {
+                "shop_name": shop.name,
+                "kind": shop.kind,
+                "city": shop.city,
+                "phone": user.phone or "",
+            },
+        )
     session.flush()
     return shop
 
@@ -260,6 +272,16 @@ def get_or_create_draft_style(session: Session, shop: Shop, style_id: int | None
             and style.deleted_at is None
         ):
             return style
+    # Coming back another day: the session no longer knows the draft, so pick up the newest
+    # unfinished one (photos and all) instead of starting over.
+    existing = session.scalar(
+        select(Style)
+        .where(Style.shop_id == shop.id, Style.published.is_(False), Style.deleted_at.is_(None))
+        .order_by(Style.id.desc())
+        .limit(1)
+    )
+    if existing is not None:
+        return existing
     style = Style(
         shop_id=shop.id,
         code=next_style_code(session, shop.id),

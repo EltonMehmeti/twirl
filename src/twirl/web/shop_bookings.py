@@ -16,7 +16,7 @@ from twirl.booking.board import today_board, week_calendar
 from twirl.booking.errors import InvalidDates, InvalidTransition, ItemConflict
 from twirl.db import get_db
 from twirl.i18n import N_
-from twirl.models import Booking, BookingEvent, BookingKind, Item
+from twirl.models import Booking, BookingEvent, BookingKind, Item, ShopStatus
 from twirl.phones import InvalidPhone
 from twirl.web.forms import form_data, validate_form
 from twirl.web.messages import DATE_ERRORS, GENERIC_DATE_ERROR, STATUS_LABELS
@@ -120,7 +120,12 @@ def today(
     return render(
         request,
         "shop/today.html",
-        {"ctx": ctx, "board": today_board(db, ctx.shop.id, day), "today": day},
+        {
+            "ctx": ctx,
+            "board": today_board(db, ctx.shop.id, day),
+            "today": day,
+            "not_public": ctx.shop.status != ShopStatus.PUBLISHED.value,
+        },
     )
 
 

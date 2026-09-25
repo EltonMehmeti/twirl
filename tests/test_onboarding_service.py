@@ -264,8 +264,8 @@ def test_publish_requires_terms_and_goes_live(db, tmp_path):
     publish(db, shop=shop, style=style, accepted_terms=True, now=clock.now())
     assert (shop.status, style.published) == ("published", True)
     assert shop.terms_accepted_at is not None and shop.onboarding_completed_at is not None
-    alert = db.scalars(select(Notification)).one()
-    assert alert.template == "provider_published_admin"
+    templates = sorted(n.template for n in db.scalars(select(Notification)))
+    assert templates == ["provider_published_admin", "provider_signed_up_admin"]
     assert provider_shop(db, user).id == shop.id
 
 
@@ -274,3 +274,31 @@ def test_month_grid_starts_on_monday():
     assert grid[:6] == [None, None, None, None, None, date(2027, 5, 1)]
     assert grid[-1] == date(2027, 5, 31)
     assert len(grid) % 7 == 0 or grid[-1] is not None
+
+
+def test_unfinished_draft_is_resumed_without_session_id(db, tmp_path):
+    _, shop = _provider(db)
+    draft = _style_with_photos(db, tmp_path, shop, count=2)
+    assert get_or_create_draft_style(db, shop, None).id == draft.id
+
+
+def test_signup_alert_only_for_new_providers(db):
+    user, _ = _provider(db)
+    alerts = db.scalars(
+        select(Notification).where(Notification.template == "provider_signed_up_admin")
+    )
+    assert len(list(alerts)) == 1
+    save_provider(
+        db,
+        user=user,
+        kind=ShopKind.SALON,
+        name="Sallon Dea",
+        city="Ferizaj",
+        address="Rr. Dëshmorët 14",
+        whatsapp="044 111 222",
+        hours=HOURS,
+    )
+    alerts = db.scalars(
+        select(Notification).where(Notification.template == "provider_signed_up_admin")
+    )
+    assert len(list(alerts)) == 1

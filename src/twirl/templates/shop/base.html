@@ -8,7 +8,7 @@
 <a href="/shop/walk-in"{% if here.startswith("/shop/walk-in") %} aria-current="page"{% endif %}>{{ _("Walk-in") }}</a>
 <a href="/shop/styles"{% if here.startswith("/shop/styles") %} aria-current="page"{% endif %}>{{ _("Dresses") }}</a>
 {% if ctx.is_owner %}<a href="/shop/settings"{% if here.startswith("/shop/settings") %} aria-current="page"{% endif %}>{{ _("Settings") }}</a>{% endif %}
-<a href="/{{ ctx.shop.slug }}" target="_blank" rel="noopener">{{ _("My storefront") }} ↗</a>
+{% if ctx.shop.status == "published" %}<a href="/{{ ctx.shop.slug }}" target="_blank" rel="noopener">{{ _("My storefront") }} ↗</a>{% endif %}
 <form method="post" action="/logout" class="inline">
   <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
   <button class="v-linkbtn">{{ _("Log out") }}</button>

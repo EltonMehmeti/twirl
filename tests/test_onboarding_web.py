@@ -1,11 +1,11 @@
 from datetime import timedelta
 
 import pytest
-from sqlalchemy import select
+from sqlalchemy import select, update
 
 from tests.helpers import csrf_from, png_bytes
 from twirl import clock
-from twirl.models import Booking, Notification, Shop, Style, User
+from twirl.models import Booking, Notification, PhoneCode, Shop, Style, User
 
 
 def _post(client, path, data=None, files=None):
@@ -174,3 +174,26 @@ def test_phone_page_works_on_english(client, sms):
 def test_step_counter_is_translated(client, sms):
     _verify(client, sms)
     assert "Hapi 2 / 5" in client.get("/listo/profili").text
+
+
+def test_provider_can_finish_later_and_resume(client, db, sms):
+    _verify(client, sms)
+    _post(client, "/listo/profili", SALON)
+    dress_page = client.get("/listo/veshja").text
+    assert 'href="/shop"' in dress_page  # the "finish later" link
+    _photos(client, 1)
+    today = client.get("/shop")
+    assert today.status_code == 200
+    assert 'href="/listo/veshja"' in today.text  # "add your first item" banner
+    assert '/sallon-dea"' not in today.text  # no storefront link while nothing is public
+    shop = db.scalar(select(Shop).where(Shop.slug == "sallon-dea"))
+    assert shop.status == "draft"
+    assert client.get("/sallon-dea").status_code == 404
+    # log out, come back another day with the phone, resume the same draft
+    _post(client, "/logout")
+    db.execute(update(PhoneCode).values(created_at=PhoneCode.created_at - timedelta(minutes=2)))
+    _post(client, "/login/telefoni", {"phone": "044 123 456"})
+    assert _post(client, "/login/kodi", {"code": sms.last_code()}).headers["location"] == "/shop"
+    assert client.get("/listo", follow_redirects=False).headers["location"] == "/listo/veshja"
+    resumed = client.get("/listo/veshja").text
+    assert resumed.count("v-photo--filled") == 1

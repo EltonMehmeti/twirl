@@ -5,6 +5,12 @@
   <div><div class="v-eyebrow">{{ _("Today") }} · {{ today|date }}</div><h1>{{ ctx.shop.name }}</h1></div>
   <a class="v-action" href="/shop/walk-in">+ {{ _("New walk-in") }}</a>
 </div>
+{% if not_public %}
+<div class="v-banner">
+  <div><strong>{{ _("Your shop isn't public yet.") }}</strong><p>{{ _("Add your first item and it goes live in search.") }}</p></div>
+  <a class="v-action" href="/listo/veshja">{{ _("Add your first item") }} →</a>
+</div>
+{% endif %}
 <div class="v-stats">
   <div class="v-stat{% if board.pending %} v-stat--alert{% endif %}"><div class="v-stat__n">{{ board.pending|length }}</div><div class="v-stat__l">{{ _("Requests waiting for you") }}</div></div>
   <div class="v-stat"><div class="v-stat__n">{{ board.pickups_today|length }}</div><div class="v-stat__l">{{ _("Pickups today") }}</div></div>
