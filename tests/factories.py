@@ -39,3 +39,28 @@ def make_shop_user(db, shop, *, role="owner", email=None, password_hash=None):
     db.add(ShopUser(shop_id=shop.id, user_id=user.id, role=role))
     db.flush()
     return user
+
+
+from twirl.codes import new_item_code  # noqa: E402
+from twirl.models import Item, Style  # noqa: E402
+
+
+def make_style(db, shop, *, name="Silk gown", price_cents=5000, published=True, code=None):
+    n = next(_seq)
+    style = Style(
+        shop_id=shop.id, code=code or f"S{n:04d}", name=name, price_cents=price_cents,
+        published=published,
+    )
+    db.add(style)
+    db.flush()
+    return style
+
+
+def make_item(db, style, *, size="38", status="active", code=None):
+    item = Item(
+        shop_id=style.shop_id, style_id=style.id, size=size, status=status,
+        code=code or new_item_code(db, style.shop_id),
+    )
+    db.add(item)
+    db.flush()
+    return item
