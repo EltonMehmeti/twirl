@@ -197,9 +197,9 @@ def request_dress(
 
     if form.get("website"):
         return RedirectResponse(f"/{shop.slug}", status_code=303)
-    if not request.app.state.request_limiter.allow(
-        client_ip(request, trust_cf=settings.trust_cf_connecting_ip)
-    ):
+    limiter = request.app.state.request_limiter
+    ip = client_ip(request, trust_cf=settings.trust_cf_connecting_ip)
+    if limiter.blocked(ip):
         return page(N_("Too many requests from your connection. Try again later."), 429)
     parsed, _ = validate_form(RequestForm, form)
     if parsed is None:
@@ -232,4 +232,5 @@ def request_dress(
         db.rollback()
         raise HTTPException(status_code=404) from exc
     db.commit()
+    limiter.record(ip)  # only successful requests count: typos must not lock a renter out
     return RedirectResponse(f"/{shop.slug}/r/{booking.ref}", status_code=303)

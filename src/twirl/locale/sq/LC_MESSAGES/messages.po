@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  twirl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-26 00:01+0200\n"
+"POT-Creation-Date: 2026-09-26 00:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: sq\n"
@@ -25,6 +25,26 @@ msgstr "Kryesore"
 #: src/twirl/templates/base.html:27 src/twirl/templates/home.html:6
 msgid "Dress rental shops in Kosovo, bookable online."
 msgstr "Dyqanet e fustaneve me qira në Kosovë, me rezervim online."
+
+#: src/twirl/templates/error.html:7
+msgid "You don't have access to this page."
+msgstr "Nuk ke qasje në këtë faqe."
+
+#: src/twirl/templates/error.html:8
+msgid "Log in with the account that owns it, or go back to the start."
+msgstr "Hyr me llogarinë që e zotëron, ose kthehu në fillim."
+
+#: src/twirl/templates/error.html:10
+msgid "This page doesn't exist."
+msgstr "Kjo faqe nuk ekziston."
+
+#: src/twirl/templates/error.html:11
+msgid "The link may be old, or the shop may have taken the dress down."
+msgstr "Lidhja mund të jetë e vjetër, ose dyqani e ka hequr fustanin."
+
+#: src/twirl/templates/error.html:13
+msgid "Back to the start"
+msgstr "Kthehu në fillim"
 
 #: src/twirl/templates/home.html:4
 msgid "Kosovo · dress rental"
@@ -449,7 +469,7 @@ msgid "Shown on your listings so customers can find you."
 msgstr "Shfaqet në listime që klientët të të gjejnë."
 
 #: src/twirl/templates/onboarding/profile.html:23 src/twirl/templates/onboarding/profile.html:70
-#: src/twirl/web/onboarding.py:801
+#: src/twirl/templates/shop/settings.html:15 src/twirl/web/onboarding.py:801
 msgid "City"
 msgstr "Qyteti"
 
@@ -744,6 +764,31 @@ msgstr "Cilësimet e dyqanit"
 msgid "Saved."
 msgstr "U ruajt."
 
+#: src/twirl/templates/shop/settings.html:14
+msgid "Shop name"
+msgstr "Emri i dyqanit"
+
+#: src/twirl/templates/shop/settings.html:16 src/twirl/web/onboarding.py:789
+msgid "Address"
+msgstr "Adresa"
+
+#: src/twirl/templates/shop/settings.html:17 src/twirl/templates/shop/walk_in.html:34
+#: src/twirl/templates/storefront/style.html:47 src/twirl/web/onboarding.py:804
+msgid "Phone"
+msgstr "Telefoni"
+
+#: src/twirl/templates/shop/settings.html:18
+msgid "WhatsApp number"
+msgstr "Numri i WhatsApp"
+
+#: src/twirl/templates/shop/settings.html:19
+msgid "Viber number"
+msgstr "Numri i Viber"
+
+#: src/twirl/templates/shop/settings.html:20
+msgid "Instagram handle"
+msgstr "Llogaria në Instagram"
+
 #: src/twirl/templates/shop/settings.html:22
 msgid "Your terms (deposit, ID, late fee, damage)"
 msgstr "Kushtet tuaja (depozita, letërnjoftimi, vonesa, dëmtimet)"
@@ -751,6 +796,26 @@ msgstr "Kushtet tuaja (depozita, letërnjoftimi, vonesa, dëmtimet)"
 #: src/twirl/templates/shop/settings.html:24
 msgid "Rental rules"
 msgstr "Rregullat e qirasë"
+
+#: src/twirl/templates/shop/settings.html:25
+msgid "Pickup: days before the event"
+msgstr "Marrja: ditë para eventit"
+
+#: src/twirl/templates/shop/settings.html:26
+msgid "Return: days after the event"
+msgstr "Kthimi: ditë pas eventit"
+
+#: src/twirl/templates/shop/settings.html:27
+msgid "Preparation days before pickup"
+msgstr "Ditë përgatitjeje para marrjes"
+
+#: src/twirl/templates/shop/settings.html:28
+msgid "Cleaning days after return"
+msgstr "Ditë pastrimi pas kthimit"
+
+#: src/twirl/templates/shop/settings.html:29
+msgid "Longest rental in days"
+msgstr "Qiraja më e gjatë në ditë"
 
 #: src/twirl/templates/shop/settings.html:31
 msgid "Closed every week on"
@@ -846,8 +911,8 @@ msgid "No photos yet"
 msgstr "Ende pa foto"
 
 #: src/twirl/templates/shop/styles.html:15
-msgid "Pieces"
-msgstr "Copë"
+msgid "pieces"
+msgstr "copë"
 
 #: src/twirl/templates/shop/styles.html:16
 msgid "Online"
@@ -948,11 +1013,6 @@ msgstr "Me telefon"
 #: src/twirl/templates/shop/walk_in.html:33
 msgid "Customer name"
 msgstr "Emri i klientit"
-
-#: src/twirl/templates/shop/walk_in.html:34 src/twirl/templates/storefront/style.html:47
-#: src/twirl/web/onboarding.py:804
-msgid "Phone"
-msgstr "Telefoni"
 
 #: src/twirl/templates/shop/walk_in.html:35
 msgid "Note"
@@ -1383,10 +1443,6 @@ msgstr "Salloni"
 msgid "Owner"
 msgstr "Pronarja"
 
-#: src/twirl/web/onboarding.py:789
-msgid "Address"
-msgstr "Adresa"
-
 #: src/twirl/web/onboarding.py:792
 msgid "Hours"
 msgstr "Orari"
@@ -1611,6 +1667,30 @@ msgstr "Ju lutem plotësoni datën e eventit, masën, emrin dhe telefonin."
 msgid "Sorry, that size is not free for your date. Try another size or date."
 msgstr "Na vjen keq, kjo masë nuk është e lirë për datën tuaj. Provoni një masë ose datë tjetër."
 
+#: src/twirl/web/templating.py:38
+msgid "The shop didn't answer within 24 hours"
+msgstr "Dyqani nuk u përgjigj brenda 24 orësh"
+
+#: src/twirl/web/templating.py:39
+msgid "The pickup date passed"
+msgstr "Kaloi data e marrjes"
+
+#: src/twirl/web/templating.py:40
+msgid "The return is overdue"
+msgstr "Kthimi është vonuar"
+
+#: src/twirl/web/templating.py:41
+msgid "Block removed"
+msgstr "Bllokimi u hoq"
+
+#: src/twirl/web/templating.py:43
+msgid "Item handed out in store"
+msgstr "Veshja u dha në dyqan"
+
+#: src/twirl/web/templating.py:56
+msgid "Moved to another dress"
+msgstr "U kalua në një fustan tjetër"
+
 #~ msgid "Yes"
 #~ msgstr "Po"
 
@@ -1619,4 +1699,7 @@ msgstr "Na vjen keq, kjo masë nuk është e lirë për datën tuaj. Provoni nj�
 
 #~ msgid "dresses"
 #~ msgstr "fustane"
+
+#~ msgid "Pieces"
+#~ msgstr "Copë"
 

@@ -32,6 +32,31 @@ def format_money(cents: int, locale: str) -> str:
     return f"{number} €" if locale == "sq" else f"€{number}"
 
 
+from twirl.i18n import N_  # noqa: E402
+
+SYSTEM_REASONS = {
+    "no reply within SLA": N_("The shop didn't answer within 24 hours"),
+    "pickup date passed": N_("The pickup date passed"),
+    "return overdue": N_("The return is overdue"),
+    "block removed": N_("Block removed"),
+}
+REASON_PREFIXES = {"item taken in store: ": N_("Item handed out in store")}
+
+
+def translate_reason(reason: str | None) -> str:
+    """Reasons written by the system are stored in English; show them in the reader's language."""
+    if not reason:
+        return ""
+    if reason in SYSTEM_REASONS:
+        return _gettext(SYSTEM_REASONS[reason])
+    for prefix, msgid in REASON_PREFIXES.items():
+        if reason.startswith(prefix):
+            return f"{_gettext(msgid)}: {reason[len(prefix) :]}"
+    if reason.startswith("swap "):
+        return f"{_gettext(N_('Moved to another dress'))}: {reason[5:]}"
+    return reason
+
+
 def format_date(value: date | None) -> str:
     return value.strftime("%d.%m.%Y") if value else ""
 
@@ -45,6 +70,7 @@ def _build_env() -> Environment:
     env.install_gettext_callables(_gettext, _ngettext, newstyle=True)
     env.filters["money"] = format_money
     env.filters["date"] = format_date
+    env.filters["reason"] = translate_reason
     env.globals["csrf_token"] = get_csrf_token
     return env
 

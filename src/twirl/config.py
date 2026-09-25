@@ -1,7 +1,16 @@
 from functools import lru_cache
 from pathlib import Path
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+def normalize_database_url(url: str) -> str:
+    """Hosted Postgres (Neon, Render) hands out postgres:// URLs; SQLAlchemy needs the driver."""
+    for prefix in ("postgres://", "postgresql://"):
+        if url.startswith(prefix):
+            return "postgresql+psycopg://" + url[len(prefix) :]
+    return url
 
 
 class Settings(BaseSettings):
@@ -23,8 +32,22 @@ class Settings(BaseSettings):
     telegram_bot_token: str = ""
     telegram_admin_chat_id: str = ""
     trust_cf_connecting_ip: bool = False
-    request_rate_limit_per_hour: int = 5
+    request_rate_limit_per_hour: int = 20
     request_sla_hours: int = 24
+    # Deployment
+    storage_backend: str = "local"  # local | s3 | memory
+    s3_endpoint_url: str = ""
+    s3_bucket: str = ""
+    s3_region: str = "auto"
+    s3_access_key_id: str = ""
+    s3_secret_access_key: str = ""
+    cron_secret: str = ""  # enables POST /internal/jobs for an external scheduler
+    basic_auth: str = ""  # "user:password" puts the whole site behind a login (staging)
+
+    @field_validator("database_url")
+    @classmethod
+    def _driver(cls, value: str) -> str:
+        return normalize_database_url(value)
 
 
 @lru_cache

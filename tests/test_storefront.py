@@ -109,13 +109,12 @@ def test_bad_phone_is_400(client, db, shop):
     )
 
 
-def test_requests_are_rate_limited(client, db, shop):
+def test_requests_are_rate_limited(client, app, db, shop):
     style, _, _ = _dress(db, shop)
-    statuses = [
-        post(client, f"/bella/{style.code}/request", _request_data(size="42")).status_code
-        for _ in range(6)
-    ]
-    assert statuses == [409, 409, 409, 409, 409, 429]
+    limiter = app.state.request_limiter
+    for _ in range(limiter.max_events):
+        limiter.record("testclient")
+    assert post(client, f"/bella/{style.code}/request", _request_data()).status_code == 429
 
 
 def test_fixed_paths_are_not_shadowed(client):

@@ -217,7 +217,7 @@ def list_styles(
         {
             "style": s,
             "thumb": image_url(storage, s.images[0]) if s.images else None,
-            "items": len(s.items),
+            "pieces": len(s.items),
         }
         for s in styles
     ]

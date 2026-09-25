@@ -12,7 +12,7 @@
     <div class="v-tile__body"><span class="v-tile__name">{{ row.style.name }}</span><span class="v-tile__price">{{ row.style.price_cents|money(locale) }}</span></div>
     <div class="v-row" style="margin-top:6px;gap:6px">
       <span class="v-pill">#{{ row.style.code }}</span>
-      <span class="v-pill">{{ row.items }} {{ _("Pieces") }}</span>
+      <span class="v-pill">{{ row.pieces }} {{ _("pieces") }}</span>
       <span class="v-pill{% if row.style.published %} v-pill--good{% endif %}">{{ _("Online") if row.style.published else _("Hidden") }}</span>
     </div>
   </a></li>

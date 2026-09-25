@@ -17,7 +17,7 @@
       <dt>{{ _("Return") }}</dt><dd>{{ b.return_date|date }}</dd>
       {% if b.kind != "block" %}<dt>{{ _("Price") }}</dt><dd>{{ b.price_cents|money(locale) }}</dd>{% endif %}
       {% if b.customer_note %}<dt>{{ _("Note from the customer") }}</dt><dd>{{ b.customer_note }}</dd>{% endif %}
-      {% if b.reason %}<dt>{{ _("Reason") }}</dt><dd>{{ b.reason }}</dd>{% endif %}
+      {% if b.reason %}<dt>{{ _("Reason") }}</dt><dd>{{ b.reason|reason }}</dd>{% endif %}
     </dl>
     {% if actions %}
     <div class="v-surface">
@@ -50,7 +50,7 @@
       {% for e in events %}
       <li><strong>{{ _(status_labels[e.to_status]) }}</strong><br>
         <span class="muted">{{ e.created_at.strftime("%d.%m.%Y %H:%M") }}{% if e.from_status %} · {{ _("from") }} {{ _(status_labels[e.from_status]) }}{% endif %}</span>
-        {% if e.reason %}<br>{{ e.reason }}{% endif %}</li>
+        {% if e.reason %}<br>{{ e.reason|reason }}{% endif %}</li>
       {% endfor %}
     </ol>
   </section>

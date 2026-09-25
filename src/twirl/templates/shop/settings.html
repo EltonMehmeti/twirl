@@ -1,7 +1,7 @@
 {% extends "shop/base.html" %}
 {% block content %}
 {% macro field(name, label, type="text") %}
-<label>{{ _(label) }}
+<label>{{ label }}
   <input type="{{ type }}" name="{{ name }}" value="{{ values[name] }}">
   {% if errors[name] %}<span class="error">{{ errors[name] }}</span>{% endif %}
 </label>
@@ -11,22 +11,22 @@
 <form method="post" action="/shop/settings" class="v-surface">
   <div class="v-cols"><div>
   <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
-  {{ field("name", "Shop name") }}
-  {{ field("city", "City") }}
-  {{ field("address", "Address") }}
-  {{ field("phone", "Phone", "tel") }}
-  {{ field("whatsapp", "WhatsApp number", "tel") }}
-  {{ field("viber", "Viber number", "tel") }}
-  {{ field("instagram", "Instagram handle") }}
+  {{ field("name", _("Shop name")) }}
+  {{ field("city", _("City")) }}
+  {{ field("address", _("Address")) }}
+  {{ field("phone", _("Phone"), "tel") }}
+  {{ field("whatsapp", _("WhatsApp number"), "tel") }}
+  {{ field("viber", _("Viber number"), "tel") }}
+  {{ field("instagram", _("Instagram handle")) }}
   </div><div>
   <label>{{ _("Your terms (deposit, ID, late fee, damage)") }}
     <textarea name="terms_text" rows="4">{{ values.terms_text }}</textarea></label>
   <fieldset><legend>{{ _("Rental rules") }}</legend>
-    {{ field("pickup_lead_days", "Pickup: days before the event", "number") }}
-    {{ field("return_after_days", "Return: days after the event", "number") }}
-    {{ field("prep_days", "Preparation days before pickup", "number") }}
-    {{ field("cleaning_days", "Cleaning days after return", "number") }}
-    {{ field("max_rental_days", "Longest rental in days", "number") }}
+    {{ field("pickup_lead_days", _("Pickup: days before the event"), "number") }}
+    {{ field("return_after_days", _("Return: days after the event"), "number") }}
+    {{ field("prep_days", _("Preparation days before pickup"), "number") }}
+    {{ field("cleaning_days", _("Cleaning days after return"), "number") }}
+    {{ field("max_rental_days", _("Longest rental in days"), "number") }}
   </fieldset>
   <fieldset><legend>{{ _("Closed every week on") }}</legend>
     {% for number, day in weekdays %}
