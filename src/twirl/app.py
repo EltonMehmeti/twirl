@@ -4,12 +4,18 @@ from fastapi import FastAPI
 
 from twirl.config import Settings, get_settings
 from twirl.db import Database
+from twirl.scheduler import start_scheduler
 from twirl.web import health
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    scheduler = None
+    if app.state.settings.run_scheduler:
+        scheduler = start_scheduler(app.state.db, app.state.settings)
     yield
+    if scheduler is not None:
+        scheduler.shutdown(wait=False)
     app.state.db.engine.dispose()
 
 
