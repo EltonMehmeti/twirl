@@ -1,0 +1,21 @@
+{% extends "shop/base.html" %}
+{% block content %}
+<h1>{{ _("Dresses") }}</h1>
+{% if ctx.is_owner %}<p><a href="/shop/styles/new">{{ _("Add a dress") }}</a></p>{% endif %}
+<table>
+  <thead><tr><th></th><th>{{ _("Name") }}</th><th>{{ _("Price") }}</th><th>{{ _("Pieces") }}</th><th>{{ _("Online") }}</th></tr></thead>
+  <tbody>
+  {% for row in rows %}
+    <tr>
+      <td>{% if row.thumb %}<img src="{{ row.thumb }}" alt="{{ row.style.name }}" width="60" height="80" loading="lazy">{% endif %}</td>
+      <td><a href="/shop/styles/{{ row.style.id }}">{{ row.style.name }}</a> <small>#{{ row.style.code }}</small></td>
+      <td>{{ row.style.price_cents|money(locale) }}</td>
+      <td>{{ row.items }}</td>
+      <td>{{ _("Yes") if row.style.published else _("No") }}</td>
+    </tr>
+  {% else %}
+    <tr><td colspan="5" class="muted">{{ _("No dresses yet.") }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

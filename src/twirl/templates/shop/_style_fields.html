@@ -1,0 +1,20 @@
+<label>{{ _("Name") }} <input name="name" value="{{ values.name }}" required maxlength="160">
+  {% if errors.name %}<span class="error">{{ errors.name }}</span>{% endif %}</label>
+<label>{{ _("Price per rental (€)") }} <input name="price_eur" inputmode="decimal" value="{{ values.price_eur }}" required>
+  {% if errors.price_eur %}<span class="error">{{ errors.price_eur }}</span>{% endif %}</label>
+<label>{{ _("Description") }} <textarea name="description" rows="3" maxlength="2000">{{ values.description }}</textarea></label>
+<fieldset><legend>{{ _("Occasions") }}</legend>
+  {% for value, label in choices.occasions %}
+  <label class="inline"><input type="checkbox" name="occasion_tags" value="{{ value }}"
+    {% if value in values.occasion_tags %}checked{% endif %}> {{ _(label) }}</label>
+  {% endfor %}
+</fieldset>
+<label>{{ _("Colour") }} <select name="colour_family"><option value="">—</option>
+  {% for value, label in choices.colours %}<option value="{{ value }}" {% if values.colour_family == value %}selected{% endif %}>{{ _(label) }}</option>{% endfor %}
+</select></label>
+<label>{{ _("Length") }} <select name="length"><option value="">—</option>
+  {% for value, label in choices.lengths %}<option value="{{ value }}" {% if values.length == value %}selected{% endif %}>{{ _(label) }}</option>{% endfor %}
+</select></label>
+<label class="inline"><input type="checkbox" name="stretch" {% if values.stretch %}checked{% endif %}> {{ _("Stretch fabric") }}</label>
+<label class="inline"><input type="checkbox" name="adjustable_back" {% if values.adjustable_back %}checked{% endif %}> {{ _("Adjustable back") }}</label>
+<label class="inline"><input type="checkbox" name="published" {% if values.published %}checked{% endif %}> {{ _("Show on my storefront") }}</label>

@@ -1,0 +1,67 @@
+{% extends "shop/base.html" %}
+{% block content %}
+<p><a href="/shop/styles">← {{ _("All dresses") }}</a></p>
+<h1>{{ style.name }} <small>#{{ style.code }}</small></h1>
+{% if error %}<p class="error" role="alert">{{ _(error) }}</p>{% endif %}
+
+{% if ctx.is_owner %}
+<form method="post" action="/shop/styles/{{ style.id }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+  {% include "shop/_style_fields.html" %}
+  <button>{{ _("Save") }}</button>
+</form>
+{% else %}
+<p>{{ style.price_cents|money(locale) }}</p>
+{% endif %}
+
+<h2>{{ _("Photos") }}</h2>
+<div class="photos">
+  {% for url in images %}<img src="{{ url }}" alt="{{ style.name }}" width="120" height="160" loading="lazy">{% endfor %}
+</div>
+<form method="post" action="/shop/styles/{{ style.id }}/images" enctype="multipart/form-data">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+  <input type="file" name="files" accept="image/*" multiple required>
+  <button>{{ _("Upload photos") }}</button>
+</form>
+
+<h2>{{ _("Physical dresses") }}</h2>
+<table>
+  <thead><tr><th>{{ _("Code") }}</th><th>{{ _("Size") }}</th><th>{{ _("Status") }}</th><th>{{ _("Block dates") }}</th><th>QR</th></tr></thead>
+  <tbody>
+  {% for item in items %}
+    <tr>
+      <td><strong>{{ item.code }}</strong></td>
+      <td>{{ item.size }}</td>
+      <td>
+        <form method="post" action="/shop/items/{{ item.id }}/status" class="inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+          <select name="status">
+            {% for value, label in item_statuses %}<option value="{{ value }}" {% if item.status == value %}selected{% endif %}>{{ _(label) }}</option>{% endfor %}
+          </select>
+          <button>{{ _("Set") }}</button>
+        </form>
+      </td>
+      <td>
+        <form method="post" action="/shop/items/{{ item.id }}/block" class="inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+          <input type="date" name="starts_on" required aria-label="{{ _('From') }}">
+          <input type="date" name="ends_on" required aria-label="{{ _('To') }}">
+          <input name="reason" required placeholder="{{ _('Reason') }}" aria-label="{{ _('Reason') }}">
+          <button>{{ _("Block") }}</button>
+        </form>
+      </td>
+      <td><a href="/shop/items/{{ item.id }}/qr.svg">QR</a></td>
+    </tr>
+  {% else %}
+    <tr><td colspan="5" class="muted">{{ _("No physical dresses yet. Add them below.") }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<form method="post" action="/shop/styles/{{ style.id }}/items">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+  <label>{{ _("Size") }} <input name="size" required maxlength="8"></label>
+  <label>{{ _("How many of this size") }} <input type="number" name="quantity" value="1" min="1" max="20"></label>
+  <button>{{ _("Add dresses") }}</button>
+</form>
+{% endblock %}

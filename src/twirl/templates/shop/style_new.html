@@ -1,0 +1,9 @@
+{% extends "shop/base.html" %}
+{% block content %}
+<h1>{{ _("New dress") }}</h1>
+<form method="post" action="/shop/styles/new">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+  {% include "shop/_style_fields.html" %}
+  <button>{{ _("Create") }}</button>
+</form>
+{% endblock %}
