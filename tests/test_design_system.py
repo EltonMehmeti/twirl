@@ -13,7 +13,13 @@ def test_brand_fonts_are_served_as_woff2(client, name):
 
 def test_design_stylesheet_carries_tokens(client):
     css = client.get("/static/vesha.css").text
-    tokens = ("--color-paper: #fafaf7", "--color-gold: #f2b01e", "--font-display", "Hanken Grotesk")
+    tokens = (
+        "--color-paper: oklch(98.4% 0.004 106)",
+        "--color-gold: oklch(79.9% 0.159 80)",
+        "--color-focus",
+        "--font-display",
+        "Hanken Grotesk",
+    )
     for token in tokens:
         assert token in css
 

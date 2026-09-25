@@ -1,8 +1,7 @@
 {% extends "base.html" %}
-{% block container_class %} v-container--narrow{% endblock %}
+{% block container_class %} v-container--narrow v-doc{% endblock %}
 {% block content %}
-<section class="v-hero">
-  <div class="v-eyebrow">{{ status }}</div>
+<article>
   {% if status == 403 %}
   <h1>{{ _("You don't have access to this page.") }}</h1>
   <p>{{ _("Log in with the account that owns it, or go back to the start.") }}</p>
@@ -11,5 +10,5 @@
   <p>{{ _("The link may be old, or the shop may have taken the dress down.") }}</p>
   {% endif %}
   <p><a class="v-action" href="/">{{ _("Back to the start") }}</a></p>
-</section>
+</article>
 {% endblock %}

@@ -12,7 +12,7 @@
   <div>
     {% if images %}
     <div class="v-gallery{% if images|length == 1 %} v-gallery--single{% endif %}">
-      {% for image in images %}<img src="{{ image.detail }}" alt="{{ style.name }}" width="900" height="1200" loading="{{ 'eager' if loop.first else 'lazy' }}">{% endfor %}
+      {% for image in images %}<img src="{{ image.detail }}" alt="{{ style.name }}" width="900" height="1200" {% if loop.first %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}>{% endfor %}
     </div>
     {% else %}
     <div class="v-noimg">{% include "_logo.html" %}<span>{{ _("Photos coming soon") }}</span></div>
@@ -22,7 +22,7 @@
     <h1>{{ style.name }}</h1>
     <p class="v-price-line"><strong>{{ style.price_cents|money(locale) }}</strong> <span class="muted">{{ _("per rental, paid in the shop") }}</span></p>
     <ul class="v-facts">
-      {% if shop.verified_at %}<li class="v-pill v-pill--good">✓ {{ _("Verified salon") }}</li>{% endif %}
+      {% if shop.verified_at %}<li class="v-pill v-pill--good">{{ _("Verified salon") }}</li>{% endif %}
       <li class="v-pill">{{ shop.city }}</li>
       {% if style.length %}<li class="v-pill">{{ _("Length") }}: {{ style.length }}</li>{% endif %}
       {% if style.stretch %}<li class="v-pill">{{ _("Stretch fabric") }}</li>{% endif %}
@@ -52,11 +52,11 @@
       </form>
     </div>
 
-    <section class="v-surface v-shopcard">
+    <section class="v-shopcard">
       <h2>{{ shop.name }}{% if shop.verified_at %} · {{ _("Verified salon") }}{% endif %}</h2>
       <p>{% if shop.address %}{{ shop.address }}, {% endif %}{{ shop.city }}</p>
       {% if shop.terms_text %}<h3>{{ _("Shop terms") }}</h3><p>{{ shop.terms_text }}</p>{% endif %}
-      <p><a href="/{{ shop.slug }}">{{ _("All dresses from this shop") }} →</a></p>
+      <p><a href="/{{ shop.slug }}">{{ _("All dresses from this shop") }}</a></p>
     </section>
   </div>
 </div>
