@@ -75,3 +75,15 @@ def app(settings, db):
 def client(app):
     with TestClient(app) as c:
         yield c
+
+
+from twirl.models import Base  # noqa: E402
+
+
+@pytest.fixture
+def committed(engine):
+    """For tests that need real commits across connections. Truncates everything afterwards."""
+    yield engine
+    tables = ", ".join(t.name for t in Base.metadata.sorted_tables)
+    with engine.begin() as conn:
+        conn.execute(text(f"TRUNCATE {tables} RESTART IDENTITY CASCADE"))
