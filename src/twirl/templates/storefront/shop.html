@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}{{ shop.name }} · Twirl{% endblock %}
+{% block head %}
+<meta property="og:title" content="{{ shop.name }}">
+<meta property="og:description" content="{{ _('Dresses to rent in') }} {{ shop.city }}">
+{% endblock %}
+{% block content %}
+<h1>{{ shop.name }}</h1>
+<p class="muted">{% if shop.address %}{{ shop.address }}, {% endif %}{{ shop.city }}</p>
+<ul class="cards">
+  {% for card in cards %}
+  <li><a href="/{{ shop.slug }}/{{ card.style.code }}">
+    {% if card.thumb %}<img src="{{ card.thumb }}" alt="{{ card.style.name }}" width="200" height="267" loading="lazy">{% endif %}
+    <strong>{{ card.style.name }}</strong> · {{ card.style.price_cents|money(locale) }}</a></li>
+  {% else %}
+  <li class="muted">{{ _("No dresses online yet.") }}</li>
+  {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ _("Request sent") }}</h1>
+<p>{{ _("Your code") }}: <strong>{{ booking.ref }}</strong></p>
+<p>{{ _(status_text) }}</p>
+<dl>
+  <dt>{{ _("Dress") }}</dt><dd>{{ booking.style.name }} · {{ _("size") }} {{ booking.item.size }}</dd>
+  <dt>{{ _("Event") }}</dt><dd>{{ booking.event_date|date }}</dd>
+  <dt>{{ _("Pickup") }}</dt><dd>{{ booking.pickup_date|date }}</dd>
+  <dt>{{ _("Return") }}</dt><dd>{{ booking.return_date|date }}</dd>
+  <dt>{{ _("Price, paid in the shop") }}</dt><dd>{{ booking.price_cents|money(locale) }}</dd>
+  <dt>{{ _("Shop") }}</dt><dd>{{ shop.name }}{% if shop.address %}, {{ shop.address }}{% endif %}, {{ shop.city }}</dd>
+</dl>
+{% if shop.terms_text %}<h2>{{ _("Shop terms") }}</h2><p>{{ shop.terms_text }}</p>{% endif %}
+{% if whatsapp_url %}<p><a href="{{ whatsapp_url }}">{{ _("Message the shop on WhatsApp") }}</a></p>{% endif %}
+{% if viber_url %}<p><a href="{{ viber_url }}">{{ _("Message the shop on Viber") }}</a></p>{% endif %}
+{% endblock %}

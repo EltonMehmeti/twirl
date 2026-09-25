@@ -1,0 +1,10 @@
+{% if error %}
+<p class="error">{{ _(error) }}</p>
+{% elif availability %}
+<p>{{ _("Pickup") }} {{ availability.dates.pickup|date }} · {{ _("Return") }} {{ availability.dates.return_|date }}</p>
+<ul class="sizes">
+  {% for size, free in availability.sizes.items() %}<li class="{{ 'free' if free else 'taken' }}">{{ size }}: {{ _("free") if free else _("taken") }}</li>{% endfor %}
+</ul>
+{% else %}
+<p class="muted">{{ _("Pick your event date to see which sizes are free.") }}</p>
+{% endif %}

@@ -13,7 +13,7 @@ from twirl.db import Database
 from twirl.ratelimit import RateLimiter
 from twirl.scheduler import start_scheduler
 from twirl.storage import LocalStorage
-from twirl.web import auth, health, pages, shop_bookings, shop_catalog, shop_settings
+from twirl.web import auth, health, pages, shop_bookings, shop_catalog, shop_settings, storefront
 
 STATIC_DIR = Path(__file__).parent / "static"
 SESSION_MAX_AGE = 30 * 24 * 3600
@@ -56,4 +56,5 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.mount("/media", StaticFiles(directory=settings.media_root), name="media")
     for router in (health.router, pages.router, auth.router, shop_bookings.router, shop_catalog.router, shop_settings.router):
         app.include_router(router)
+    app.include_router(storefront.router)  # last: /{slug} matches any single segment
     return app
