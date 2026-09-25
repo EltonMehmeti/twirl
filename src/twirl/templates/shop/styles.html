@@ -1,21 +1,24 @@
 {% extends "shop/base.html" %}
 {% block content %}
-<h1>{{ _("Dresses") }}</h1>
-{% if ctx.is_owner %}<p><a href="/shop/styles/new">{{ _("Add a dress") }}</a></p>{% endif %}
-<table>
-  <thead><tr><th></th><th>{{ _("Name") }}</th><th>{{ _("Price") }}</th><th>{{ _("Pieces") }}</th><th>{{ _("Online") }}</th></tr></thead>
-  <tbody>
+<div class="v-pagehead">
+  <div><div class="v-eyebrow">{{ _("Dresses") }}: {{ rows|length }}</div><h1>{{ _("Dresses") }}</h1></div>
+  {% if ctx.is_owner %}<a class="v-action" href="/shop/styles/new">+ {{ _("Add a dress") }}</a>{% endif %}
+</div>
+{% if rows %}
+<ul class="v-grid">
   {% for row in rows %}
-    <tr>
-      <td>{% if row.thumb %}<img src="{{ row.thumb }}" alt="{{ row.style.name }}" width="60" height="80" loading="lazy">{% endif %}</td>
-      <td><a href="/shop/styles/{{ row.style.id }}">{{ row.style.name }}</a> <small>#{{ row.style.code }}</small></td>
-      <td>{{ row.style.price_cents|money(locale) }}</td>
-      <td>{{ row.items }}</td>
-      <td>{{ _("Yes") if row.style.published else _("No") }}</td>
-    </tr>
-  {% else %}
-    <tr><td colspan="5" class="muted">{{ _("No dresses yet.") }}</td></tr>
+  <li><a class="v-tile" href="/shop/styles/{{ row.style.id }}">
+    <div class="v-tile__img">{% if row.thumb %}<img src="{{ row.thumb }}" alt="{{ row.style.name }}" width="400" height="533" loading="lazy">{% else %}<div class="v-noimg">{% include "_logo.html" %}<span>{{ _("No photos yet") }}</span></div>{% endif %}</div>
+    <div class="v-tile__body"><span class="v-tile__name">{{ row.style.name }}</span><span class="v-tile__price">{{ row.style.price_cents|money(locale) }}</span></div>
+    <div class="v-row" style="margin-top:6px;gap:6px">
+      <span class="v-pill">#{{ row.style.code }}</span>
+      <span class="v-pill">{{ row.items }} {{ _("Pieces") }}</span>
+      <span class="v-pill{% if row.style.published %} v-pill--good{% endif %}">{{ _("Online") if row.style.published else _("Hidden") }}</span>
+    </div>
+  </a></li>
   {% endfor %}
-  </tbody>
-</table>
+</ul>
+{% else %}
+<p class="v-empty">{{ _("No dresses yet.") }}</p>
+{% endif %}
 {% endblock %}

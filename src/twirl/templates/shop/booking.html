@@ -1,45 +1,58 @@
 {% extends "shop/base.html" %}
+{% from "shop/_macros.html" import status_pill with context %}
 {% block content %}
-<h1>{{ b.ref }} · {{ _(status_labels[b.status]) }}</h1>
-{% if error %}<p class="error" role="alert">{{ _(error) }}</p>{% endif %}
-<dl>
-  <dt>{{ _("Dress") }}</dt><dd>{{ b.style.name }} · {{ _("size") }} {{ b.item.size }} · {{ _("code") }} {{ b.item.code }}</dd>
-  {% if b.customer %}<dt>{{ _("Customer") }}</dt><dd>{{ b.customer.name }} · <a href="tel:{{ b.customer.phone }}">{{ b.customer.phone }}</a></dd>{% endif %}
-  {% if b.event_date %}<dt>{{ _("Event") }}</dt><dd>{{ b.event_date|date }}</dd>{% endif %}
-  <dt>{{ _("Pickup") }}</dt><dd>{{ b.pickup_date|date }}</dd>
-  <dt>{{ _("Return") }}</dt><dd>{{ b.return_date|date }}</dd>
-  {% if b.kind != "block" %}<dt>{{ _("Price") }}</dt><dd>{{ b.price_cents|money(locale) }}</dd>{% endif %}
-  {% if b.customer_note %}<dt>{{ _("Note from the customer") }}</dt><dd>{{ b.customer_note }}</dd>{% endif %}
-  {% if b.reason %}<dt>{{ _("Reason") }}</dt><dd>{{ b.reason }}</dd>{% endif %}
-</dl>
-
-<div class="actions">
-{% for action, label, needs_reason in actions %}
-  <form method="post" action="/shop/bookings/{{ b.id }}/{{ action }}">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
-    {% if needs_reason %}<label>{{ _("Reason") }} <input name="reason" required maxlength="300"></label>{% endif %}
-    <button>{{ _(label) }}</button>
-  </form>
-{% endfor %}
+<p class="v-crumb"><a href="/shop">← {{ _("Today") }}</a></p>
+<div class="v-pagehead">
+  <div><div class="v-eyebrow">{{ b.ref }}</div><h1>{{ b.style.name }} · {{ b.item.size }}</h1></div>
+  {{ status_pill(b.status, status_labels) }}
 </div>
-
-{% if candidates %}
-<h2>{{ _("Move to another dress") }}</h2>
-<form method="post" action="/shop/bookings/{{ b.id }}/swap">
-  <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
-  <select name="item_id">
-    {% for item in candidates %}<option value="{{ item.id }}">{{ item.style.name }} · {{ item.size }} · {{ item.code }}</option>{% endfor %}
-  </select>
-  <button>{{ _("Move") }}</button>
-</form>
-{% endif %}
-
-<h2>{{ _("History") }}</h2>
-<ol class="timeline">
-  {% for e in events %}
-  <li>{{ e.created_at.strftime("%d.%m.%Y %H:%M") }} ·
-    {{ _(status_labels[e.from_status]) if e.from_status else "—" }} → {{ _(status_labels[e.to_status]) }}
-    {% if e.reason %}· {{ e.reason }}{% endif %}</li>
-  {% endfor %}
-</ol>
+{% if error %}<p class="error" role="alert">{{ _(error) }}</p>{% endif %}
+<div class="v-detail">
+  <div>
+    <dl>
+      <dt>{{ _("Dress") }}</dt><dd>{{ b.style.name }} · {{ _("size") }} {{ b.item.size }} · {{ _("code") }} {{ b.item.code }}</dd>
+      {% if b.customer %}<dt>{{ _("Customer") }}</dt><dd>{{ b.customer.name }} · <a href="tel:{{ b.customer.phone }}">{{ b.customer.phone }}</a></dd>{% endif %}
+      {% if b.event_date %}<dt>{{ _("Event") }}</dt><dd>{{ b.event_date|date }}</dd>{% endif %}
+      <dt>{{ _("Pickup") }}</dt><dd>{{ b.pickup_date|date }}</dd>
+      <dt>{{ _("Return") }}</dt><dd>{{ b.return_date|date }}</dd>
+      {% if b.kind != "block" %}<dt>{{ _("Price") }}</dt><dd>{{ b.price_cents|money(locale) }}</dd>{% endif %}
+      {% if b.customer_note %}<dt>{{ _("Note from the customer") }}</dt><dd>{{ b.customer_note }}</dd>{% endif %}
+      {% if b.reason %}<dt>{{ _("Reason") }}</dt><dd>{{ b.reason }}</dd>{% endif %}
+    </dl>
+    {% if actions %}
+    <div class="v-surface">
+      <div class="actions">
+      {% for action, label, needs_reason in actions %}
+        <form method="post" action="/shop/bookings/{{ b.id }}/{{ action }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+          {% if needs_reason %}<label>{{ _("Reason") }} <input name="reason" required maxlength="300"></label>{% endif %}
+          <button>{{ _(label) }}</button>
+        </form>
+      {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    {% if candidates %}
+    <h2>{{ _("Move to another dress") }}</h2>
+    <form method="post" action="/shop/bookings/{{ b.id }}/swap" class="v-surface actions">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+      <label style="flex:1;margin:0">{{ _("Dress") }}
+        <select name="item_id">
+          {% for item in candidates %}<option value="{{ item.id }}">{{ item.style.name }} · {{ item.size }} · {{ item.code }}</option>{% endfor %}
+        </select></label>
+      <button>{{ _("Move") }}</button>
+    </form>
+    {% endif %}
+  </div>
+  <section class="v-surface">
+    <h2 style="margin-top:0">{{ _("History") }}</h2>
+    <ol class="timeline">
+      {% for e in events %}
+      <li><strong>{{ _(status_labels[e.to_status]) }}</strong><br>
+        <span class="muted">{{ e.created_at.strftime("%d.%m.%Y %H:%M") }}{% if e.from_status %} · {{ _("from") }} {{ _(status_labels[e.from_status]) }}{% endif %}</span>
+        {% if e.reason %}<br>{{ e.reason }}{% endif %}</li>
+      {% endfor %}
+    </ol>
+  </section>
+</div>
 {% endblock %}

@@ -1,12 +1,16 @@
 {% extends "base.html" %}
+{% block home_url %}/shop{% endblock %}
+{% block tagline %}<span class="v-brand__tag">{{ ctx.shop.name }}</span>{% endblock %}
 {% block nav %}
-<a href="/shop">{{ _("Today") }}</a>
-<a href="/shop/calendar">{{ _("Calendar") }}</a>
-<a href="/shop/walk-in">{{ _("Walk-in") }}</a>
-<a href="/shop/styles">{{ _("Dresses") }}</a>
-{% if ctx.is_owner %}<a href="/shop/settings">{{ _("Settings") }}</a>{% endif %}
+{% set here = request.url.path %}
+<a href="/shop"{% if here == "/shop" %} aria-current="page"{% endif %}>{{ _("Today") }}</a>
+<a href="/shop/calendar"{% if here.startswith("/shop/calendar") %} aria-current="page"{% endif %}>{{ _("Calendar") }}</a>
+<a href="/shop/walk-in"{% if here.startswith("/shop/walk-in") %} aria-current="page"{% endif %}>{{ _("Walk-in") }}</a>
+<a href="/shop/styles"{% if here.startswith("/shop/styles") %} aria-current="page"{% endif %}>{{ _("Dresses") }}</a>
+{% if ctx.is_owner %}<a href="/shop/settings"{% if here.startswith("/shop/settings") %} aria-current="page"{% endif %}>{{ _("Settings") }}</a>{% endif %}
+<a href="/{{ ctx.shop.slug }}" target="_blank" rel="noopener">{{ _("My storefront") }} ↗</a>
 <form method="post" action="/logout" class="inline">
   <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
-  <button>{{ _("Log out") }}</button>
+  <button class="v-linkbtn">{{ _("Log out") }}</button>
 </form>
 {% endblock %}

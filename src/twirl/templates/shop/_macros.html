@@ -1,13 +1,14 @@
-{% macro booking_list(title, bookings, empty) %}
-<section>
-  <h2>{{ title }} ({{ bookings|length }})</h2>
+{% macro booking_list(title, bookings, empty, tone="") %}
+<section class="v-lane{% if tone and bookings %} v-lane--{{ tone }}{% endif %}">
+  <div class="v-lane__head"><h2>{{ title }}</h2><span class="v-lane__count">{{ bookings|length }}</span></div>
   {% if bookings %}
-  <ul class="bookings">
+  <ul>
     {% for b in bookings %}
-    <li><a href="/shop/bookings/{{ b.id }}"><strong>{{ b.ref }}</strong>
-      · {{ b.style.name }} {{ b.item.size }} ({{ b.item.code }})
-      {% if b.customer %}· {{ b.customer.name }}{% endif %}
-      · {{ b.pickup_date|date }} – {{ b.return_date|date }}</a></li>
+    <li><a class="v-row-link" href="/shop/bookings/{{ b.id }}">
+      <span class="v-row-link__title">{{ b.style.name }} · {{ b.item.size }}{% if b.customer %} — {{ b.customer.name }}{% endif %}</span>
+      <span class="v-row-link__meta">{{ b.pickup_date|date }} → {{ b.return_date|date }} · {{ _("code") }} {{ b.item.code }}</span>
+      <span class="v-row-link__ref">{{ b.ref }}</span>
+    </a></li>
     {% endfor %}
   </ul>
   {% else %}
@@ -15,3 +16,8 @@
   {% endif %}
 </section>
 {% endmacro %}
+
+{% macro status_pill(status, labels) -%}
+{%- set tone = {"pending_shop": "gold", "at_risk": "danger", "confirmed": "good", "picked_up": "ink", "not_returned": "danger", "no_show": "danger"}.get(status, "") -%}
+<span class="v-pill{% if tone %} v-pill--{{ tone }}{% endif %}">{{ _(labels[status]) }}</span>
+{%- endmacro %}

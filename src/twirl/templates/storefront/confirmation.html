@@ -1,8 +1,15 @@
 {% extends "base.html" %}
+{% block container_class %} v-container--narrow{% endblock %}
 {% block content %}
-<h1>{{ _("Request sent") }}</h1>
-<p>{{ _("Your code") }}: <strong>{{ booking.ref }}</strong></p>
-<p>{{ _(status_text) }}</p>
+<div class="v-ticket">
+  <div class="v-eyebrow">{{ _("Request sent") }}</div>
+  <div class="v-ticket__code" aria-label="{{ _('Your code') }}">{{ booking.ref }}</div>
+  <p>{{ _(status_text) }}</p>
+</div>
+<div class="v-ctas">
+  {% if whatsapp_url %}<a class="v-cta" href="{{ whatsapp_url }}">{{ _("Message the shop on WhatsApp") }}</a>{% endif %}
+  {% if viber_url %}<a class="v-cta v-cta--ghost" href="{{ viber_url }}">{{ _("Message the shop on Viber") }}</a>{% endif %}
+</div>
 <dl>
   <dt>{{ _("Dress") }}</dt><dd>{{ booking.style.name }} · {{ _("size") }} {{ booking.item.size }}</dd>
   <dt>{{ _("Event") }}</dt><dd>{{ booking.event_date|date }}</dd>
@@ -11,7 +18,5 @@
   <dt>{{ _("Price, paid in the shop") }}</dt><dd>{{ booking.price_cents|money(locale) }}</dd>
   <dt>{{ _("Shop") }}</dt><dd>{{ shop.name }}{% if shop.address %}, {{ shop.address }}{% endif %}, {{ shop.city }}</dd>
 </dl>
-{% if shop.terms_text %}<h2>{{ _("Shop terms") }}</h2><p>{{ shop.terms_text }}</p>{% endif %}
-{% if whatsapp_url %}<p><a href="{{ whatsapp_url }}">{{ _("Message the shop on WhatsApp") }}</a></p>{% endif %}
-{% if viber_url %}<p><a href="{{ viber_url }}">{{ _("Message the shop on Viber") }}</a></p>{% endif %}
+{% if shop.terms_text %}<section class="v-surface"><h2 style="margin-top:0">{{ _("Shop terms") }}</h2><p>{{ shop.terms_text }}</p></section>{% endif %}
 {% endblock %}

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-25 23:37+0200\n"
+"POT-Creation-Date: 2026-09-25 23:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,18 +21,40 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-#: src/twirl/templates/home.html:3
-msgid "Rent the dress. Skip the price tag."
+#: src/twirl/templates/base.html:19
+msgid "Main"
 msgstr ""
 
-#: src/twirl/templates/home.html:4
+#: src/twirl/templates/base.html:27 src/twirl/templates/home.html:6
 msgid "Dress rental shops in Kosovo, bookable online."
 msgstr ""
 
+#: src/twirl/templates/home.html:4
+msgid "Kosovo · dress rental"
+msgstr ""
+
+#: src/twirl/templates/home.html:5
+msgid "Rent the dress. Skip the price tag."
+msgstr ""
+
 #: src/twirl/templates/auth/code.html:3 src/twirl/templates/auth/phone.html:3
-#: src/twirl/templates/layouts/vesha.html:16
+#: src/twirl/templates/home.html:9 src/twirl/templates/layouts/vesha.html:16
 #: src/twirl/templates/onboarding/fork.html:2
 msgid "List your clothes"
+msgstr ""
+
+#: src/twirl/templates/home.html:10
+msgid ""
+"For salons and for people with a dress to rent out. A phone number is "
+"enough to start."
+msgstr ""
+
+#: src/twirl/templates/auth/login.html:5 src/twirl/templates/home.html:13
+msgid "Shop login"
+msgstr ""
+
+#: src/twirl/templates/home.html:14
+msgid "Today's pickups, returns and requests, in one place."
 msgstr ""
 
 #: src/twirl/templates/auth/code.html:3 src/twirl/templates/auth/phone.html:3
@@ -78,27 +100,23 @@ msgstr ""
 msgid "Verify the number"
 msgstr ""
 
-#: src/twirl/templates/auth/login.html:3
-msgid "Shop login"
-msgstr ""
-
-#: src/twirl/templates/auth/login.html:8
+#: src/twirl/templates/auth/login.html:11
 msgid "Email"
 msgstr ""
 
-#: src/twirl/templates/auth/login.html:9
+#: src/twirl/templates/auth/login.html:12
 msgid "Password"
 msgstr ""
 
-#: src/twirl/templates/auth/login.html:10
+#: src/twirl/templates/auth/login.html:13
 msgid "Log in"
 msgstr ""
 
-#: src/twirl/templates/auth/login.html:12
+#: src/twirl/templates/auth/login.html:16
 msgid "Log in with your phone number"
 msgstr ""
 
-#: src/twirl/templates/auth/login.html:13
+#: src/twirl/templates/auth/login.html:17
 msgid "New here? List your clothes"
 msgstr ""
 
@@ -128,7 +146,7 @@ msgid "for providers"
 msgstr ""
 
 #: src/twirl/templates/onboarding/_photos.html:2
-#: src/twirl/templates/shop/style_edit.html:17 src/twirl/web/onboarding.py:817
+#: src/twirl/templates/shop/style_edit.html:13 src/twirl/web/onboarding.py:817
 msgid "Photos"
 msgstr ""
 
@@ -147,7 +165,9 @@ msgid ""
 msgstr ""
 
 #: src/twirl/templates/onboarding/done.html:4
-#: src/twirl/templates/storefront/style.html:43
+#: src/twirl/templates/storefront/shop.html:13
+#: src/twirl/templates/storefront/style.html:24
+#: src/twirl/templates/storefront/style.html:57
 msgid "Verified salon"
 msgstr ""
 
@@ -249,9 +269,9 @@ msgid "Sizes in stock"
 msgstr ""
 
 #: src/twirl/templates/onboarding/dress.html:23
-#: src/twirl/templates/shop/style_edit.html:29
-#: src/twirl/templates/shop/style_edit.html:63
-#: src/twirl/templates/storefront/style.html:30
+#: src/twirl/templates/shop/style_edit.html:40
+#: src/twirl/templates/shop/style_edit.html:75
+#: src/twirl/templates/storefront/style.html:42
 msgid "Size"
 msgstr ""
 
@@ -566,12 +586,12 @@ msgid "verified"
 msgstr ""
 
 #: src/twirl/templates/onboarding/review.html:28
-#: src/twirl/templates/storefront/style.html:40
+#: src/twirl/templates/storefront/style.html:52
 msgid "As pictured."
 msgstr ""
 
 #: src/twirl/templates/onboarding/review.html:28
-#: src/twirl/templates/storefront/style.html:40
+#: src/twirl/templates/storefront/style.html:52
 msgid ""
 "The item is handed over as in the photos and in the stated size. If it "
 "isn't, the renter may refuse it and owes nothing."
@@ -585,8 +605,12 @@ msgstr ""
 msgid "Publish the item"
 msgstr ""
 
+#: src/twirl/templates/shop/_macros.html:9
+#: src/twirl/templates/shop/booking.html:13
+msgid "code"
+msgstr ""
+
 #: src/twirl/templates/shop/_style_fields.html:1
-#: src/twirl/templates/shop/styles.html:6
 msgid "Name"
 msgstr ""
 
@@ -603,17 +627,17 @@ msgid "Colour"
 msgstr ""
 
 #: src/twirl/templates/shop/_style_fields.html:15
-#: src/twirl/templates/storefront/style.html:17
+#: src/twirl/templates/storefront/style.html:26
 msgid "Length"
 msgstr ""
 
 #: src/twirl/templates/shop/_style_fields.html:18
-#: src/twirl/templates/storefront/style.html:18
+#: src/twirl/templates/storefront/style.html:27
 msgid "Stretch fabric"
 msgstr ""
 
 #: src/twirl/templates/shop/_style_fields.html:19
-#: src/twirl/templates/storefront/style.html:19
+#: src/twirl/templates/storefront/style.html:28
 msgid "Adjustable back"
 msgstr ""
 
@@ -621,109 +645,133 @@ msgstr ""
 msgid "Show on my storefront"
 msgstr ""
 
-#: src/twirl/templates/shop/base.html:3
+#: src/twirl/templates/shop/base.html:6 src/twirl/templates/shop/booking.html:4
+#: src/twirl/templates/shop/today.html:5
 msgid "Today"
 msgstr ""
 
-#: src/twirl/templates/shop/base.html:4
-#: src/twirl/templates/shop/calendar.html:3
+#: src/twirl/templates/shop/base.html:7
+#: src/twirl/templates/shop/calendar.html:4
 msgid "Calendar"
 msgstr ""
 
-#: src/twirl/templates/shop/base.html:5
+#: src/twirl/templates/shop/base.html:8 src/twirl/templates/shop/walk_in.html:4
 msgid "Walk-in"
 msgstr ""
 
-#: src/twirl/templates/shop/base.html:6 src/twirl/templates/shop/styles.html:3
+#: src/twirl/templates/shop/base.html:9 src/twirl/templates/shop/styles.html:4
+#: src/twirl/templates/storefront/shop.html:15
 msgid "Dresses"
 msgstr ""
 
-#: src/twirl/templates/shop/base.html:7
+#: src/twirl/templates/shop/base.html:10
 msgid "Settings"
 msgstr ""
 
-#: src/twirl/templates/shop/base.html:10
+#: src/twirl/templates/shop/base.html:11
+msgid "My storefront"
+msgstr ""
+
+#: src/twirl/templates/shop/base.html:14
 msgid "Log out"
 msgstr ""
 
-#: src/twirl/templates/shop/booking.html:6
-#: src/twirl/templates/shop/calendar.html:7
-#: src/twirl/templates/storefront/confirmation.html:7
+#: src/twirl/templates/shop/booking.html:13
+#: src/twirl/templates/shop/booking.html:39
+#: src/twirl/templates/shop/calendar.html:12
+#: src/twirl/templates/storefront/confirmation.html:14
 msgid "Dress"
 msgstr ""
 
-#: src/twirl/templates/shop/booking.html:6
-#: src/twirl/templates/shop/walk_in.html:5
-#: src/twirl/templates/storefront/confirmation.html:7
+#: src/twirl/templates/shop/booking.html:13
+#: src/twirl/templates/shop/walk_in.html:22
+#: src/twirl/templates/storefront/confirmation.html:14
 msgid "size"
 msgstr ""
 
-#: src/twirl/templates/shop/booking.html:6
-msgid "code"
-msgstr ""
-
-#: src/twirl/templates/shop/booking.html:7
+#: src/twirl/templates/shop/booking.html:14
 msgid "Customer"
 msgstr ""
 
-#: src/twirl/templates/shop/booking.html:8
-#: src/twirl/templates/storefront/confirmation.html:8
+#: src/twirl/templates/shop/booking.html:15
+#: src/twirl/templates/storefront/confirmation.html:15
 msgid "Event"
 msgstr ""
 
-#: src/twirl/templates/shop/booking.html:9
-#: src/twirl/templates/shop/walk_in.html:24
+#: src/twirl/templates/shop/booking.html:16
+#: src/twirl/templates/shop/walk_in.html:28
 #: src/twirl/templates/storefront/_availability.html:4
-#: src/twirl/templates/storefront/confirmation.html:9
+#: src/twirl/templates/storefront/confirmation.html:16
 msgid "Pickup"
 msgstr ""
 
-#: src/twirl/templates/shop/booking.html:10
-#: src/twirl/templates/shop/walk_in.html:25
+#: src/twirl/templates/shop/booking.html:17
+#: src/twirl/templates/shop/walk_in.html:29
 #: src/twirl/templates/storefront/_availability.html:4
-#: src/twirl/templates/storefront/confirmation.html:10
+#: src/twirl/templates/storefront/confirmation.html:17
 msgid "Return"
 msgstr ""
 
-#: src/twirl/templates/shop/booking.html:11
-#: src/twirl/templates/shop/styles.html:6
+#: src/twirl/templates/shop/booking.html:18
 msgid "Price"
 msgstr ""
 
-#: src/twirl/templates/shop/booking.html:12
+#: src/twirl/templates/shop/booking.html:19
 msgid "Note from the customer"
 msgstr ""
 
-#: src/twirl/templates/shop/booking.html:13
 #: src/twirl/templates/shop/booking.html:20
-#: src/twirl/templates/shop/settings.html:52
-#: src/twirl/templates/shop/style_edit.html:49
+#: src/twirl/templates/shop/booking.html:28
+#: src/twirl/templates/shop/settings.html:55
+#: src/twirl/templates/shop/style_edit.html:60
 msgid "Reason"
 msgstr ""
 
-#: src/twirl/templates/shop/booking.html:27
+#: src/twirl/templates/shop/booking.html:36
 msgid "Move to another dress"
 msgstr ""
 
-#: src/twirl/templates/shop/booking.html:33
+#: src/twirl/templates/shop/booking.html:43
 msgid "Move"
 msgstr ""
 
-#: src/twirl/templates/shop/booking.html:37
+#: src/twirl/templates/shop/booking.html:48
 msgid "History"
 msgstr ""
 
-#: src/twirl/templates/shop/calendar.html:4
+#: src/twirl/templates/shop/booking.html:52
+msgid "from"
+msgstr ""
+
+#: src/twirl/templates/shop/calendar.html:6
 msgid "Previous week"
 msgstr ""
 
-#: src/twirl/templates/shop/calendar.html:5
+#: src/twirl/templates/shop/calendar.html:7
 msgid "Next week"
 msgstr ""
 
-#: src/twirl/templates/shop/calendar.html:19
-#: src/twirl/templates/shop/styles.html:17
+#: src/twirl/templates/shop/calendar.html:24
+#: src/twirl/templates/shop/styles.html:22
 msgid "No dresses yet."
+msgstr ""
+
+#: src/twirl/templates/shop/calendar.html:29 src/twirl/web/messages.py:6
+msgid "Confirmed"
+msgstr ""
+
+#: src/twirl/templates/shop/calendar.html:29 src/twirl/web/messages.py:5
+msgid "Waiting for your answer"
+msgstr ""
+
+#: src/twirl/templates/shop/calendar.html:29 src/twirl/web/messages.py:8
+#: src/twirl/web/shop_bookings.py:30
+msgid "Picked up"
+msgstr ""
+
+#: src/twirl/templates/shop/calendar.html:29
+#: src/twirl/templates/shop/style_edit.html:61
+msgid "Block"
 msgstr ""
 
 #: src/twirl/templates/shop/settings.html:9
@@ -734,172 +782,179 @@ msgstr ""
 msgid "Saved."
 msgstr ""
 
-#: src/twirl/templates/shop/settings.html:20
+#: src/twirl/templates/shop/settings.html:22
 msgid "Your terms (deposit, ID, late fee, damage)"
 msgstr ""
 
-#: src/twirl/templates/shop/settings.html:22
+#: src/twirl/templates/shop/settings.html:24
 msgid "Rental rules"
 msgstr ""
 
-#: src/twirl/templates/shop/settings.html:29
+#: src/twirl/templates/shop/settings.html:31
 msgid "Closed every week on"
 msgstr ""
 
-#: src/twirl/templates/shop/settings.html:35
-#: src/twirl/templates/shop/style_edit.html:11
-#: src/twirl/templates/shop/walk_in.html:35
+#: src/twirl/templates/shop/settings.html:38
+#: src/twirl/templates/shop/style_edit.html:29
+#: src/twirl/templates/shop/walk_in.html:44
 msgid "Save"
 msgstr ""
 
-#: src/twirl/templates/shop/settings.html:38
+#: src/twirl/templates/shop/settings.html:41
 msgid "Closures"
 msgstr ""
 
-#: src/twirl/templates/shop/settings.html:39
+#: src/twirl/templates/shop/settings.html:42
 msgid "The end date must be on or after the start date."
 msgstr ""
 
-#: src/twirl/templates/shop/settings.html:45
+#: src/twirl/templates/shop/settings.html:48
 msgid "Remove"
 msgstr ""
 
-#: src/twirl/templates/shop/settings.html:50
-#: src/twirl/templates/shop/style_edit.html:47
+#: src/twirl/templates/shop/settings.html:53
+#: src/twirl/templates/shop/style_edit.html:58
 msgid "From"
 msgstr ""
 
-#: src/twirl/templates/shop/settings.html:51
-#: src/twirl/templates/shop/style_edit.html:48
+#: src/twirl/templates/shop/settings.html:54
+#: src/twirl/templates/shop/style_edit.html:59
 msgid "To"
 msgstr ""
 
-#: src/twirl/templates/shop/settings.html:53
+#: src/twirl/templates/shop/settings.html:56
 msgid "Add closure"
 msgstr ""
 
 #: src/twirl/templates/shop/style_edit.html:3
+#: src/twirl/templates/shop/style_new.html:4
 msgid "All dresses"
 msgstr ""
 
-#: src/twirl/templates/shop/style_edit.html:24
+#: src/twirl/templates/shop/style_edit.html:6
+msgid "View online"
+msgstr ""
+
+#: src/twirl/templates/shop/style_edit.html:20
 msgid "Upload photos"
 msgstr ""
 
-#: src/twirl/templates/shop/style_edit.html:27
+#: src/twirl/templates/shop/style_edit.html:37
 msgid "Physical dresses"
 msgstr ""
 
-#: src/twirl/templates/shop/style_edit.html:29
+#: src/twirl/templates/shop/style_edit.html:40
 msgid "Code"
 msgstr ""
 
-#: src/twirl/templates/shop/style_edit.html:29
+#: src/twirl/templates/shop/style_edit.html:40
 msgid "Status"
 msgstr ""
 
-#: src/twirl/templates/shop/style_edit.html:29
+#: src/twirl/templates/shop/style_edit.html:40
 msgid "Block dates"
 msgstr ""
 
-#: src/twirl/templates/shop/style_edit.html:41
+#: src/twirl/templates/shop/style_edit.html:52
 msgid "Set"
 msgstr ""
 
-#: src/twirl/templates/shop/style_edit.html:50
-msgid "Block"
-msgstr ""
-
-#: src/twirl/templates/shop/style_edit.html:56
+#: src/twirl/templates/shop/style_edit.html:67
 msgid "No physical dresses yet. Add them below."
 msgstr ""
 
-#: src/twirl/templates/shop/style_edit.html:64
+#: src/twirl/templates/shop/style_edit.html:76
 msgid "How many of this size"
 msgstr ""
 
-#: src/twirl/templates/shop/style_edit.html:65
+#: src/twirl/templates/shop/style_edit.html:77
 msgid "Add dresses"
 msgstr ""
 
-#: src/twirl/templates/shop/style_new.html:3
+#: src/twirl/templates/shop/style_new.html:5
 msgid "New dress"
 msgstr ""
 
-#: src/twirl/templates/shop/style_new.html:7
+#: src/twirl/templates/shop/style_new.html:9
 msgid "Create"
 msgstr ""
 
-#: src/twirl/templates/shop/styles.html:4
+#: src/twirl/templates/shop/styles.html:5
 msgid "Add a dress"
 msgstr ""
 
-#: src/twirl/templates/shop/styles.html:6
+#: src/twirl/templates/shop/styles.html:11
+msgid "No photos yet"
+msgstr ""
+
+#: src/twirl/templates/shop/styles.html:15
 msgid "Pieces"
 msgstr ""
 
-#: src/twirl/templates/shop/styles.html:6
+#: src/twirl/templates/shop/styles.html:16
 msgid "Online"
 msgstr ""
 
-#: src/twirl/templates/shop/styles.html:14
-msgid "Yes"
+#: src/twirl/templates/shop/styles.html:16
+msgid "Hidden"
 msgstr ""
 
-#: src/twirl/templates/shop/styles.html:14
-msgid "No"
-msgstr ""
-
-#: src/twirl/templates/shop/today.html:5
+#: src/twirl/templates/shop/today.html:6
 msgid "New walk-in"
 msgstr ""
 
-#: src/twirl/templates/shop/today.html:6
+#: src/twirl/templates/shop/today.html:9 src/twirl/templates/shop/today.html:16
 msgid "Requests waiting for you"
 msgstr ""
 
-#: src/twirl/templates/shop/today.html:6
-msgid "No requests waiting."
-msgstr ""
-
-#: src/twirl/templates/shop/today.html:7
-msgid "At risk: find another dress"
-msgstr ""
-
-#: src/twirl/templates/shop/today.html:7
-msgid "Nothing at risk."
-msgstr ""
-
-#: src/twirl/templates/shop/today.html:8
+#: src/twirl/templates/shop/today.html:10
+#: src/twirl/templates/shop/today.html:18
 msgid "Pickups today"
 msgstr ""
 
-#: src/twirl/templates/shop/today.html:8
-msgid "No pickups today."
-msgstr ""
-
-#: src/twirl/templates/shop/today.html:9
+#: src/twirl/templates/shop/today.html:11
+#: src/twirl/templates/shop/today.html:19
 msgid "Returns today"
 msgstr ""
 
-#: src/twirl/templates/shop/today.html:9
+#: src/twirl/templates/shop/today.html:13
+msgid "Need attention"
+msgstr ""
+
+#: src/twirl/templates/shop/today.html:16
+msgid "No requests waiting."
+msgstr ""
+
+#: src/twirl/templates/shop/today.html:17
+msgid "At risk: find another dress"
+msgstr ""
+
+#: src/twirl/templates/shop/today.html:17
+msgid "Nothing at risk."
+msgstr ""
+
+#: src/twirl/templates/shop/today.html:18
+msgid "No pickups today."
+msgstr ""
+
+#: src/twirl/templates/shop/today.html:19
 msgid "No returns today."
 msgstr ""
 
-#: src/twirl/templates/shop/today.html:10
+#: src/twirl/templates/shop/today.html:20
 msgid "Overdue pickups"
 msgstr ""
 
-#: src/twirl/templates/shop/today.html:10
-#: src/twirl/templates/shop/today.html:11
+#: src/twirl/templates/shop/today.html:20
+#: src/twirl/templates/shop/today.html:21
 msgid "None."
 msgstr ""
 
-#: src/twirl/templates/shop/today.html:11
+#: src/twirl/templates/shop/today.html:21
 msgid "Overdue returns"
 msgstr ""
 
-#: src/twirl/templates/shop/walk_in.html:3
+#: src/twirl/templates/shop/walk_in.html:4
 msgid "Walk-in or phone booking"
 msgstr ""
 
@@ -909,46 +964,46 @@ msgid ""
 "dress or other dates."
 msgstr ""
 
-#: src/twirl/templates/shop/walk_in.html:19
+#: src/twirl/templates/shop/walk_in.html:21
 msgid "Dress code"
 msgstr ""
 
-#: src/twirl/templates/shop/walk_in.html:20
+#: src/twirl/templates/shop/walk_in.html:23
 msgid "Type"
 msgstr ""
 
-#: src/twirl/templates/shop/walk_in.html:21
+#: src/twirl/templates/shop/walk_in.html:24
 msgid "In the shop"
 msgstr ""
 
-#: src/twirl/templates/shop/walk_in.html:22
+#: src/twirl/templates/shop/walk_in.html:25
 msgid "By phone"
 msgstr ""
 
-#: src/twirl/templates/shop/walk_in.html:26
+#: src/twirl/templates/shop/walk_in.html:33
 msgid "Customer name"
 msgstr ""
 
-#: src/twirl/templates/shop/walk_in.html:27
-#: src/twirl/templates/storefront/style.html:35 src/twirl/web/onboarding.py:804
+#: src/twirl/templates/shop/walk_in.html:34
+#: src/twirl/templates/storefront/style.html:47 src/twirl/web/onboarding.py:804
 msgid "Phone"
 msgstr ""
 
-#: src/twirl/templates/shop/walk_in.html:28
+#: src/twirl/templates/shop/walk_in.html:35
 msgid "Note"
 msgstr ""
 
-#: src/twirl/templates/shop/walk_in.html:29
+#: src/twirl/templates/shop/walk_in.html:36
 msgid "The customer takes the dress now"
 msgstr ""
 
-#: src/twirl/templates/shop/walk_in.html:31
+#: src/twirl/templates/shop/walk_in.html:40
 msgid ""
 "Why does this customer get the dress? The online booking will be flagged "
 "and we will find another dress for it."
 msgstr ""
 
-#: src/twirl/templates/shop/walk_in.html:33
+#: src/twirl/templates/shop/walk_in.html:42
 msgid "Save anyway"
 msgstr ""
 
@@ -961,70 +1016,85 @@ msgid "taken"
 msgstr ""
 
 #: src/twirl/templates/storefront/_availability.html:9
+#: src/twirl/templates/storefront/style.html:41
 msgid "Pick your event date to see which sizes are free."
 msgstr ""
 
-#: src/twirl/templates/storefront/confirmation.html:3
+#: src/twirl/templates/storefront/confirmation.html:5
 msgid "Request sent"
 msgstr ""
 
-#: src/twirl/templates/storefront/confirmation.html:4
+#: src/twirl/templates/storefront/confirmation.html:6
 msgid "Your code"
 msgstr ""
 
-#: src/twirl/templates/storefront/confirmation.html:11
-msgid "Price, paid in the shop"
-msgstr ""
-
-#: src/twirl/templates/storefront/confirmation.html:12
-msgid "Shop"
-msgstr ""
-
-#: src/twirl/templates/storefront/confirmation.html:14
-#: src/twirl/templates/storefront/style.html:45
-msgid "Shop terms"
-msgstr ""
-
-#: src/twirl/templates/storefront/confirmation.html:15
+#: src/twirl/templates/storefront/confirmation.html:10
 msgid "Message the shop on WhatsApp"
 msgstr ""
 
-#: src/twirl/templates/storefront/confirmation.html:16
+#: src/twirl/templates/storefront/confirmation.html:11
 msgid "Message the shop on Viber"
 msgstr ""
 
+#: src/twirl/templates/storefront/confirmation.html:18
+msgid "Price, paid in the shop"
+msgstr ""
+
+#: src/twirl/templates/storefront/confirmation.html:19
+msgid "Shop"
+msgstr ""
+
+#: src/twirl/templates/storefront/confirmation.html:21
+#: src/twirl/templates/storefront/style.html:59
+msgid "Shop terms"
+msgstr ""
+
 #: src/twirl/templates/storefront/shop.html:5
+#: src/twirl/templates/storefront/shop.html:10
 msgid "Dresses to rent in"
 msgstr ""
 
-#: src/twirl/templates/storefront/shop.html:16
+#: src/twirl/templates/storefront/shop.html:31
 msgid "No dresses online yet."
 msgstr ""
 
-#: src/twirl/templates/storefront/style.html:11
+#: src/twirl/templates/storefront/style.html:17
+msgid "Photos coming soon"
+msgstr ""
+
+#: src/twirl/templates/storefront/style.html:22
 msgid "per rental, paid in the shop"
 msgstr ""
 
-#: src/twirl/templates/storefront/style.html:25
-msgid "Event date"
-msgstr ""
-
-#: src/twirl/templates/storefront/style.html:34
-msgid "Your name"
-msgstr ""
-
-#: src/twirl/templates/storefront/style.html:36
-msgid "Note for the shop (optional)"
-msgstr ""
-
-#: src/twirl/templates/storefront/style.html:38
+#: src/twirl/templates/storefront/style.html:33
+#: src/twirl/templates/storefront/style.html:50
 msgid "Request this dress"
 msgstr ""
 
-#: src/twirl/templates/storefront/style.html:39
+#: src/twirl/templates/storefront/style.html:37
+msgid "Event date"
+msgstr ""
+
+#: src/twirl/templates/storefront/style.html:44 src/twirl/web/onboarding.py:120
+msgid "Made to measure"
+msgstr ""
+
+#: src/twirl/templates/storefront/style.html:46
+msgid "Your name"
+msgstr ""
+
+#: src/twirl/templates/storefront/style.html:48
+msgid "Note for the shop (optional)"
+msgstr ""
+
+#: src/twirl/templates/storefront/style.html:51
 msgid ""
 "No payment now. The shop confirms your request, then you pick up and pay "
 "in the shop."
+msgstr ""
+
+#: src/twirl/templates/storefront/style.html:60
+msgid "All dresses from this shop"
 msgstr ""
 
 #: src/twirl/web/auth.py:44 src/twirl/web/auth.py:105 src/twirl/web/auth.py:177
@@ -1055,20 +1125,8 @@ msgstr ""
 msgid "On hold"
 msgstr ""
 
-#: src/twirl/web/messages.py:5
-msgid "Waiting for your answer"
-msgstr ""
-
-#: src/twirl/web/messages.py:6
-msgid "Confirmed"
-msgstr ""
-
 #: src/twirl/web/messages.py:7
 msgid "At risk"
-msgstr ""
-
-#: src/twirl/web/messages.py:8 src/twirl/web/shop_bookings.py:30
-msgid "Picked up"
 msgstr ""
 
 #: src/twirl/web/messages.py:9
@@ -1277,10 +1335,6 @@ msgstr ""
 
 #: src/twirl/web/onboarding.py:115
 msgid "Confirm the promise before publishing."
-msgstr ""
-
-#: src/twirl/web/onboarding.py:120
-msgid "Made to measure"
 msgstr ""
 
 #: src/twirl/web/onboarding.py:204

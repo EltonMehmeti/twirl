@@ -1,36 +1,47 @@
 {% extends "shop/base.html" %}
 {% block content %}
-<p><a href="/shop/styles">← {{ _("All dresses") }}</a></p>
-<h1>{{ style.name }} <small>#{{ style.code }}</small></h1>
+<p class="v-crumb"><a href="/shop/styles">← {{ _("All dresses") }}</a></p>
+<div class="v-pagehead">
+  <div><div class="v-eyebrow">#{{ style.code }}</div><h1>{{ style.name }}</h1></div>
+  {% if style.published %}<a class="v-action v-action--ghost" href="/{{ ctx.shop.slug }}/{{ style.code }}" target="_blank" rel="noopener">{{ _("View online") }} ↗</a>{% endif %}
+</div>
 {% if error %}<p class="error" role="alert">{{ _(error) }}</p>{% endif %}
 
-{% if ctx.is_owner %}
-<form method="post" action="/shop/styles/{{ style.id }}">
-  <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
-  {% include "shop/_style_fields.html" %}
-  <button>{{ _("Save") }}</button>
-</form>
-{% else %}
-<p>{{ style.price_cents|money(locale) }}</p>
-{% endif %}
-
-<h2>{{ _("Photos") }}</h2>
-<div class="photos">
-  {% for url in images %}<img src="{{ url }}" alt="{{ style.name }}" width="120" height="160" loading="lazy">{% endfor %}
+<div class="v-cols">
+  <div>
+    <section class="v-surface">
+      <h2 style="margin-top:0">{{ _("Photos") }}</h2>
+      <div class="photos">
+        {% for url in images %}<img src="{{ url }}" alt="{{ style.name }}" width="120" height="160" loading="lazy">{% endfor %}
+      </div>
+      <form method="post" action="/shop/styles/{{ style.id }}/images" enctype="multipart/form-data" class="actions">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+        <input type="file" name="files" accept="image/*" multiple required>
+        <button>{{ _("Upload photos") }}</button>
+      </form>
+    </section>
+  </div>
+  <div>
+    {% if ctx.is_owner %}
+    <form method="post" action="/shop/styles/{{ style.id }}" class="v-surface">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+      {% include "shop/_style_fields.html" %}
+      <button>{{ _("Save") }}</button>
+    </form>
+    {% else %}
+    <p class="v-price-line"><strong>{{ style.price_cents|money(locale) }}</strong></p>
+    {% endif %}
+  </div>
 </div>
-<form method="post" action="/shop/styles/{{ style.id }}/images" enctype="multipart/form-data">
-  <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
-  <input type="file" name="files" accept="image/*" multiple required>
-  <button>{{ _("Upload photos") }}</button>
-</form>
 
 <h2>{{ _("Physical dresses") }}</h2>
+<div class="v-table-wrap">
 <table>
   <thead><tr><th>{{ _("Code") }}</th><th>{{ _("Size") }}</th><th>{{ _("Status") }}</th><th>{{ _("Block dates") }}</th><th>QR</th></tr></thead>
   <tbody>
   {% for item in items %}
-    <tr>
-      <td><strong>{{ item.code }}</strong></td>
+    <tr class="v-itemrow">
+      <td><strong style="font-family:var(--font-mono);letter-spacing:.1em">{{ item.code }}</strong></td>
       <td>{{ item.size }}</td>
       <td>
         <form method="post" action="/shop/items/{{ item.id }}/status" class="inline">
@@ -57,11 +68,12 @@
   {% endfor %}
   </tbody>
 </table>
+</div>
 
-<form method="post" action="/shop/styles/{{ style.id }}/items">
+<form method="post" action="/shop/styles/{{ style.id }}/items" class="v-surface actions" style="margin-top:14px">
   <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
-  <label>{{ _("Size") }} <input name="size" required maxlength="8"></label>
-  <label>{{ _("How many of this size") }} <input type="number" name="quantity" value="1" min="1" max="20"></label>
+  <label style="margin:0">{{ _("Size") }} <input name="size" required maxlength="8"></label>
+  <label style="margin:0">{{ _("How many of this size") }} <input type="number" name="quantity" value="1" min="1" max="20"></label>
   <button>{{ _("Add dresses") }}</button>
 </form>
 {% endblock %}

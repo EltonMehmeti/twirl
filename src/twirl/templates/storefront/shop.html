@@ -5,15 +5,29 @@
 <meta property="og:description" content="{{ _('Dresses to rent in') }} {{ shop.city }}">
 {% endblock %}
 {% block content %}
-<h1>{{ shop.name }}</h1>
-<p class="muted">{% if shop.address %}{{ shop.address }}, {% endif %}{{ shop.city }}</p>
-<ul class="cards">
+<header class="v-shophead">
+  <div>
+    <div class="v-eyebrow">{{ _("Dresses to rent in") }} {{ shop.city }}</div>
+    <h1>{{ shop.name }}</h1>
+    <div class="v-shophead__meta">
+      {% if shop.verified_at %}<span class="v-pill v-pill--good">✓ {{ _("Verified salon") }}</span>{% endif %}
+      {% if shop.address %}<span class="v-pill">{{ shop.address }}, {{ shop.city }}</span>{% endif %}
+      <span class="v-pill">{{ _("Dresses") }}: {{ cards|length }}</span>
+    </div>
+  </div>
+</header>
+{% if cards %}
+<ul class="v-grid">
   {% for card in cards %}
-  <li><a href="/{{ shop.slug }}/{{ card.style.code }}">
-    {% if card.thumb %}<img src="{{ card.thumb }}" alt="{{ card.style.name }}" width="200" height="267" loading="lazy">{% endif %}
-    <strong>{{ card.style.name }}</strong> · {{ card.style.price_cents|money(locale) }}</a></li>
-  {% else %}
-  <li class="muted">{{ _("No dresses online yet.") }}</li>
+  <li>
+    <a class="v-tile" href="/{{ shop.slug }}/{{ card.style.code }}">
+      <div class="v-tile__img">{% if card.thumb %}<img src="{{ card.thumb }}" alt="{{ card.style.name }}" width="400" height="533" loading="lazy">{% else %}<div class="v-noimg">{% include "_logo.html" %}</div>{% endif %}</div>
+      <div class="v-tile__body"><span class="v-tile__name">{{ card.style.name }}</span><span class="v-tile__price">{{ card.style.price_cents|money(locale) }}</span></div>
+    </a>
+  </li>
   {% endfor %}
 </ul>
+{% else %}
+<p class="v-empty">{{ _("No dresses online yet.") }}</p>
+{% endif %}
 {% endblock %}

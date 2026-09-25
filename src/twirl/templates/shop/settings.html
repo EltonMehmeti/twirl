@@ -6,9 +6,10 @@
   {% if errors[name] %}<span class="error">{{ errors[name] }}</span>{% endif %}
 </label>
 {% endmacro %}
-<h1>{{ _("Shop settings") }}</h1>
-{% if saved %}<p role="status">{{ _("Saved.") }}</p>{% endif %}
-<form method="post" action="/shop/settings">
+<div class="v-pagehead"><div><div class="v-eyebrow">{{ ctx.shop.name }}</div><h1>{{ _("Shop settings") }}</h1></div></div>
+{% if saved %}<p class="v-pill v-pill--good" role="status">✓ {{ _("Saved.") }}</p>{% endif %}
+<form method="post" action="/shop/settings" class="v-surface">
+  <div class="v-cols"><div>
   <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
   {{ field("name", "Shop name") }}
   {{ field("city", "City") }}
@@ -17,6 +18,7 @@
   {{ field("whatsapp", "WhatsApp number", "tel") }}
   {{ field("viber", "Viber number", "tel") }}
   {{ field("instagram", "Instagram handle") }}
+  </div><div>
   <label>{{ _("Your terms (deposit, ID, late fee, damage)") }}
     <textarea name="terms_text" rows="4">{{ values.terms_text }}</textarea></label>
   <fieldset><legend>{{ _("Rental rules") }}</legend>
@@ -32,24 +34,25 @@
       {% if number in values.closed_weekdays %}checked{% endif %}> {{ _(day) }}</label>
     {% endfor %}
   </fieldset>
+  </div></div>
   <button>{{ _("Save") }}</button>
 </form>
 
 <h2>{{ _("Closures") }}</h2>
 {% if errors.get('ends_on') or errors.get('__all__') %}<p class="error">{{ _("The end date must be on or after the start date.") }}</p>{% endif %}
-<ul>
+<ul class="v-lane" style="list-style:none;padding:0">
 {% for closure in closures %}
-  <li>{{ closure.starts_on|date }} – {{ closure.ends_on|date }} {{ closure.reason }}
+  <li class="v-row" style="justify-content:space-between;margin:0;padding:10px 16px">{{ closure.starts_on|date }} – {{ closure.ends_on|date }} {{ closure.reason }}
     <form method="post" action="/shop/settings/closures/{{ closure.id }}/delete" class="inline">
       <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
-      <button>{{ _("Remove") }}</button></form></li>
+      <button class="v-btn-ghost">{{ _("Remove") }}</button></form></li>
 {% endfor %}
 </ul>
-<form method="post" action="/shop/settings/closures">
+<form method="post" action="/shop/settings/closures" class="v-surface actions">
   <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
-  <label>{{ _("From") }} <input type="date" name="starts_on" required></label>
-  <label>{{ _("To") }} <input type="date" name="ends_on" required></label>
-  <label>{{ _("Reason") }} <input name="reason" maxlength="200"></label>
+  <label style="margin:0">{{ _("From") }} <input type="date" name="starts_on" required></label>
+  <label style="margin:0">{{ _("To") }} <input type="date" name="ends_on" required></label>
+  <label style="margin:0;flex:1">{{ _("Reason") }} <input name="reason" maxlength="200"></label>
   <button>{{ _("Add closure") }}</button>
 </form>
 {% endblock %}

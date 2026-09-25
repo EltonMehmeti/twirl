@@ -4,20 +4,26 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token(request) }}">
+  <meta name="theme-color" content="#fafaf7">
   <title>{% block title %}{{ brand }}{% endblock %}</title>
   {% block head %}{% endblock %}
-  <link rel="stylesheet" href="{{ url_for('static', path='app.css') }}">
+  <link rel="preload" href="{{ url_for('static', path='fonts/clash-display-600.woff2') }}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ url_for('static', path='fonts/hanken-grotesk-400.woff2') }}" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="{{ url_for('static', path='vesha.css') }}">
   <script src="{{ url_for('static', path='htmx.min.js') }}" defer></script>
 </head>
-<body hx-headers='{"X-CSRF-Token": "{{ csrf_token(request) }}"}'>
-  <header class="topbar">
-    <a href="/" class="brand">{% include "_logo.html" %} {{ brand }}</a>
-    <nav>{% block nav %}{% endblock %}</nav>
-    <span class="lang">
-      <a href="/lang/sq?next={{ request.url.path }}">SQ</a> ·
-      <a href="/lang/en?next={{ request.url.path }}">EN</a>
-    </span>
+<body class="v-app" hx-headers='{"X-CSRF-Token": "{{ csrf_token(request) }}"}'>
+  <header class="v-appbar">
+    <div class="v-appbar__inner">
+      <a href="{% block home_url %}/{% endblock %}" class="v-brand">{% include "_logo.html" %}<span class="v-brand__name">{{ brand }}</span>{% block tagline %}{% endblock %}</a>
+      <nav class="v-nav-links" aria-label="{{ _('Main') }}">{% block nav %}{% endblock %}</nav>
+      <span class="v-lang">
+        <a href="/lang/sq?next={{ request.url.path }}"{% if locale == "sq" %} aria-current="true"{% endif %}>SQ</a>
+        <a href="/lang/en?next={{ request.url.path }}"{% if locale == "en" %} aria-current="true"{% endif %}>EN</a>
+      </span>
+    </div>
   </header>
-  <main>{% block content %}{% endblock %}</main>
+  <main class="v-container{% block container_class %}{% endblock %}">{% block content %}{% endblock %}</main>
+  <footer class="v-sitefoot"><span>{{ brand }}</span><span>{{ _("Dress rental shops in Kosovo, bookable online.") }}</span></footer>
 </body>
 </html>

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  twirl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-25 23:37+0200\n"
+"POT-Creation-Date: 2026-09-25 23:55+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: sq\n"
@@ -18,18 +18,39 @@ msgstr ""
 msgid "Back"
 msgstr "Prapa"
 
-#: src/twirl/templates/home.html:3
-msgid "Rent the dress. Skip the price tag."
-msgstr "Merr fustanin me qira, pa e blerë."
+#: src/twirl/templates/base.html:19
+msgid "Main"
+msgstr "Kryesore"
 
-#: src/twirl/templates/home.html:4
+#: src/twirl/templates/base.html:27 src/twirl/templates/home.html:6
 msgid "Dress rental shops in Kosovo, bookable online."
 msgstr "Dyqanet e fustaneve me qira në Kosovë, me rezervim online."
 
+#: src/twirl/templates/home.html:4
+msgid "Kosovo · dress rental"
+msgstr "Kosovë · veshje me qira"
+
+#: src/twirl/templates/home.html:5
+msgid "Rent the dress. Skip the price tag."
+msgstr "Merr fustanin me qira, pa e blerë."
+
 #: src/twirl/templates/auth/code.html:3 src/twirl/templates/auth/phone.html:3
-#: src/twirl/templates/layouts/vesha.html:16 src/twirl/templates/onboarding/fork.html:2
+#: src/twirl/templates/home.html:9 src/twirl/templates/layouts/vesha.html:16
+#: src/twirl/templates/onboarding/fork.html:2
 msgid "List your clothes"
 msgstr "Listo veshjen"
+
+#: src/twirl/templates/home.html:10
+msgid "For salons and for people with a dress to rent out. A phone number is enough to start."
+msgstr "Për sallone dhe për këdo që ka një fustan për ta dhënë me qira. Mjafton numri i telefonit."
+
+#: src/twirl/templates/auth/login.html:5 src/twirl/templates/home.html:13
+msgid "Shop login"
+msgstr "Hyrja për dyqane"
+
+#: src/twirl/templates/home.html:14
+msgid "Today's pickups, returns and requests, in one place."
+msgstr "Marrjet, kthimet dhe kërkesat e sotme, në një vend."
 
 #: src/twirl/templates/auth/code.html:3 src/twirl/templates/auth/phone.html:3 src/twirl/web/auth.py:73
 #: src/twirl/web/auth.py:139
@@ -74,27 +95,23 @@ msgstr "Ndrysho numrin"
 msgid "Verify the number"
 msgstr "Verifiko numrin"
 
-#: src/twirl/templates/auth/login.html:3
-msgid "Shop login"
-msgstr "Hyrja për dyqane"
-
-#: src/twirl/templates/auth/login.html:8
+#: src/twirl/templates/auth/login.html:11
 msgid "Email"
 msgstr "Email"
 
-#: src/twirl/templates/auth/login.html:9
+#: src/twirl/templates/auth/login.html:12
 msgid "Password"
 msgstr "Fjalëkalimi"
 
-#: src/twirl/templates/auth/login.html:10
+#: src/twirl/templates/auth/login.html:13
 msgid "Log in"
 msgstr "Hyni"
 
-#: src/twirl/templates/auth/login.html:12
+#: src/twirl/templates/auth/login.html:16
 msgid "Log in with your phone number"
 msgstr "Hyr me numrin e telefonit"
 
-#: src/twirl/templates/auth/login.html:13
+#: src/twirl/templates/auth/login.html:17
 msgid "New here? List your clothes"
 msgstr "I ri këtu? Listo veshjen"
 
@@ -122,7 +139,7 @@ msgstr "Hapat"
 msgid "for providers"
 msgstr "për ofruesit"
 
-#: src/twirl/templates/onboarding/_photos.html:2 src/twirl/templates/shop/style_edit.html:17
+#: src/twirl/templates/onboarding/_photos.html:2 src/twirl/templates/shop/style_edit.html:13
 #: src/twirl/web/onboarding.py:817
 msgid "Photos"
 msgstr "Fotot"
@@ -139,7 +156,8 @@ msgstr "Shto foto"
 msgid "At least 3 photos. Daylight, no filters: the “as pictured” promise is judged against these."
 msgstr "Së paku 3 foto. Dritë dite, pa filtra — garancia «si në foto» matet me këto."
 
-#: src/twirl/templates/onboarding/done.html:4 src/twirl/templates/storefront/style.html:43
+#: src/twirl/templates/onboarding/done.html:4 src/twirl/templates/storefront/shop.html:13
+#: src/twirl/templates/storefront/style.html:24 src/twirl/templates/storefront/style.html:57
 msgid "Verified salon"
 msgstr "Sallon i verifikuar"
 
@@ -231,8 +249,8 @@ msgstr "Një kategori për listim."
 msgid "Sizes in stock"
 msgstr "Madhësitë në stok"
 
-#: src/twirl/templates/onboarding/dress.html:23 src/twirl/templates/shop/style_edit.html:29
-#: src/twirl/templates/shop/style_edit.html:63 src/twirl/templates/storefront/style.html:30
+#: src/twirl/templates/onboarding/dress.html:23 src/twirl/templates/shop/style_edit.html:40
+#: src/twirl/templates/shop/style_edit.html:75 src/twirl/templates/storefront/style.html:42
 msgid "Size"
 msgstr "Masa"
 
@@ -534,11 +552,11 @@ msgstr "Asnjë datë e zënë"
 msgid "verified"
 msgstr "i verifikuar"
 
-#: src/twirl/templates/onboarding/review.html:28 src/twirl/templates/storefront/style.html:40
+#: src/twirl/templates/onboarding/review.html:28 src/twirl/templates/storefront/style.html:52
 msgid "As pictured."
 msgstr "Si në foto."
 
-#: src/twirl/templates/onboarding/review.html:28 src/twirl/templates/storefront/style.html:40
+#: src/twirl/templates/onboarding/review.html:28 src/twirl/templates/storefront/style.html:52
 msgid ""
 "The item is handed over as in the photos and in the stated size. If it isn't, the renter may "
 "refuse it and owes nothing."
@@ -554,7 +572,11 @@ msgstr "Ky rresht shfaqet edhe në faqen e listimit."
 msgid "Publish the item"
 msgstr "Publiko veshjen"
 
-#: src/twirl/templates/shop/_style_fields.html:1 src/twirl/templates/shop/styles.html:6
+#: src/twirl/templates/shop/_macros.html:9 src/twirl/templates/shop/booking.html:13
+msgid "code"
+msgstr "kodi"
+
+#: src/twirl/templates/shop/_style_fields.html:1
 msgid "Name"
 msgstr "Emri"
 
@@ -570,15 +592,15 @@ msgstr "Rastet"
 msgid "Colour"
 msgstr "Ngjyra"
 
-#: src/twirl/templates/shop/_style_fields.html:15 src/twirl/templates/storefront/style.html:17
+#: src/twirl/templates/shop/_style_fields.html:15 src/twirl/templates/storefront/style.html:26
 msgid "Length"
 msgstr "Gjatësia"
 
-#: src/twirl/templates/shop/_style_fields.html:18 src/twirl/templates/storefront/style.html:18
+#: src/twirl/templates/shop/_style_fields.html:18 src/twirl/templates/storefront/style.html:27
 msgid "Stretch fabric"
 msgstr "Pëlhurë elastike"
 
-#: src/twirl/templates/shop/_style_fields.html:19 src/twirl/templates/storefront/style.html:19
+#: src/twirl/templates/shop/_style_fields.html:19 src/twirl/templates/storefront/style.html:28
 msgid "Adjustable back"
 msgstr "Shpina e rregullueshme"
 
@@ -586,100 +608,123 @@ msgstr "Shpina e rregullueshme"
 msgid "Show on my storefront"
 msgstr "Shfaqe në faqen e dyqanit"
 
-#: src/twirl/templates/shop/base.html:3
+#: src/twirl/templates/shop/base.html:6 src/twirl/templates/shop/booking.html:4
+#: src/twirl/templates/shop/today.html:5
 msgid "Today"
 msgstr "Sot"
 
-#: src/twirl/templates/shop/base.html:4 src/twirl/templates/shop/calendar.html:3
+#: src/twirl/templates/shop/base.html:7 src/twirl/templates/shop/calendar.html:4
 msgid "Calendar"
 msgstr "Kalendari"
 
-#: src/twirl/templates/shop/base.html:5
+#: src/twirl/templates/shop/base.html:8 src/twirl/templates/shop/walk_in.html:4
 msgid "Walk-in"
 msgstr "Klient në dyqan"
 
-#: src/twirl/templates/shop/base.html:6 src/twirl/templates/shop/styles.html:3
+#: src/twirl/templates/shop/base.html:9 src/twirl/templates/shop/styles.html:4
+#: src/twirl/templates/storefront/shop.html:15
 msgid "Dresses"
 msgstr "Fustanet"
 
-#: src/twirl/templates/shop/base.html:7
+#: src/twirl/templates/shop/base.html:10
 msgid "Settings"
 msgstr "Cilësimet"
 
-#: src/twirl/templates/shop/base.html:10
+#: src/twirl/templates/shop/base.html:11
+msgid "My storefront"
+msgstr "Faqja ime"
+
+#: src/twirl/templates/shop/base.html:14
 msgid "Log out"
 msgstr "Dilni"
 
-#: src/twirl/templates/shop/booking.html:6 src/twirl/templates/shop/calendar.html:7
-#: src/twirl/templates/storefront/confirmation.html:7
+#: src/twirl/templates/shop/booking.html:13 src/twirl/templates/shop/booking.html:39
+#: src/twirl/templates/shop/calendar.html:12 src/twirl/templates/storefront/confirmation.html:14
 msgid "Dress"
 msgstr "Fustani"
 
-#: src/twirl/templates/shop/booking.html:6 src/twirl/templates/shop/walk_in.html:5
-#: src/twirl/templates/storefront/confirmation.html:7
+#: src/twirl/templates/shop/booking.html:13 src/twirl/templates/shop/walk_in.html:22
+#: src/twirl/templates/storefront/confirmation.html:14
 msgid "size"
 msgstr "masa"
 
-#: src/twirl/templates/shop/booking.html:6
-msgid "code"
-msgstr "kodi"
-
-#: src/twirl/templates/shop/booking.html:7
+#: src/twirl/templates/shop/booking.html:14
 msgid "Customer"
 msgstr "Klienti"
 
-#: src/twirl/templates/shop/booking.html:8 src/twirl/templates/storefront/confirmation.html:8
+#: src/twirl/templates/shop/booking.html:15 src/twirl/templates/storefront/confirmation.html:15
 msgid "Event"
 msgstr "Eventi"
 
-#: src/twirl/templates/shop/booking.html:9 src/twirl/templates/shop/walk_in.html:24
+#: src/twirl/templates/shop/booking.html:16 src/twirl/templates/shop/walk_in.html:28
 #: src/twirl/templates/storefront/_availability.html:4
-#: src/twirl/templates/storefront/confirmation.html:9
+#: src/twirl/templates/storefront/confirmation.html:16
 msgid "Pickup"
 msgstr "Marrja"
 
-#: src/twirl/templates/shop/booking.html:10 src/twirl/templates/shop/walk_in.html:25
+#: src/twirl/templates/shop/booking.html:17 src/twirl/templates/shop/walk_in.html:29
 #: src/twirl/templates/storefront/_availability.html:4
-#: src/twirl/templates/storefront/confirmation.html:10
+#: src/twirl/templates/storefront/confirmation.html:17
 msgid "Return"
 msgstr "Kthimi"
 
-#: src/twirl/templates/shop/booking.html:11 src/twirl/templates/shop/styles.html:6
+#: src/twirl/templates/shop/booking.html:18
 msgid "Price"
 msgstr "Çmimi"
 
-#: src/twirl/templates/shop/booking.html:12
+#: src/twirl/templates/shop/booking.html:19
 msgid "Note from the customer"
 msgstr "Shënim nga klienti"
 
-#: src/twirl/templates/shop/booking.html:13 src/twirl/templates/shop/booking.html:20
-#: src/twirl/templates/shop/settings.html:52 src/twirl/templates/shop/style_edit.html:49
+#: src/twirl/templates/shop/booking.html:20 src/twirl/templates/shop/booking.html:28
+#: src/twirl/templates/shop/settings.html:55 src/twirl/templates/shop/style_edit.html:60
 msgid "Reason"
 msgstr "Arsyeja"
 
-#: src/twirl/templates/shop/booking.html:27
+#: src/twirl/templates/shop/booking.html:36
 msgid "Move to another dress"
 msgstr "Kaloje në një fustan tjetër"
 
-#: src/twirl/templates/shop/booking.html:33
+#: src/twirl/templates/shop/booking.html:43
 msgid "Move"
 msgstr "Kaloje"
 
-#: src/twirl/templates/shop/booking.html:37
+#: src/twirl/templates/shop/booking.html:48
 msgid "History"
 msgstr "Historiku"
 
-#: src/twirl/templates/shop/calendar.html:4
+#: src/twirl/templates/shop/booking.html:52
+msgid "from"
+msgstr "nga"
+
+#: src/twirl/templates/shop/calendar.html:6
 msgid "Previous week"
 msgstr "Java e kaluar"
 
-#: src/twirl/templates/shop/calendar.html:5
+#: src/twirl/templates/shop/calendar.html:7
 msgid "Next week"
 msgstr "Java e ardhshme"
 
-#: src/twirl/templates/shop/calendar.html:19 src/twirl/templates/shop/styles.html:17
+#: src/twirl/templates/shop/calendar.html:24 src/twirl/templates/shop/styles.html:22
 msgid "No dresses yet."
 msgstr "Ende nuk ka fustane."
+
+#: src/twirl/templates/shop/calendar.html:29 src/twirl/web/messages.py:6
+msgid "Confirmed"
+msgstr "I konfirmuar"
+
+#: src/twirl/templates/shop/calendar.html:29 src/twirl/web/messages.py:5
+msgid "Waiting for your answer"
+msgstr "Pret përgjigjen tuaj"
+
+#: src/twirl/templates/shop/calendar.html:29 src/twirl/web/messages.py:8
+#: src/twirl/web/shop_bookings.py:30
+msgid "Picked up"
+msgstr "I marrë"
+
+#: src/twirl/templates/shop/calendar.html:29 src/twirl/templates/shop/style_edit.html:61
+msgid "Block"
+msgstr "Blloko"
 
 #: src/twirl/templates/shop/settings.html:9
 msgid "Shop settings"
@@ -689,168 +734,172 @@ msgstr "Cilësimet e dyqanit"
 msgid "Saved."
 msgstr "U ruajt."
 
-#: src/twirl/templates/shop/settings.html:20
+#: src/twirl/templates/shop/settings.html:22
 msgid "Your terms (deposit, ID, late fee, damage)"
 msgstr "Kushtet tuaja (depozita, letërnjoftimi, vonesa, dëmtimet)"
 
-#: src/twirl/templates/shop/settings.html:22
+#: src/twirl/templates/shop/settings.html:24
 msgid "Rental rules"
 msgstr "Rregullat e qirasë"
 
-#: src/twirl/templates/shop/settings.html:29
+#: src/twirl/templates/shop/settings.html:31
 msgid "Closed every week on"
 msgstr "Mbyllur çdo javë të"
 
-#: src/twirl/templates/shop/settings.html:35 src/twirl/templates/shop/style_edit.html:11
-#: src/twirl/templates/shop/walk_in.html:35
+#: src/twirl/templates/shop/settings.html:38 src/twirl/templates/shop/style_edit.html:29
+#: src/twirl/templates/shop/walk_in.html:44
 msgid "Save"
 msgstr "Ruaj"
 
-#: src/twirl/templates/shop/settings.html:38
+#: src/twirl/templates/shop/settings.html:41
 msgid "Closures"
 msgstr "Mbylljet"
 
-#: src/twirl/templates/shop/settings.html:39
+#: src/twirl/templates/shop/settings.html:42
 msgid "The end date must be on or after the start date."
 msgstr "Data e mbarimit duhet të jetë e njëjtë ose pas datës së fillimit."
 
-#: src/twirl/templates/shop/settings.html:45
+#: src/twirl/templates/shop/settings.html:48
 msgid "Remove"
 msgstr "Hiqe"
 
-#: src/twirl/templates/shop/settings.html:50 src/twirl/templates/shop/style_edit.html:47
+#: src/twirl/templates/shop/settings.html:53 src/twirl/templates/shop/style_edit.html:58
 msgid "From"
 msgstr "Nga"
 
-#: src/twirl/templates/shop/settings.html:51 src/twirl/templates/shop/style_edit.html:48
+#: src/twirl/templates/shop/settings.html:54 src/twirl/templates/shop/style_edit.html:59
 msgid "To"
 msgstr "Deri"
 
-#: src/twirl/templates/shop/settings.html:53
+#: src/twirl/templates/shop/settings.html:56
 msgid "Add closure"
 msgstr "Shto mbyllje"
 
-#: src/twirl/templates/shop/style_edit.html:3
+#: src/twirl/templates/shop/style_edit.html:3 src/twirl/templates/shop/style_new.html:4
 msgid "All dresses"
 msgstr "Të gjitha fustanet"
 
-#: src/twirl/templates/shop/style_edit.html:24
+#: src/twirl/templates/shop/style_edit.html:6
+msgid "View online"
+msgstr "Shiko online"
+
+#: src/twirl/templates/shop/style_edit.html:20
 msgid "Upload photos"
 msgstr "Ngarkoni fotot"
 
-#: src/twirl/templates/shop/style_edit.html:27
+#: src/twirl/templates/shop/style_edit.html:37
 msgid "Physical dresses"
 msgstr "Fustanet fizike"
 
-#: src/twirl/templates/shop/style_edit.html:29
+#: src/twirl/templates/shop/style_edit.html:40
 msgid "Code"
 msgstr "Kodi"
 
-#: src/twirl/templates/shop/style_edit.html:29
+#: src/twirl/templates/shop/style_edit.html:40
 msgid "Status"
 msgstr "Statusi"
 
-#: src/twirl/templates/shop/style_edit.html:29
+#: src/twirl/templates/shop/style_edit.html:40
 msgid "Block dates"
 msgstr "Blloko datat"
 
-#: src/twirl/templates/shop/style_edit.html:41
+#: src/twirl/templates/shop/style_edit.html:52
 msgid "Set"
 msgstr "Vendos"
 
-#: src/twirl/templates/shop/style_edit.html:50
-msgid "Block"
-msgstr "Blloko"
-
-#: src/twirl/templates/shop/style_edit.html:56
+#: src/twirl/templates/shop/style_edit.html:67
 msgid "No physical dresses yet. Add them below."
 msgstr "Ende nuk ka fustane fizike. Shtojini më poshtë."
 
-#: src/twirl/templates/shop/style_edit.html:64
+#: src/twirl/templates/shop/style_edit.html:76
 msgid "How many of this size"
 msgstr "Sa copë të kësaj mase"
 
-#: src/twirl/templates/shop/style_edit.html:65
+#: src/twirl/templates/shop/style_edit.html:77
 msgid "Add dresses"
 msgstr "Shto fustane"
 
-#: src/twirl/templates/shop/style_new.html:3
+#: src/twirl/templates/shop/style_new.html:5
 msgid "New dress"
 msgstr "Fustan i ri"
 
-#: src/twirl/templates/shop/style_new.html:7
+#: src/twirl/templates/shop/style_new.html:9
 msgid "Create"
 msgstr "Krijo"
 
-#: src/twirl/templates/shop/styles.html:4
+#: src/twirl/templates/shop/styles.html:5
 msgid "Add a dress"
 msgstr "Shto një fustan"
 
-#: src/twirl/templates/shop/styles.html:6
+#: src/twirl/templates/shop/styles.html:11
+msgid "No photos yet"
+msgstr "Ende pa foto"
+
+#: src/twirl/templates/shop/styles.html:15
 msgid "Pieces"
 msgstr "Copë"
 
-#: src/twirl/templates/shop/styles.html:6
+#: src/twirl/templates/shop/styles.html:16
 msgid "Online"
 msgstr "Online"
 
-#: src/twirl/templates/shop/styles.html:14
-msgid "Yes"
-msgstr "Po"
+#: src/twirl/templates/shop/styles.html:16
+msgid "Hidden"
+msgstr "E fshehur"
 
-#: src/twirl/templates/shop/styles.html:14
-msgid "No"
-msgstr "Jo"
-
-#: src/twirl/templates/shop/today.html:5
+#: src/twirl/templates/shop/today.html:6
 msgid "New walk-in"
 msgstr "Klient i ri në dyqan"
 
-#: src/twirl/templates/shop/today.html:6
+#: src/twirl/templates/shop/today.html:9 src/twirl/templates/shop/today.html:16
 msgid "Requests waiting for you"
 msgstr "Kërkesat që presin përgjigjen tuaj"
 
-#: src/twirl/templates/shop/today.html:6
-msgid "No requests waiting."
-msgstr "Nuk ka kërkesa në pritje."
-
-#: src/twirl/templates/shop/today.html:7
-msgid "At risk: find another dress"
-msgstr "Në rrezik: gjeni një fustan tjetër"
-
-#: src/twirl/templates/shop/today.html:7
-msgid "Nothing at risk."
-msgstr "Asgjë në rrezik."
-
-#: src/twirl/templates/shop/today.html:8
+#: src/twirl/templates/shop/today.html:10 src/twirl/templates/shop/today.html:18
 msgid "Pickups today"
 msgstr "Marrjet sot"
 
-#: src/twirl/templates/shop/today.html:8
-msgid "No pickups today."
-msgstr "Nuk ka marrje sot."
-
-#: src/twirl/templates/shop/today.html:9
+#: src/twirl/templates/shop/today.html:11 src/twirl/templates/shop/today.html:19
 msgid "Returns today"
 msgstr "Kthimet sot"
 
-#: src/twirl/templates/shop/today.html:9
+#: src/twirl/templates/shop/today.html:13
+msgid "Need attention"
+msgstr "Kërkojnë vëmendje"
+
+#: src/twirl/templates/shop/today.html:16
+msgid "No requests waiting."
+msgstr "Nuk ka kërkesa në pritje."
+
+#: src/twirl/templates/shop/today.html:17
+msgid "At risk: find another dress"
+msgstr "Në rrezik: gjeni një fustan tjetër"
+
+#: src/twirl/templates/shop/today.html:17
+msgid "Nothing at risk."
+msgstr "Asgjë në rrezik."
+
+#: src/twirl/templates/shop/today.html:18
+msgid "No pickups today."
+msgstr "Nuk ka marrje sot."
+
+#: src/twirl/templates/shop/today.html:19
 msgid "No returns today."
 msgstr "Nuk ka kthime sot."
 
-#: src/twirl/templates/shop/today.html:10
+#: src/twirl/templates/shop/today.html:20
 msgid "Overdue pickups"
 msgstr "Marrje të vonuara"
 
-#: src/twirl/templates/shop/today.html:10 src/twirl/templates/shop/today.html:11
+#: src/twirl/templates/shop/today.html:20 src/twirl/templates/shop/today.html:21
 msgid "None."
 msgstr "Asnjë."
 
-#: src/twirl/templates/shop/today.html:11
+#: src/twirl/templates/shop/today.html:21
 msgid "Overdue returns"
 msgstr "Kthime të vonuara"
 
-#: src/twirl/templates/shop/walk_in.html:3
+#: src/twirl/templates/shop/walk_in.html:4
 msgid "Walk-in or phone booking"
 msgstr "Rezervim në dyqan ose me telefon"
 
@@ -858,40 +907,40 @@ msgstr "Rezervim në dyqan ose me telefon"
 msgid "This dress is blocked or already given out for those dates. Pick another dress or other dates."
 msgstr "Ky fustan është i bllokuar ose i dhënë për ato data. Zgjidhni një fustan tjetër ose data të tjera."
 
-#: src/twirl/templates/shop/walk_in.html:19
+#: src/twirl/templates/shop/walk_in.html:21
 msgid "Dress code"
 msgstr "Kodi i fustanit"
 
-#: src/twirl/templates/shop/walk_in.html:20
+#: src/twirl/templates/shop/walk_in.html:23
 msgid "Type"
 msgstr "Lloji"
 
-#: src/twirl/templates/shop/walk_in.html:21
+#: src/twirl/templates/shop/walk_in.html:24
 msgid "In the shop"
 msgstr "Në dyqan"
 
-#: src/twirl/templates/shop/walk_in.html:22
+#: src/twirl/templates/shop/walk_in.html:25
 msgid "By phone"
 msgstr "Me telefon"
 
-#: src/twirl/templates/shop/walk_in.html:26
+#: src/twirl/templates/shop/walk_in.html:33
 msgid "Customer name"
 msgstr "Emri i klientit"
 
-#: src/twirl/templates/shop/walk_in.html:27 src/twirl/templates/storefront/style.html:35
+#: src/twirl/templates/shop/walk_in.html:34 src/twirl/templates/storefront/style.html:47
 #: src/twirl/web/onboarding.py:804
 msgid "Phone"
 msgstr "Telefoni"
 
-#: src/twirl/templates/shop/walk_in.html:28
+#: src/twirl/templates/shop/walk_in.html:35
 msgid "Note"
 msgstr "Shënim"
 
-#: src/twirl/templates/shop/walk_in.html:29
+#: src/twirl/templates/shop/walk_in.html:36
 msgid "The customer takes the dress now"
 msgstr "Klienti e merr fustanin tani"
 
-#: src/twirl/templates/shop/walk_in.html:31
+#: src/twirl/templates/shop/walk_in.html:40
 msgid ""
 "Why does this customer get the dress? The online booking will be flagged and we will find another"
 " dress for it."
@@ -899,7 +948,7 @@ msgstr ""
 "Pse ia jepni fustanin këtij klienti? Rezervimi online do të shënohet dhe do t’i gjejmë një fustan"
 " tjetër."
 
-#: src/twirl/templates/shop/walk_in.html:33
+#: src/twirl/templates/shop/walk_in.html:42
 msgid "Save anyway"
 msgstr "Ruaje sidoqoftë"
 
@@ -911,69 +960,81 @@ msgstr "i lirë"
 msgid "taken"
 msgstr "i zënë"
 
-#: src/twirl/templates/storefront/_availability.html:9
+#: src/twirl/templates/storefront/_availability.html:9 src/twirl/templates/storefront/style.html:41
 msgid "Pick your event date to see which sizes are free."
 msgstr "Zgjidhni datën e eventit për të parë cilat masa janë të lira."
 
-#: src/twirl/templates/storefront/confirmation.html:3
+#: src/twirl/templates/storefront/confirmation.html:5
 msgid "Request sent"
 msgstr "Kërkesa u dërgua"
 
-#: src/twirl/templates/storefront/confirmation.html:4
+#: src/twirl/templates/storefront/confirmation.html:6
 msgid "Your code"
 msgstr "Kodi juaj"
 
-#: src/twirl/templates/storefront/confirmation.html:11
-msgid "Price, paid in the shop"
-msgstr "Çmimi, paguhet në dyqan"
-
-#: src/twirl/templates/storefront/confirmation.html:12
-msgid "Shop"
-msgstr "Dyqani"
-
-#: src/twirl/templates/storefront/confirmation.html:14 src/twirl/templates/storefront/style.html:45
-msgid "Shop terms"
-msgstr "Kushtet e dyqanit"
-
-#: src/twirl/templates/storefront/confirmation.html:15
+#: src/twirl/templates/storefront/confirmation.html:10
 msgid "Message the shop on WhatsApp"
 msgstr "Shkruajini dyqanit në WhatsApp"
 
-#: src/twirl/templates/storefront/confirmation.html:16
+#: src/twirl/templates/storefront/confirmation.html:11
 msgid "Message the shop on Viber"
 msgstr "Shkruajini dyqanit në Viber"
 
-#: src/twirl/templates/storefront/shop.html:5
+#: src/twirl/templates/storefront/confirmation.html:18
+msgid "Price, paid in the shop"
+msgstr "Çmimi, paguhet në dyqan"
+
+#: src/twirl/templates/storefront/confirmation.html:19
+msgid "Shop"
+msgstr "Dyqani"
+
+#: src/twirl/templates/storefront/confirmation.html:21 src/twirl/templates/storefront/style.html:59
+msgid "Shop terms"
+msgstr "Kushtet e dyqanit"
+
+#: src/twirl/templates/storefront/shop.html:5 src/twirl/templates/storefront/shop.html:10
 msgid "Dresses to rent in"
 msgstr "Fustane me qira në"
 
-#: src/twirl/templates/storefront/shop.html:16
+#: src/twirl/templates/storefront/shop.html:31
 msgid "No dresses online yet."
 msgstr "Ende nuk ka fustane online."
 
-#: src/twirl/templates/storefront/style.html:11
+#: src/twirl/templates/storefront/style.html:17
+msgid "Photos coming soon"
+msgstr "Fotot vijnë së shpejti"
+
+#: src/twirl/templates/storefront/style.html:22
 msgid "per rental, paid in the shop"
 msgstr "për një qira, paguhet në dyqan"
 
-#: src/twirl/templates/storefront/style.html:25
-msgid "Event date"
-msgstr "Data e eventit"
-
-#: src/twirl/templates/storefront/style.html:34
-msgid "Your name"
-msgstr "Emri juaj"
-
-#: src/twirl/templates/storefront/style.html:36
-msgid "Note for the shop (optional)"
-msgstr "Shënim për dyqanin (opsional)"
-
-#: src/twirl/templates/storefront/style.html:38
+#: src/twirl/templates/storefront/style.html:33 src/twirl/templates/storefront/style.html:50
 msgid "Request this dress"
 msgstr "Rezervo këtë fustan"
 
-#: src/twirl/templates/storefront/style.html:39
+#: src/twirl/templates/storefront/style.html:37
+msgid "Event date"
+msgstr "Data e eventit"
+
+#: src/twirl/templates/storefront/style.html:44 src/twirl/web/onboarding.py:120
+msgid "Made to measure"
+msgstr "Me masë"
+
+#: src/twirl/templates/storefront/style.html:46
+msgid "Your name"
+msgstr "Emri juaj"
+
+#: src/twirl/templates/storefront/style.html:48
+msgid "Note for the shop (optional)"
+msgstr "Shënim për dyqanin (opsional)"
+
+#: src/twirl/templates/storefront/style.html:51
 msgid "No payment now. The shop confirms your request, then you pick up and pay in the shop."
 msgstr "Nuk paguani tani. Dyqani e konfirmon kërkesën tuaj, pastaj e merrni fustanin dhe paguani në dyqan."
+
+#: src/twirl/templates/storefront/style.html:60
+msgid "All dresses from this shop"
+msgstr "Të gjitha fustanet e këtij dyqani"
 
 #: src/twirl/web/auth.py:44 src/twirl/web/auth.py:105 src/twirl/web/auth.py:177
 msgid "Too many attempts. Try again in a few minutes."
@@ -1003,21 +1064,9 @@ msgstr "Ky kod nuk është i saktë ose ka skaduar."
 msgid "On hold"
 msgstr "Në pritje"
 
-#: src/twirl/web/messages.py:5
-msgid "Waiting for your answer"
-msgstr "Pret përgjigjen tuaj"
-
-#: src/twirl/web/messages.py:6
-msgid "Confirmed"
-msgstr "I konfirmuar"
-
 #: src/twirl/web/messages.py:7
 msgid "At risk"
 msgstr "Në rrezik"
-
-#: src/twirl/web/messages.py:8 src/twirl/web/shop_bookings.py:30
-msgid "Picked up"
-msgstr "I marrë"
 
 #: src/twirl/web/messages.py:9
 msgid "Returned"
@@ -1226,10 +1275,6 @@ msgstr "Shkruaj qeranë në euro, vetëm numra — nga 5 deri 2000."
 #: src/twirl/web/onboarding.py:115
 msgid "Confirm the promise before publishing."
 msgstr "Konfirmo garancinë para publikimit."
-
-#: src/twirl/web/onboarding.py:120
-msgid "Made to measure"
-msgstr "Me masë"
 
 #: src/twirl/web/onboarding.py:204
 msgid "Salon and hours"
@@ -1543,4 +1588,13 @@ msgstr "Ju lutem plotësoni datën e eventit, masën, emrin dhe telefonin."
 #: src/twirl/web/storefront.py:229
 msgid "Sorry, that size is not free for your date. Try another size or date."
 msgstr "Na vjen keq, kjo masë nuk është e lirë për datën tuaj. Provoni një masë ose datë tjetër."
+
+#~ msgid "Yes"
+#~ msgstr "Po"
+
+#~ msgid "No"
+#~ msgstr "Jo"
+
+#~ msgid "dresses"
+#~ msgstr "fustane"
 

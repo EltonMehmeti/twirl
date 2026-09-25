@@ -1,5 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>{{ _("Rent the dress. Skip the price tag.") }}</h1>
-<p>{{ _("Dress rental shops in Kosovo, bookable online.") }}</p>
+<section class="v-hero">
+  <div class="v-eyebrow">{{ _("Kosovo · dress rental") }}</div>
+  <h1>{{ _("Rent the dress. Skip the price tag.") }}</h1>
+  <p>{{ _("Dress rental shops in Kosovo, bookable online.") }}</p>
+  <div class="v-split">
+    <a class="v-bigcard" href="/listo">
+      <strong>{{ _("List your clothes") }} →</strong>
+      <span>{{ _("For salons and for people with a dress to rent out. A phone number is enough to start.") }}</span>
+    </a>
+    <a class="v-bigcard" href="/login">
+      <strong>{{ _("Shop login") }} →</strong>
+      <span>{{ _("Today's pickups, returns and requests, in one place.") }}</span>
+    </a>
+  </div>
+</section>
 {% endblock %}
