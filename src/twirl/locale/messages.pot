@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-09-25 22:48+0200\n"
+"POT-Creation-Date: 2026-09-25 23:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,12 +17,59 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
+#: src/twirl/templates/_macros.html:7
+msgid "Back"
+msgstr ""
+
 #: src/twirl/templates/home.html:3
 msgid "Rent the dress. Skip the price tag."
 msgstr ""
 
 #: src/twirl/templates/home.html:4
 msgid "Dress rental shops in Kosovo, bookable online."
+msgstr ""
+
+#: src/twirl/templates/auth/code.html:3 src/twirl/templates/auth/phone.html:3
+#: src/twirl/web/auth.py:73 src/twirl/web/auth.py:139
+msgid "Provider login"
+msgstr ""
+
+#: src/twirl/templates/auth/code.html:8
+msgid "Code from the SMS"
+msgstr ""
+
+#: src/twirl/templates/auth/code.html:9
+#, python-brace-format
+msgid "We sent the code to {phone}."
+msgstr ""
+
+#: src/twirl/templates/auth/code.html:13
+msgid "Six digits"
+msgstr ""
+
+#: src/twirl/templates/auth/code.html:15
+msgid "The code expires after 5 minutes."
+msgstr ""
+
+#: src/twirl/templates/auth/code.html:18
+msgid "Development only, no SMS provider configured. Code:"
+msgstr ""
+
+#: src/twirl/templates/auth/code.html:20
+msgid "Send the code again"
+msgstr ""
+
+#: src/twirl/templates/auth/code.html:20
+#, python-brace-format
+msgid "Send again in {s}s"
+msgstr ""
+
+#: src/twirl/templates/auth/code.html:21
+msgid "Change the number"
+msgstr ""
+
+#: src/twirl/templates/auth/code.html:23
+msgid "Verify the number"
 msgstr ""
 
 #: src/twirl/templates/auth/login.html:3
@@ -39,6 +86,43 @@ msgstr ""
 
 #: src/twirl/templates/auth/login.html:10
 msgid "Log in"
+msgstr ""
+
+#: src/twirl/templates/auth/login.html:12
+msgid "Log in with your phone number"
+msgstr ""
+
+#: src/twirl/templates/auth/login.html:13
+msgid "New here? List your clothes"
+msgstr ""
+
+#: src/twirl/templates/auth/phone.html:8
+msgid "Phone number"
+msgstr ""
+
+#: src/twirl/templates/auth/phone.html:13
+msgid "Number"
+msgstr ""
+
+#: src/twirl/templates/auth/phone.html:15
+msgid "Not shown publicly. Used for the code and for bookings."
+msgstr ""
+
+#: src/twirl/templates/auth/phone.html:18
+msgid "Send the code"
+msgstr ""
+
+#: src/twirl/templates/layouts/vesha.html:16
+msgid "List your clothes"
+msgstr ""
+
+#: src/twirl/templates/layouts/vesha.html:22
+#: src/twirl/templates/layouts/vesha.html:24
+msgid "Steps"
+msgstr ""
+
+#: src/twirl/templates/layouts/vesha.html:44
+msgid "for providers"
 msgstr ""
 
 #: src/twirl/templates/shop/_style_fields.html:1
@@ -497,12 +581,28 @@ msgid ""
 "in the shop."
 msgstr ""
 
-#: src/twirl/web/auth.py:37
+#: src/twirl/web/auth.py:44 src/twirl/web/auth.py:105 src/twirl/web/auth.py:177
 msgid "Too many attempts. Try again in a few minutes."
 msgstr ""
 
-#: src/twirl/web/auth.py:49
+#: src/twirl/web/auth.py:57
 msgid "Wrong email or password."
+msgstr ""
+
+#: src/twirl/web/auth.py:74
+msgid "We send a six-digit code to the number you listed with."
+msgstr ""
+
+#: src/twirl/web/auth.py:114
+msgid "Write the number like 044 123 456."
+msgstr ""
+
+#: src/twirl/web/auth.py:125
+msgid "Too many codes for this number. Try again in an hour."
+msgstr ""
+
+#: src/twirl/web/auth.py:190
+msgid "That code is not right or has expired."
 msgstr ""
 
 #: src/twirl/web/messages.py:4
@@ -521,7 +621,7 @@ msgstr ""
 msgid "At risk"
 msgstr ""
 
-#: src/twirl/web/messages.py:8 src/twirl/web/shop_bookings.py:29
+#: src/twirl/web/messages.py:8 src/twirl/web/shop_bookings.py:30
 msgid "Picked up"
 msgstr ""
 
@@ -541,7 +641,7 @@ msgstr ""
 msgid "Expired"
 msgstr ""
 
-#: src/twirl/web/messages.py:13 src/twirl/web/shop_bookings.py:29
+#: src/twirl/web/messages.py:13 src/twirl/web/shop_bookings.py:31
 msgid "No-show"
 msgstr ""
 
@@ -593,51 +693,51 @@ msgstr ""
 msgid "Decline"
 msgstr ""
 
-#: src/twirl/web/shop_bookings.py:30 src/twirl/web/shop_bookings.py:31
+#: src/twirl/web/shop_bookings.py:32 src/twirl/web/shop_bookings.py:34
 msgid "Cancel"
 msgstr ""
 
-#: src/twirl/web/shop_bookings.py:32 src/twirl/web/shop_bookings.py:34
+#: src/twirl/web/shop_bookings.py:36 src/twirl/web/shop_bookings.py:40
 msgid "Returned OK"
 msgstr ""
 
-#: src/twirl/web/shop_bookings.py:33 src/twirl/web/shop_bookings.py:35
+#: src/twirl/web/shop_bookings.py:37 src/twirl/web/shop_bookings.py:41
 msgid "Returned with an issue"
 msgstr ""
 
-#: src/twirl/web/shop_bookings.py:37
+#: src/twirl/web/shop_bookings.py:44
 msgid "Remove block"
 msgstr ""
 
-#: src/twirl/web/shop_bookings.py:142
+#: src/twirl/web/shop_bookings.py:179
 msgid "That dress is taken on these dates. Pick another one."
 msgstr ""
 
-#: src/twirl/web/shop_bookings.py:144
+#: src/twirl/web/shop_bookings.py:181
 msgid "That action is not possible for this booking any more."
 msgstr ""
 
-#: src/twirl/web/shop_bookings.py:150
+#: src/twirl/web/shop_bookings.py:187
 msgid "Please give a reason."
 msgstr ""
 
-#: src/twirl/web/shop_bookings.py:151
+#: src/twirl/web/shop_bookings.py:189
 msgid "Check the form and try again."
 msgstr ""
 
-#: src/twirl/web/shop_bookings.py:190
+#: src/twirl/web/shop_bookings.py:280
 msgid "Check the highlighted fields."
 msgstr ""
 
-#: src/twirl/web/shop_bookings.py:194
+#: src/twirl/web/shop_bookings.py:290
 msgid "No dress with this code in your shop."
 msgstr ""
 
-#: src/twirl/web/shop_bookings.py:206
+#: src/twirl/web/shop_bookings.py:317
 msgid "This dress is already booked on those dates."
 msgstr ""
 
-#: src/twirl/web/shop_bookings.py:210 src/twirl/web/storefront.py:169
+#: src/twirl/web/shop_bookings.py:327 src/twirl/web/storefront.py:222
 msgid "That phone number does not look right."
 msgstr ""
 
@@ -645,131 +745,131 @@ msgstr ""
 msgid "Wedding"
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:31
+#: src/twirl/web/shop_catalog.py:32
 msgid "Engagement"
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:32
+#: src/twirl/web/shop_catalog.py:33
 msgid "Matura"
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:32
+#: src/twirl/web/shop_catalog.py:34
 msgid "Henna night"
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:33
+#: src/twirl/web/shop_catalog.py:35
 msgid "Evening"
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:36
+#: src/twirl/web/shop_catalog.py:38
 msgid "Black"
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:36
+#: src/twirl/web/shop_catalog.py:39
 msgid "White"
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:37
+#: src/twirl/web/shop_catalog.py:40
 msgid "Red"
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:37
+#: src/twirl/web/shop_catalog.py:41
 msgid "Pink"
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:38
+#: src/twirl/web/shop_catalog.py:42
 msgid "Blue"
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:38
+#: src/twirl/web/shop_catalog.py:43
 msgid "Green"
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:39
+#: src/twirl/web/shop_catalog.py:44
 msgid "Gold"
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:39
+#: src/twirl/web/shop_catalog.py:45
 msgid "Silver"
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:40
+#: src/twirl/web/shop_catalog.py:46
 msgid "Beige"
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:40
+#: src/twirl/web/shop_catalog.py:47
 msgid "Purple"
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:41
+#: src/twirl/web/shop_catalog.py:48
 msgid "Multicolour"
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:44
+#: src/twirl/web/shop_catalog.py:51
 msgid "Short"
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:44
+#: src/twirl/web/shop_catalog.py:52
 msgid "Midi"
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:45
+#: src/twirl/web/shop_catalog.py:53
 msgid "Long"
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:49
+#: src/twirl/web/shop_catalog.py:57
 msgid "Available"
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:49
+#: src/twirl/web/shop_catalog.py:58
 msgid "Cleaning"
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:50
+#: src/twirl/web/shop_catalog.py:59
 msgid "Repair"
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:50
+#: src/twirl/web/shop_catalog.py:60
 msgid "Retired"
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:51
+#: src/twirl/web/shop_catalog.py:61
 msgid "Lost"
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:54
+#: src/twirl/web/shop_catalog.py:64
 msgid "That dress is already booked or blocked on those dates."
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:55
+#: src/twirl/web/shop_catalog.py:65
 msgid "The block end date must be on or after the start date."
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:56
+#: src/twirl/web/shop_catalog.py:66
 msgid "Enter both dates and a reason for the block."
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:57
+#: src/twirl/web/shop_catalog.py:67
 msgid "This dress still has upcoming bookings. Swap them to another dress."
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:60
+#: src/twirl/web/shop_catalog.py:70
 msgid "That photo is larger than 15 MB."
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:61
+#: src/twirl/web/shop_catalog.py:71
 msgid "That file is not a photo."
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:62
+#: src/twirl/web/shop_catalog.py:72
 msgid "Use JPEG, PNG or WebP photos."
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:63
+#: src/twirl/web/shop_catalog.py:73
 msgid "A dress can have at most 8 photos."
 msgstr ""
 
-#: src/twirl/web/shop_catalog.py:256
+#: src/twirl/web/shop_catalog.py:341
 msgid "Enter a size and a quantity from 1 to 20."
 msgstr ""
 
@@ -777,27 +877,27 @@ msgstr ""
 msgid "Monday"
 msgstr ""
 
-#: src/twirl/web/shop_settings.py:21
+#: src/twirl/web/shop_settings.py:22
 msgid "Tuesday"
 msgstr ""
 
-#: src/twirl/web/shop_settings.py:21
+#: src/twirl/web/shop_settings.py:23
 msgid "Wednesday"
 msgstr ""
 
-#: src/twirl/web/shop_settings.py:21
+#: src/twirl/web/shop_settings.py:24
 msgid "Thursday"
 msgstr ""
 
-#: src/twirl/web/shop_settings.py:21
+#: src/twirl/web/shop_settings.py:25
 msgid "Friday"
 msgstr ""
 
-#: src/twirl/web/shop_settings.py:21
+#: src/twirl/web/shop_settings.py:26
 msgid "Saturday"
 msgstr ""
 
-#: src/twirl/web/shop_settings.py:22
+#: src/twirl/web/shop_settings.py:27
 msgid "Sunday"
 msgstr ""
 
@@ -813,15 +913,15 @@ msgstr ""
 msgid "This request is closed. Contact the shop for details."
 msgstr ""
 
-#: src/twirl/web/storefront.py:156
+#: src/twirl/web/storefront.py:203
 msgid "Too many requests from your connection. Try again later."
 msgstr ""
 
-#: src/twirl/web/storefront.py:159
+#: src/twirl/web/storefront.py:206
 msgid "Please fill in your event date, size, name and phone."
 msgstr ""
 
-#: src/twirl/web/storefront.py:175
+#: src/twirl/web/storefront.py:229
 msgid "Sorry, that size is not free for your date. Try another size or date."
 msgstr ""
 

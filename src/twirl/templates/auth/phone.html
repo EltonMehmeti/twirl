@@ -1,0 +1,20 @@
+{% extends "layouts/vesha.html" %}
+{% from "_macros.html" import hint, nav with context %}
+{% block tagline %}{{ _("Provider login") }}{% endblock %}
+{% block main %}
+<form method="post" action="{{ action }}" class="v-narrow" novalidate>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+  <div class="v-eyebrow">{{ _(eyebrow) }}</div>
+  <h1 class="v-title">{{ _("Phone number") }}</h1>
+  <p class="v-lede">{{ _(lede) }}</p>
+  {% if error %}<p class="v-alert" role="alert">{{ _(error) }}</p>{% endif %}
+  <div class="v-fields">
+    <div class="v-field{% if errors.phone %} v-field--error{% endif %}">
+      <label class="v-label" for="v-phone">{{ _("Number") }}</label>
+      <input class="v-input v-input--tel" id="v-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="044 123 456" value="{{ phone }}" required aria-describedby="phone-hint" autofocus>
+      {{ hint(errors, "phone", _("Not shown publicly. Used for the code and for bookings.")) }}
+    </div>
+  </div>
+  {{ nav(back_url, _("Send the code")) }}
+</form>
+{% endblock %}

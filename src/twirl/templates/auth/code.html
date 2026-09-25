@@ -1,0 +1,40 @@
+{% extends "layouts/vesha.html" %}
+{% from "_macros.html" import hint, nav with context %}
+{% block tagline %}{{ _("Provider login") }}{% endblock %}
+{% block main %}
+<form method="post" action="{{ action }}" class="v-narrow" novalidate>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+  <div class="v-eyebrow">{{ _(eyebrow) }}</div>
+  <h1 class="v-title">{{ _("Code from the SMS") }}</h1>
+  <p class="v-lede">{{ _("We sent the code to {phone}.").replace("{phone}", phone_display) }}</p>
+  {% if error %}<p class="v-alert" role="alert">{{ _(error) }}</p>{% endif %}
+  <div class="v-fields">
+    <div class="v-field{% if errors.code %} v-field--error{% endif %}">
+      <label class="v-label" for="v-code">{{ _("Six digits") }}</label>
+      <input class="v-input v-input--code" id="v-code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="––––––" required aria-describedby="code-hint" autofocus>
+      {{ hint(errors, "code", _("The code expires after 5 minutes.")) }}
+    </div>
+  </div>
+  {% if echo %}<p class="v-echo">{{ _("Development only, no SMS provider configured. Code:") }} <strong>{{ echo }}</strong></p>{% endif %}
+  <div class="v-row">
+    <button class="v-textbtn" type="submit" form="v-resend" formnovalidate id="v-resend-btn" data-wait="{{ resend_in }}" data-label="{{ _('Send the code again') }}" data-waiting="{{ _('Send again in {s}s') }}"{% if resend_in %} disabled{% endif %}>{{ _("Send the code again") }}</button>
+    <a class="v-textbtn" href="{{ change_url }}">{{ _("Change the number") }}</a>
+  </div>
+  {{ nav(None, _("Verify the number")) }}
+</form>
+<form id="v-resend" method="post" action="{{ resend_action }}"><input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}"></form>
+<script>
+(function () {
+  var b = document.getElementById("v-resend-btn");
+  if (!b) return;
+  var n = parseInt(b.dataset.wait || "0", 10);
+  function tick() {
+    if (n <= 0) { b.disabled = false; b.textContent = b.dataset.label; return; }
+    b.textContent = b.dataset.waiting.replace("{s}", n);
+    n -= 1;
+    setTimeout(tick, 1000);
+  }
+  tick();
+})();
+</script>
+{% endblock %}

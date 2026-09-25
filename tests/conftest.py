@@ -119,3 +119,24 @@ def staff_client(app, db, shop):
     with TestClient(app) as c:
         login(c, staff.email)
         yield c
+
+
+class FakeSms:
+    def __init__(self):
+        self.sent: list[tuple[str, str]] = []
+
+    def send(self, recipient, subject, body):
+        self.sent.append((recipient, body))
+        return None
+
+    def last_code(self) -> str:
+        import re
+
+        return re.search(r"\b(\d{6})\b", self.sent[-1][1]).group(1)
+
+
+@pytest.fixture
+def sms(app):
+    fake = FakeSms()
+    app.state.sms_sender = fake
+    return fake

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="{{ locale }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token(request) }}">
+  <title>{% block title %}{{ brand }}{% endblock %}</title>
+  <link rel="preload" href="{{ url_for('static', path='fonts/clash-display-600.woff2') }}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ url_for('static', path='fonts/hanken-grotesk-400.woff2') }}" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="{{ url_for('static', path='vesha.css') }}">
+  <script src="{{ url_for('static', path='htmx.min.js') }}" defer></script>
+</head>
+<body class="v-page" hx-headers='{"X-CSRF-Token": "{{ csrf_token(request) }}"}'>
+  <div class="v-frame">
+    <header class="v-header">
+      <a class="v-brand" href="/">{% include "_logo.html" %}<span class="v-brand__name">{{ brand }}</span><span class="v-brand__tag">{% block tagline %}{{ _("List your clothes") }}{% endblock %}</span></a>
+      {% if counter %}<span class="v-counter">{{ counter }}</span>{% endif %}
+    </header>
+    {% if show_progress %}<div class="v-progress" aria-hidden="true"><div class="v-progress__bar" style="width: {{ progress }}%"></div></div>{% endif %}
+    <div class="v-body{% if rail %} v-body--rail{% endif %}">
+      {% if rail %}
+      <aside class="v-rail" aria-label="{{ _('Steps') }}">
+        <div>
+          <div class="v-eyebrow">{{ _("Steps") }}</div>
+          <ol>
+            {% for item in rail %}
+            <li class="v-rail__item v-rail__item--{{ item.state }}"{% if item.state == "now" %} aria-current="step"{% endif %}>
+              <span class="v-rail__dot">{{ "✓" if item.state == "done" else item.num }}</span>{{ _(item.label) }}
+            </li>
+            {% endfor %}
+          </ol>
+        </div>
+        {% if rail_note %}
+        <div class="v-rail__note">
+          <div class="v-eyebrow">{{ _(rail_note_label) }}</div>
+          <p>{{ _(rail_note) }}</p>
+        </div>
+        {% endif %}
+      </aside>
+      {% endif %}
+      <main class="v-main">{% block main %}{% endblock %}</main>
+    </div>
+  </div>
+  <div class="v-foot"><span>{{ brand }} · {% block footer_left %}{{ _("for providers") }}{% endblock %}</span>{% if path_footer %}<span>{{ _(path_footer) }}</span>{% endif %}</div>
+</body>
+</html>

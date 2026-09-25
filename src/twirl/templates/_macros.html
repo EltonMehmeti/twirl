@@ -1,0 +1,14 @@
+{% macro hint(errors, name, default) -%}
+<span class="v-hint{% if errors.get(name) %} v-hint--error{% endif %}" id="{{ name }}-hint">{{ _(errors[name]) if errors.get(name) else default }}</span>
+{%- endmacro %}
+
+{% macro nav(back_url, next_label) -%}
+<div class="v-nav">
+  {% if back_url %}<a class="v-back" href="{{ back_url }}">← {{ _("Back") }}</a>{% else %}<span></span>{% endif %}
+  <button class="v-btn" type="submit">{{ next_label }}</button>
+</div>
+{%- endmacro %}
+
+{% macro csrf() -%}
+<input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+{%- endmacro %}

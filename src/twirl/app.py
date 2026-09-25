@@ -10,6 +10,7 @@ from starlette.middleware.sessions import SessionMiddleware
 from twirl.auth.deps import LoginRequired
 from twirl.config import Settings, get_settings
 from twirl.db import Database
+from twirl.notify.senders import LogSender
 from twirl.ratelimit import RateLimiter
 from twirl.scheduler import start_scheduler
 from twirl.storage import LocalStorage
@@ -43,6 +44,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     settings.media_root.mkdir(parents=True, exist_ok=True)
     app.state.storage = LocalStorage(settings.media_root, "/media")
     app.state.login_limiter = RateLimiter(10, 15 * 60)
+    app.state.sms_sender = LogSender("sms")  # replaced once an SMS provider is chosen
     app.state.request_limiter = RateLimiter(settings.request_rate_limit_per_hour, 3600)
     app.add_middleware(
         SessionMiddleware,
