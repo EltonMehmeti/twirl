@@ -1,0 +1,23 @@
+{% extends "shop/base.html" %}
+{% block content %}
+<h1>{{ _("Calendar") }}</h1>
+<nav><a href="/shop/calendar?start={{ prev }}">← {{ _("Previous week") }}</a>
+  · <a href="/shop/calendar?start={{ next }}">{{ _("Next week") }} →</a></nav>
+<table class="calendar">
+  <thead><tr><th>{{ _("Dress") }}</th>{% for day in days %}<th>{{ day|date }}</th>{% endfor %}</tr></thead>
+  <tbody>
+  {% for row in rows %}
+    <tr>
+      <th>{{ row.item.style.name }} · {{ row.item.size }} · {{ row.item.code }}</th>
+      {% for cell in row.cells %}
+        {% if cell %}
+        <td data-kind="{{ cell.kind }}" data-status="{{ cell.status }}"><a href="/shop/bookings/{{ cell.id }}">{{ cell.ref }}</a></td>
+        {% else %}<td></td>{% endif %}
+      {% endfor %}
+    </tr>
+  {% else %}
+    <tr><td colspan="8" class="muted">{{ _("No dresses yet.") }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% macro booking_list(title, bookings, empty) %}
+<section>
+  <h2>{{ title }} ({{ bookings|length }})</h2>
+  {% if bookings %}
+  <ul class="bookings">
+    {% for b in bookings %}
+    <li><a href="/shop/bookings/{{ b.id }}"><strong>{{ b.ref }}</strong>
+      · {{ b.style.name }} {{ b.item.size }} ({{ b.item.code }})
+      {% if b.customer %}· {{ b.customer.name }}{% endif %}
+      · {{ b.pickup_date|date }} – {{ b.return_date|date }}</a></li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="muted">{{ empty }}</p>
+  {% endif %}
+</section>
+{% endmacro %}

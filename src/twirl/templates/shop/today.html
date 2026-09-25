@@ -1,4 +1,12 @@
 {% extends "shop/base.html" %}
 {% block content %}
-<h1>{{ ctx.shop.name }}</h1>
+{% from "shop/_macros.html" import booking_list %}
+<h1>{{ ctx.shop.name }} · {{ today|date }}</h1>
+<p><a href="/shop/walk-in">{{ _("New walk-in") }}</a></p>
+{{ booking_list(_("Requests waiting for you"), board.pending, _("No requests waiting.")) }}
+{{ booking_list(_("At risk: find another dress"), board.at_risk, _("Nothing at risk.")) }}
+{{ booking_list(_("Pickups today"), board.pickups_today, _("No pickups today.")) }}
+{{ booking_list(_("Returns today"), board.returns_today, _("No returns today.")) }}
+{{ booking_list(_("Overdue pickups"), board.overdue_pickups, _("None.")) }}
+{{ booking_list(_("Overdue returns"), board.overdue_returns, _("None.")) }}
 {% endblock %}

@@ -1,0 +1,45 @@
+{% extends "shop/base.html" %}
+{% block content %}
+<h1>{{ b.ref }} · {{ _(status_labels[b.status]) }}</h1>
+{% if error %}<p class="error" role="alert">{{ _(error) }}</p>{% endif %}
+<dl>
+  <dt>{{ _("Dress") }}</dt><dd>{{ b.style.name }} · {{ _("size") }} {{ b.item.size }} · {{ _("code") }} {{ b.item.code }}</dd>
+  {% if b.customer %}<dt>{{ _("Customer") }}</dt><dd>{{ b.customer.name }} · <a href="tel:{{ b.customer.phone }}">{{ b.customer.phone }}</a></dd>{% endif %}
+  {% if b.event_date %}<dt>{{ _("Event") }}</dt><dd>{{ b.event_date|date }}</dd>{% endif %}
+  <dt>{{ _("Pickup") }}</dt><dd>{{ b.pickup_date|date }}</dd>
+  <dt>{{ _("Return") }}</dt><dd>{{ b.return_date|date }}</dd>
+  {% if b.kind != "block" %}<dt>{{ _("Price") }}</dt><dd>{{ b.price_cents|money(locale) }}</dd>{% endif %}
+  {% if b.customer_note %}<dt>{{ _("Note from the customer") }}</dt><dd>{{ b.customer_note }}</dd>{% endif %}
+  {% if b.reason %}<dt>{{ _("Reason") }}</dt><dd>{{ b.reason }}</dd>{% endif %}
+</dl>
+
+<div class="actions">
+{% for action, label, needs_reason in actions %}
+  <form method="post" action="/shop/bookings/{{ b.id }}/{{ action }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+    {% if needs_reason %}<label>{{ _("Reason") }} <input name="reason" required maxlength="300"></label>{% endif %}
+    <button>{{ _(label) }}</button>
+  </form>
+{% endfor %}
+</div>
+
+{% if candidates %}
+<h2>{{ _("Move to another dress") }}</h2>
+<form method="post" action="/shop/bookings/{{ b.id }}/swap">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+  <select name="item_id">
+    {% for item in candidates %}<option value="{{ item.id }}">{{ item.style.name }} · {{ item.size }} · {{ item.code }}</option>{% endfor %}
+  </select>
+  <button>{{ _("Move") }}</button>
+</form>
+{% endif %}
+
+<h2>{{ _("History") }}</h2>
+<ol class="timeline">
+  {% for e in events %}
+  <li>{{ e.created_at.strftime("%d.%m.%Y %H:%M") }} ·
+    {{ _(status_labels[e.from_status]) if e.from_status else "—" }} → {{ _(status_labels[e.to_status]) }}
+    {% if e.reason %}· {{ e.reason }}{% endif %}</li>
+  {% endfor %}
+</ol>
+{% endblock %}

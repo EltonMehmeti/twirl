@@ -1,0 +1,38 @@
+{% extends "shop/base.html" %}
+{% block content %}
+<h1>{{ _("Walk-in or phone booking") }}</h1>
+{% if error %}<p class="error" role="alert">{{ _(error) }}</p>{% endif %}
+{% if item %}<p>{{ item.style.name }} · {{ _("size") }} {{ item.size }}</p>{% endif %}
+
+{% if conflicts %}
+<ul class="conflicts">
+  {% for c in conflicts %}
+  <li><strong>{{ c.ref }}</strong> · {{ _(status_labels[c.status]) }} · {{ c.pickup_date|date }} – {{ c.return_date|date }}
+    {% if c.customer %}· {{ c.customer.name }} {{ c.customer.phone }}{% endif %}</li>
+  {% endfor %}
+</ul>
+{% if not overridable %}<p>{{ _("This dress is blocked or already given out for those dates. Pick another dress or other dates.") }}</p>{% endif %}
+{% endif %}
+
+<form method="post" action="/shop/walk-in">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+  <label>{{ _("Dress code") }} <input name="code" value="{{ values.code }}" required maxlength="4" autocapitalize="characters"></label>
+  <label>{{ _("Type") }} <select name="kind">
+    <option value="walk_in" {% if values.kind == "walk_in" %}selected{% endif %}>{{ _("In the shop") }}</option>
+    <option value="phone" {% if values.kind == "phone" %}selected{% endif %}>{{ _("By phone") }}</option>
+  </select></label>
+  <label>{{ _("Pickup") }} <input type="date" name="pickup_date" value="{{ values.pickup_date }}" required></label>
+  <label>{{ _("Return") }} <input type="date" name="return_date" value="{{ values.return_date }}" required></label>
+  <label>{{ _("Customer name") }} <input name="name" value="{{ values.name }}" required maxlength="120"></label>
+  <label>{{ _("Phone") }} <input type="tel" name="phone" value="{{ values.phone }}" required placeholder="044 123 456"></label>
+  <label>{{ _("Note") }} <input name="note" value="{{ values.note }}" maxlength="500"></label>
+  <label class="inline"><input type="checkbox" name="picked_up_now" {% if values.picked_up_now %}checked{% endif %}> {{ _("The customer takes the dress now") }}</label>
+  {% if overridable %}
+  <label>{{ _("Why does this customer get the dress? The online booking will be flagged and we will find another dress for it.") }}
+    <input name="override_reason" required maxlength="300"></label>
+  <button>{{ _("Save anyway") }}</button>
+  {% else %}
+  <button>{{ _("Save") }}</button>
+  {% endif %}
+</form>
+{% endblock %}
