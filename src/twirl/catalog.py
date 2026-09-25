@@ -75,7 +75,9 @@ def add_items(session: Session, style: Style, *, size: str, quantity: int) -> li
     items = []
     for _ in range(quantity):
         item = Item(
-            shop_id=style.shop_id, style_id=style.id, size=size,
+            shop_id=style.shop_id,
+            style_id=style.id,
+            size=size,
             code=new_item_code(session, style.shop_id),
         )
         session.add(item)
@@ -94,9 +96,12 @@ MAX_IMAGES_PER_STYLE = 8
 
 
 def save_style_image(session: Session, storage: Storage, style: Style, data: bytes) -> StyleImage:
-    count = session.scalar(
-        select(func.count()).select_from(StyleImage).where(StyleImage.style_id == style.id)
-    ) or 0
+    count = (
+        session.scalar(
+            select(func.count()).select_from(StyleImage).where(StyleImage.style_id == style.id)
+        )
+        or 0
+    )
     if count >= MAX_IMAGES_PER_STYLE:
         raise InvalidImage("too_many")
     processed = process_image(data)
@@ -104,8 +109,11 @@ def save_style_image(session: Session, storage: Storage, style: Style, data: byt
     for variant, blob in processed.variants.items():
         storage.put(f"{key}-{variant}.webp", blob, "image/webp")
     image = StyleImage(
-        style_id=style.id, position=count, storage_key=key,
-        width=processed.width, height=processed.height,
+        style_id=style.id,
+        position=count,
+        storage_key=key,
+        width=processed.width,
+        height=processed.height,
     )
     session.add(image)
     session.flush()

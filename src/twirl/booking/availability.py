@@ -5,7 +5,12 @@ from sqlalchemy import Select, select
 from sqlalchemy.dialects.postgresql import Range
 from sqlalchemy.orm import Session
 
-from twirl.booking.dates import RentalDates, blocked_range, derive_rental_dates, validate_rental_dates
+from twirl.booking.dates import (
+    RentalDates,
+    blocked_range,
+    derive_rental_dates,
+    validate_rental_dates,
+)
 from twirl.booking.rules import rules_for_shop
 from twirl.catalog import size_sort_key
 from twirl.models import ACTIVE_STATUSES, Booking, Item, ItemStatus, Style
@@ -30,7 +35,11 @@ def overlapping_bookings(session: Session, item_id: int, start: date, end: date)
 
 
 def free_items_stmt(
-    *, start: date, end: date, style_id: int | None = None, shop_id: int | None = None,
+    *,
+    start: date,
+    end: date,
+    style_id: int | None = None,
+    shop_id: int | None = None,
     size: str | None = None,
 ) -> Select:
     busy = (

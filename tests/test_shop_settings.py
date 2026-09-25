@@ -7,10 +7,19 @@ from twirl.models import ShopClosure
 
 def _data(**over):
     data = {
-        "name": "Bella Dresses", "city": "Ferizaj", "address": "Rr. Dëshmorët 1",
-        "phone": "044 111 222", "whatsapp": "044 111 222", "viber": "", "instagram": "bella.ks",
-        "terms_text": "Depozitë 50 €", "pickup_lead_days": "2", "return_after_days": "1",
-        "prep_days": "0", "cleaning_days": "2", "max_rental_days": "7",
+        "name": "Bella Dresses",
+        "city": "Ferizaj",
+        "address": "Rr. Dëshmorët 1",
+        "phone": "044 111 222",
+        "whatsapp": "044 111 222",
+        "viber": "",
+        "instagram": "bella.ks",
+        "terms_text": "Depozitë 50 €",
+        "pickup_lead_days": "2",
+        "return_after_days": "1",
+        "prep_days": "0",
+        "cleaning_days": "2",
+        "max_rental_days": "7",
     }
     data.update(over)
     return data
@@ -30,7 +39,10 @@ def test_owner_saves_settings_and_closed_days(owner_client, shop):
     response = post(owner_client, "/shop/settings", {**_data(), "closed_weekdays": ["6"]})
     assert response.status_code == 303
     assert (shop.name, shop.cleaning_days, shop.whatsapp, shop.viber) == (
-        "Bella Dresses", 2, "+38344111222", None,
+        "Bella Dresses",
+        2,
+        "+38344111222",
+        None,
     )
     assert [h.weekday for h in shop.hours if h.closed] == [6]
 
@@ -47,8 +59,11 @@ def test_invalid_phone_is_reported(owner_client, shop):
 
 
 def test_add_and_delete_closure(owner_client, db, shop):
-    response = post(owner_client, "/shop/settings/closures",
-                    {"starts_on": "2027-08-01", "ends_on": "2027-08-10", "reason": "Pushime"})
+    response = post(
+        owner_client,
+        "/shop/settings/closures",
+        {"starts_on": "2027-08-01", "ends_on": "2027-08-10", "reason": "Pushime"},
+    )
     assert response.status_code == 303
     closure = db.query(ShopClosure).filter_by(shop_id=shop.id).one()
     assert (closure.starts_on, closure.ends_on) == (date(2027, 8, 1), date(2027, 8, 10))
@@ -65,6 +80,9 @@ def test_cannot_delete_another_shops_closure(owner_client, db):
 
 
 def test_closure_end_before_start_is_rejected(owner_client):
-    response = post(owner_client, "/shop/settings/closures",
-                    {"starts_on": "2027-08-10", "ends_on": "2027-08-01", "reason": ""})
+    response = post(
+        owner_client,
+        "/shop/settings/closures",
+        {"starts_on": "2027-08-10", "ends_on": "2027-08-01", "reason": ""},
+    )
     assert response.status_code == 400

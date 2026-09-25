@@ -2,8 +2,19 @@ from datetime import date, datetime
 from enum import StrEnum
 
 from sqlalchemy import (
-    CheckConstraint, Computed, Date, DateTime, ForeignKey, ForeignKeyConstraint, Index, Integer,
-    SmallInteger, String, Text, func, text,
+    CheckConstraint,
+    Computed,
+    Date,
+    DateTime,
+    ForeignKey,
+    ForeignKeyConstraint,
+    Index,
+    Integer,
+    SmallInteger,
+    String,
+    Text,
+    func,
+    text,
 )
 from sqlalchemy.dialects.postgresql import DATERANGE, ExcludeConstraint, Range
 from sqlalchemy.orm import Mapped, mapped_column, relationship

@@ -29,7 +29,10 @@ def test_fifty_parallel_requests_never_double_book(committed, dresses):
                 create_request(
                     s,
                     RentalRequest(
-                        style_id=style_id, size="38", event_date=event, name=f"R{i}",
+                        style_id=style_id,
+                        size="38",
+                        event_date=event,
+                        name=f"R{i}",
                         phone=f"+3834912{i:04d}",
                     ),
                     today=clock.today(),

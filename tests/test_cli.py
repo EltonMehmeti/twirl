@@ -7,8 +7,14 @@ from twirl.models import ShopUser, User
 
 
 def _shop(db, **over):
-    kwargs = dict(slug="bella-2", name="Bella", city="Ferizaj", owner_email="Owner@Bella.test",
-                  owner_name="Drita", owner_password="pw-123456")
+    kwargs = dict(
+        slug="bella-2",
+        name="Bella",
+        city="Ferizaj",
+        owner_email="Owner@Bella.test",
+        owner_name="Drita",
+        owner_password="pw-123456",
+    )
     kwargs.update(over)
     return cmd_create_shop(db, **kwargs)
 

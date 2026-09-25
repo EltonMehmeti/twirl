@@ -10,15 +10,16 @@ from starlette.responses import HTMLResponse
 from twirl.auth.csrf import get_csrf_token
 from twirl.i18n import get_translations, pick_locale
 
-_current: ContextVar[NullTranslations] = ContextVar("twirl_translations", default=NullTranslations())
+_NULL_TRANSLATIONS = NullTranslations()
+_current: ContextVar[NullTranslations | None] = ContextVar("twirl_translations", default=None)
 
 
 def _gettext(message: str) -> str:
-    return _current.get().gettext(message)
+    return (_current.get() or _NULL_TRANSLATIONS).gettext(message)
 
 
 def _ngettext(singular: str, plural: str, n: int) -> str:
-    return _current.get().ngettext(singular, plural, n)
+    return (_current.get() or _NULL_TRANSLATIONS).ngettext(singular, plural, n)
 
 
 def format_money(cents: int, locale: str) -> str:

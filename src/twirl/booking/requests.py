@@ -14,7 +14,14 @@ from twirl.catalog import normalize_size
 from twirl.codes import new_booking_ref
 from twirl.customers import get_or_create_customer, link_customer
 from twirl.models import (
-    ActorKind, Booking, BookingKind, BookingMode, BookingStatus, Item, ShopStatus, Style,
+    ActorKind,
+    Booking,
+    BookingKind,
+    BookingMode,
+    BookingStatus,
+    Item,
+    ShopStatus,
+    Style,
 )
 from twirl.notify.outbox import notify_admin, notify_shop_owners
 from twirl.notify.payloads import booking_payload

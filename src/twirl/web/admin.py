@@ -9,7 +9,14 @@ from twirl.auth.passwords import verify_password
 from twirl.config import Settings
 from twirl.db import Database
 from twirl.models import (
-    Booking, BookingEvent, Item, Notification, Shop, Style, User, UserKind,
+    Booking,
+    BookingEvent,
+    Item,
+    Notification,
+    Shop,
+    Style,
+    User,
+    UserKind,
 )
 
 ADMIN_SESSION_KEY = "admin_uid"
@@ -56,9 +63,20 @@ class ShopAdmin(ModelView, model=Shop):
     column_list = [Shop.id, Shop.slug, Shop.name, Shop.city, Shop.status, Shop.booking_mode]
     column_searchable_list = [Shop.slug, Shop.name]
     form_columns = [
-        Shop.name, Shop.city, Shop.address, Shop.phone, Shop.whatsapp, Shop.viber, Shop.instagram,
-        Shop.status, Shop.booking_mode, Shop.pickup_lead_days, Shop.return_after_days,
-        Shop.prep_days, Shop.cleaning_days, Shop.max_rental_days,
+        Shop.name,
+        Shop.city,
+        Shop.address,
+        Shop.phone,
+        Shop.whatsapp,
+        Shop.viber,
+        Shop.instagram,
+        Shop.status,
+        Shop.booking_mode,
+        Shop.pickup_lead_days,
+        Shop.return_after_days,
+        Shop.prep_days,
+        Shop.cleaning_days,
+        Shop.max_rental_days,
     ]
     can_delete = False
 
@@ -72,7 +90,14 @@ class UserAdmin(ModelView, model=User):
 
 
 class StyleAdmin(ModelView, model=Style):
-    column_list = [Style.id, Style.shop_id, Style.code, Style.name, Style.price_cents, Style.published]
+    column_list = [
+        Style.id,
+        Style.shop_id,
+        Style.code,
+        Style.name,
+        Style.price_cents,
+        Style.published,
+    ]
     column_searchable_list = [Style.name, Style.code]
     form_columns = [Style.name, Style.description, Style.price_cents, Style.published]
     can_create = False
@@ -89,8 +114,15 @@ class ItemAdmin(ModelView, model=Item):
 
 class BookingAdmin(ModelView, model=Booking):
     column_list = [
-        Booking.id, Booking.ref, Booking.shop_id, Booking.item_id, Booking.kind, Booking.status,
-        Booking.pickup_date, Booking.return_date, Booking.created_at,
+        Booking.id,
+        Booking.ref,
+        Booking.shop_id,
+        Booking.item_id,
+        Booking.kind,
+        Booking.status,
+        Booking.pickup_date,
+        Booking.return_date,
+        Booking.created_at,
     ]
     column_searchable_list = [Booking.ref]
     column_sortable_list = [Booking.created_at, Booking.pickup_date]
@@ -102,8 +134,13 @@ class BookingAdmin(ModelView, model=Booking):
 
 class BookingEventAdmin(ModelView, model=BookingEvent):
     column_list = [
-        BookingEvent.id, BookingEvent.booking_id, BookingEvent.from_status, BookingEvent.to_status,
-        BookingEvent.actor_kind, BookingEvent.reason, BookingEvent.created_at,
+        BookingEvent.id,
+        BookingEvent.booking_id,
+        BookingEvent.from_status,
+        BookingEvent.to_status,
+        BookingEvent.actor_kind,
+        BookingEvent.reason,
+        BookingEvent.created_at,
     ]
     column_default_sort = [(BookingEvent.id, True)]
     can_create = False
@@ -113,8 +150,14 @@ class BookingEventAdmin(ModelView, model=BookingEvent):
 
 class NotificationAdmin(ModelView, model=Notification):
     column_list = [
-        Notification.id, Notification.channel, Notification.recipient, Notification.template,
-        Notification.status, Notification.attempts, Notification.last_error, Notification.created_at,
+        Notification.id,
+        Notification.channel,
+        Notification.recipient,
+        Notification.template,
+        Notification.status,
+        Notification.attempts,
+        Notification.last_error,
+        Notification.created_at,
     ]
     column_default_sort = [(Notification.id, True)]
     can_create = False
@@ -124,10 +167,21 @@ class NotificationAdmin(ModelView, model=Notification):
 
 def mount_admin(app: FastAPI, db: Database, settings: Settings) -> Admin:
     admin = Admin(
-        app, engine=db.engine, session_maker=db.sessionmaker, base_url="/admin", title="Twirl admin",
+        app,
+        engine=db.engine,
+        session_maker=db.sessionmaker,
+        base_url="/admin",
+        title="Twirl admin",
         authentication_backend=AdminAuth(settings.secret_key, db),
     )
-    for view in (ShopAdmin, UserAdmin, StyleAdmin, ItemAdmin, BookingAdmin, BookingEventAdmin,
-                 NotificationAdmin):
+    for view in (
+        ShopAdmin,
+        UserAdmin,
+        StyleAdmin,
+        ItemAdmin,
+        BookingAdmin,
+        BookingEventAdmin,
+        NotificationAdmin,
+    ):
         admin.add_view(view)
     return admin

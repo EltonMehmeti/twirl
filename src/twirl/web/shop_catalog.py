@@ -28,26 +28,36 @@ router = APIRouter(prefix="/shop")
 
 CHOICES = {
     "occasions": [
-        (Occasion.WEDDING.value, N_("Wedding")), (Occasion.ENGAGEMENT.value, N_("Engagement")),
-        (Occasion.MATURA.value, N_("Matura")), (Occasion.HENNA_NIGHT.value, N_("Henna night")),
+        (Occasion.WEDDING.value, N_("Wedding")),
+        (Occasion.ENGAGEMENT.value, N_("Engagement")),
+        (Occasion.MATURA.value, N_("Matura")),
+        (Occasion.HENNA_NIGHT.value, N_("Henna night")),
         (Occasion.EVENING.value, N_("Evening")),
     ],
     "colours": [
-        (ColourFamily.BLACK.value, N_("Black")), (ColourFamily.WHITE.value, N_("White")),
-        (ColourFamily.RED.value, N_("Red")), (ColourFamily.PINK.value, N_("Pink")),
-        (ColourFamily.BLUE.value, N_("Blue")), (ColourFamily.GREEN.value, N_("Green")),
-        (ColourFamily.GOLD.value, N_("Gold")), (ColourFamily.SILVER.value, N_("Silver")),
-        (ColourFamily.BEIGE.value, N_("Beige")), (ColourFamily.PURPLE.value, N_("Purple")),
+        (ColourFamily.BLACK.value, N_("Black")),
+        (ColourFamily.WHITE.value, N_("White")),
+        (ColourFamily.RED.value, N_("Red")),
+        (ColourFamily.PINK.value, N_("Pink")),
+        (ColourFamily.BLUE.value, N_("Blue")),
+        (ColourFamily.GREEN.value, N_("Green")),
+        (ColourFamily.GOLD.value, N_("Gold")),
+        (ColourFamily.SILVER.value, N_("Silver")),
+        (ColourFamily.BEIGE.value, N_("Beige")),
+        (ColourFamily.PURPLE.value, N_("Purple")),
         (ColourFamily.MULTI.value, N_("Multicolour")),
     ],
     "lengths": [
-        (DressLength.MINI.value, N_("Short")), (DressLength.MIDI.value, N_("Midi")),
+        (DressLength.MINI.value, N_("Short")),
+        (DressLength.MIDI.value, N_("Midi")),
         (DressLength.MAXI.value, N_("Long")),
     ],
 }
 ITEM_STATUSES = [
-    (ItemStatus.ACTIVE.value, N_("Available")), (ItemStatus.CLEANING.value, N_("Cleaning")),
-    (ItemStatus.REPAIR.value, N_("Repair")), (ItemStatus.RETIRED.value, N_("Retired")),
+    (ItemStatus.ACTIVE.value, N_("Available")),
+    (ItemStatus.CLEANING.value, N_("Cleaning")),
+    (ItemStatus.REPAIR.value, N_("Repair")),
+    (ItemStatus.RETIRED.value, N_("Retired")),
     (ItemStatus.LOST.value, N_("Lost")),
 ]
 PAGE_ERRORS = {
@@ -122,35 +132,56 @@ def _get_item(db: Session, ctx: ShopContext, item_id: int) -> Item:
 
 def _style_values(style: Style) -> dict:
     return {
-        "name": style.name, "price_eur": f"{style.price_cents / 100:.2f}",
-        "description": style.description, "occasion_tags": list(style.occasion_tags),
-        "colour_family": style.colour_family or "", "length": style.length or "",
-        "stretch": style.stretch, "adjustable_back": style.adjustable_back,
+        "name": style.name,
+        "price_eur": f"{style.price_cents / 100:.2f}",
+        "description": style.description,
+        "occasion_tags": list(style.occasion_tags),
+        "colour_family": style.colour_family or "",
+        "length": style.length or "",
+        "stretch": style.stretch,
+        "adjustable_back": style.adjustable_back,
         "published": style.published,
     }
 
 
 def _form_values(form: FormData) -> dict:
     return {
-        "name": form.get("name", ""), "price_eur": form.get("price_eur", ""),
-        "description": form.get("description", ""), "occasion_tags": form.getlist("occasion_tags"),
-        "colour_family": form.get("colour_family", ""), "length": form.get("length", ""),
-        "stretch": bool(form.get("stretch")), "adjustable_back": bool(form.get("adjustable_back")),
+        "name": form.get("name", ""),
+        "price_eur": form.get("price_eur", ""),
+        "description": form.get("description", ""),
+        "occasion_tags": form.getlist("occasion_tags"),
+        "colour_family": form.get("colour_family", ""),
+        "length": form.get("length", ""),
+        "stretch": bool(form.get("stretch")),
+        "adjustable_back": bool(form.get("adjustable_back")),
         "published": bool(form.get("published")),
     }
 
 
-def _style_page(request: Request, ctx: ShopContext, style: Style, storage: Storage, *,
-                values: dict | None = None, errors: dict | None = None, error: str | None = None,
-                status_code: int = 200):
+def _style_page(
+    request: Request,
+    ctx: ShopContext,
+    style: Style,
+    storage: Storage,
+    *,
+    values: dict | None = None,
+    errors: dict | None = None,
+    error: str | None = None,
+    status_code: int = 200,
+):
     return render(
-        request, "shop/style_edit.html",
+        request,
+        "shop/style_edit.html",
         {
-            "ctx": ctx, "style": style,
+            "ctx": ctx,
+            "style": style,
             "items": sorted(style.items, key=lambda i: (size_sort_key(i.size), i.code)),
             "images": [image_url(storage, image) for image in style.images],
-            "values": values or _style_values(style), "errors": errors or {}, "error": error,
-            "choices": CHOICES, "item_statuses": ITEM_STATUSES,
+            "values": values or _style_values(style),
+            "errors": errors or {},
+            "error": error,
+            "choices": CHOICES,
+            "item_statuses": ITEM_STATUSES,
         },
         status_code=status_code,
     )
@@ -171,13 +202,23 @@ def _apply(style_kwargs: StyleForm) -> dict:
 
 
 @router.get("/styles", response_class=HTMLResponse)
-def list_styles(request: Request, ctx: ShopContext = Depends(require_shop),
-                db: Session = Depends(get_db), storage: Storage = Depends(get_storage)):
+def list_styles(
+    request: Request,
+    ctx: ShopContext = Depends(require_shop),
+    db: Session = Depends(get_db),
+    storage: Storage = Depends(get_storage),
+):
     styles = db.scalars(
-        select(Style).where(Style.shop_id == ctx.shop.id, Style.deleted_at.is_(None)).order_by(Style.code)
+        select(Style)
+        .where(Style.shop_id == ctx.shop.id, Style.deleted_at.is_(None))
+        .order_by(Style.code)
     ).all()
     rows = [
-        {"style": s, "thumb": image_url(storage, s.images[0]) if s.images else None, "items": len(s.items)}
+        {
+            "style": s,
+            "thumb": image_url(storage, s.images[0]) if s.images else None,
+            "items": len(s.items),
+        }
         for s in styles
     ]
     return render(request, "shop/styles.html", {"ctx": ctx, "rows": rows})
@@ -185,42 +226,72 @@ def list_styles(request: Request, ctx: ShopContext = Depends(require_shop),
 
 @router.get("/styles/new", response_class=HTMLResponse)
 def new_style_form(request: Request, ctx: ShopContext = Depends(require_owner)):
-    values = {"name": "", "price_eur": "", "description": "", "occasion_tags": [], "colour_family": "",
-              "length": "", "stretch": False, "adjustable_back": False, "published": True}
-    return render(request, "shop/style_new.html",
-                  {"ctx": ctx, "values": values, "errors": {}, "choices": CHOICES})
+    values = {
+        "name": "",
+        "price_eur": "",
+        "description": "",
+        "occasion_tags": [],
+        "colour_family": "",
+        "length": "",
+        "stretch": False,
+        "adjustable_back": False,
+        "published": True,
+    }
+    return render(
+        request,
+        "shop/style_new.html",
+        {"ctx": ctx, "values": values, "errors": {}, "choices": CHOICES},
+    )
 
 
 @router.post("/styles/new", dependencies=[Depends(verify_csrf)])
-def create_style_route(request: Request, form: FormData = Depends(form_data),
-                       ctx: ShopContext = Depends(require_owner), db: Session = Depends(get_db)):
+def create_style_route(
+    request: Request,
+    form: FormData = Depends(form_data),
+    ctx: ShopContext = Depends(require_owner),
+    db: Session = Depends(get_db),
+):
     parsed, errors = validate_form(StyleForm, form, list_fields=("occasion_tags",))
     if parsed is None:
-        return render(request, "shop/style_new.html",
-                      {"ctx": ctx, "values": _form_values(form), "errors": errors, "choices": CHOICES},
-                      status_code=400)
+        return render(
+            request,
+            "shop/style_new.html",
+            {"ctx": ctx, "values": _form_values(form), "errors": errors, "choices": CHOICES},
+            status_code=400,
+        )
     style = create_style(db, ctx.shop, **_apply(parsed))
     db.commit()
     return RedirectResponse(f"/shop/styles/{style.id}", status_code=303)
 
 
 @router.get("/styles/{style_id}", response_class=HTMLResponse)
-def style_page(request: Request, style_id: int, error: str | None = None,
-               ctx: ShopContext = Depends(require_shop), db: Session = Depends(get_db),
-               storage: Storage = Depends(get_storage)):
+def style_page(
+    request: Request,
+    style_id: int,
+    error: str | None = None,
+    ctx: ShopContext = Depends(require_shop),
+    db: Session = Depends(get_db),
+    storage: Storage = Depends(get_storage),
+):
     style = _get_style(db, ctx, style_id)
     return _style_page(request, ctx, style, storage, error=PAGE_ERRORS.get(error or ""))
 
 
 @router.post("/styles/{style_id}", dependencies=[Depends(verify_csrf)])
-def update_style(request: Request, style_id: int, form: FormData = Depends(form_data),
-                 ctx: ShopContext = Depends(require_owner), db: Session = Depends(get_db),
-                 storage: Storage = Depends(get_storage)):
+def update_style(
+    request: Request,
+    style_id: int,
+    form: FormData = Depends(form_data),
+    ctx: ShopContext = Depends(require_owner),
+    db: Session = Depends(get_db),
+    storage: Storage = Depends(get_storage),
+):
     style = _get_style(db, ctx, style_id)
     parsed, errors = validate_form(StyleForm, form, list_fields=("occasion_tags",))
     if parsed is None:
-        return _style_page(request, ctx, style, storage, values=_form_values(form), errors=errors,
-                           status_code=400)
+        return _style_page(
+            request, ctx, style, storage, values=_form_values(form), errors=errors, status_code=400
+        )
     for field, value in _apply(parsed).items():
         setattr(style, field, value)
     db.commit()
@@ -228,9 +299,14 @@ def update_style(request: Request, style_id: int, form: FormData = Depends(form_
 
 
 @router.post("/styles/{style_id}/images", dependencies=[Depends(verify_csrf)])
-def upload_images(request: Request, style_id: int, files: list[UploadFile] = File(...),
-                  ctx: ShopContext = Depends(require_shop), db: Session = Depends(get_db),
-                  storage: Storage = Depends(get_storage)):
+def upload_images(
+    request: Request,
+    style_id: int,
+    files: list[UploadFile] = File(...),
+    ctx: ShopContext = Depends(require_shop),
+    db: Session = Depends(get_db),
+    storage: Storage = Depends(get_storage),
+):
     style = _get_style(db, ctx, style_id)
     failures = []
     for upload in files:
@@ -246,25 +322,42 @@ def upload_images(request: Request, style_id: int, files: list[UploadFile] = Fil
 
 
 @router.post("/styles/{style_id}/items", dependencies=[Depends(verify_csrf)])
-def add_items_route(request: Request, style_id: int, form: FormData = Depends(form_data),
-                    ctx: ShopContext = Depends(require_shop), db: Session = Depends(get_db),
-                    storage: Storage = Depends(get_storage)):
+def add_items_route(
+    request: Request,
+    style_id: int,
+    form: FormData = Depends(form_data),
+    ctx: ShopContext = Depends(require_shop),
+    db: Session = Depends(get_db),
+    storage: Storage = Depends(get_storage),
+):
     style = _get_style(db, ctx, style_id)
     parsed, _ = validate_form(ItemsForm, form)
     if parsed is None:
-        return _style_page(request, ctx, style, storage,
-                           error=N_("Enter a size and a quantity from 1 to 20."), status_code=400)
+        return _style_page(
+            request,
+            ctx,
+            style,
+            storage,
+            error=N_("Enter a size and a quantity from 1 to 20."),
+            status_code=400,
+        )
     add_items(db, style, size=parsed.size, quantity=parsed.quantity)
     db.commit()
     return RedirectResponse(f"/shop/styles/{style.id}", status_code=303)
 
 
 @router.post("/items/{item_id}/status", dependencies=[Depends(verify_csrf)])
-def item_status(item_id: int, form: FormData = Depends(form_data),
-                ctx: ShopContext = Depends(require_shop), db: Session = Depends(get_db)):
+def item_status(
+    item_id: int,
+    form: FormData = Depends(form_data),
+    ctx: ShopContext = Depends(require_shop),
+    db: Session = Depends(get_db),
+):
     item = _get_item(db, ctx, item_id)
     try:
-        future = set_item_status(db, item, str(form.get("status", "")), actor=ctx.actor, today=clock.today())
+        future = set_item_status(
+            db, item, str(form.get("status", "")), actor=ctx.actor, today=clock.today()
+        )
     except ValueError as exc:
         raise HTTPException(status_code=400) from exc
     db.commit()
@@ -273,16 +366,26 @@ def item_status(item_id: int, form: FormData = Depends(form_data),
 
 
 @router.post("/items/{item_id}/block", dependencies=[Depends(verify_csrf)])
-def block_item(item_id: int, form: FormData = Depends(form_data),
-               ctx: ShopContext = Depends(require_shop), db: Session = Depends(get_db)):
+def block_item(
+    item_id: int,
+    form: FormData = Depends(form_data),
+    ctx: ShopContext = Depends(require_shop),
+    db: Session = Depends(get_db),
+):
     item = _get_item(db, ctx, item_id)
     target = f"/shop/styles/{item.style_id}"
     parsed, _ = validate_form(BlockForm, form)
     if parsed is None:
         return RedirectResponse(f"{target}?error=block_invalid", status_code=303)
     try:
-        create_block(db, item=item, starts_on=parsed.starts_on, ends_on=parsed.ends_on,
-                     reason=parsed.reason, actor=ctx.actor)
+        create_block(
+            db,
+            item=item,
+            starts_on=parsed.starts_on,
+            ends_on=parsed.ends_on,
+            reason=parsed.reason,
+            actor=ctx.actor,
+        )
     except ItemConflict:
         db.rollback()
         return RedirectResponse(f"{target}?error=block_conflict", status_code=303)
@@ -294,8 +397,12 @@ def block_item(item_id: int, form: FormData = Depends(form_data),
 
 
 @router.get("/items/{item_id}/qr.svg")
-def item_qr(request: Request, item_id: int, ctx: ShopContext = Depends(require_shop),
-            db: Session = Depends(get_db)):
+def item_qr(
+    request: Request,
+    item_id: int,
+    ctx: ShopContext = Depends(require_shop),
+    db: Session = Depends(get_db),
+):
     item = _get_item(db, ctx, item_id)
     url = f"{request.app.state.settings.base_url}/shop/walk-in?code={item.code}"
     buffer = io.BytesIO()

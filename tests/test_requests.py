@@ -17,8 +17,12 @@ EVENT = clock.today() + timedelta(days=30)
 
 def _req(style, **kw):
     return RentalRequest(
-        style_id=style.id, size=kw.pop("size", "38"), event_date=kw.pop("event_date", EVENT),
-        name=kw.pop("name", "Arta"), phone=kw.pop("phone", "044 123 456"), **kw,
+        style_id=style.id,
+        size=kw.pop("size", "38"),
+        event_date=kw.pop("event_date", EVENT),
+        name=kw.pop("name", "Arta"),
+        phone=kw.pop("phone", "044 123 456"),
+        **kw,
     )
 
 
@@ -36,7 +40,9 @@ def test_request_mode_creates_pending_booking_event_and_notifications(db):
     assert (booking.status, booking.kind, booking.item_id) == ("pending_shop", "online", item.id)
     assert booking.price_cents == style.price_cents
     events = db.scalars(select(BookingEvent).where(BookingEvent.booking_id == booking.id)).all()
-    assert [(e.from_status, e.to_status, e.actor_kind) for e in events] == [(None, "pending_shop", "renter")]
+    assert [(e.from_status, e.to_status, e.actor_kind) for e in events] == [
+        (None, "pending_shop", "renter")
+    ]
     assert sorted(n.channel for n in db.scalars(select(Notification))) == ["email", "telegram"]
 
 
@@ -93,8 +99,15 @@ def test_same_phone_reuses_renter_and_links_shop_once(db):
     make_item(db, style)
     create_request(db, _req(style), today=clock.today())
     create_request(db, _req(style, name="Arta B."), today=clock.today())
-    assert db.scalar(select(func.count()).select_from(User).where(User.phone == "+38344123456")) == 1
-    assert db.scalar(select(func.count()).select_from(ShopCustomer).where(ShopCustomer.shop_id == shop.id)) == 1
+    assert (
+        db.scalar(select(func.count()).select_from(User).where(User.phone == "+38344123456")) == 1
+    )
+    assert (
+        db.scalar(
+            select(func.count()).select_from(ShopCustomer).where(ShopCustomer.shop_id == shop.id)
+        )
+        == 1
+    )
 
 
 def test_style_availability_reports_each_size(db):

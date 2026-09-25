@@ -31,9 +31,12 @@ def login(
 ):
     target = safe_next(next_, "/shop")
     settings = request.app.state.settings
-    if not request.app.state.login_limiter.allow(client_ip(request, trust_cf=settings.trust_cf_connecting_ip)):
+    if not request.app.state.login_limiter.allow(
+        client_ip(request, trust_cf=settings.trust_cf_connecting_ip)
+    ):
         return render(
-            request, "auth/login.html",
+            request,
+            "auth/login.html",
             {"next": target, "error": N_("Too many attempts. Try again in a few minutes.")},
             status_code=429,
         )
@@ -45,8 +48,10 @@ def login(
         or not verify_password(user.password_hash, password)
     ):
         return render(
-            request, "auth/login.html",
-            {"next": target, "error": N_("Wrong email or password.")}, status_code=400,
+            request,
+            "auth/login.html",
+            {"next": target, "error": N_("Wrong email or password.")},
+            status_code=400,
         )
     login_user(request, user)
     return RedirectResponse(target, status_code=303)

@@ -26,7 +26,13 @@ class LogSender:
 
 class EmailSender:
     def __init__(self, *, host: str, port: int, user: str, password: str, sender: str) -> None:
-        self.host, self.port, self.user, self.password, self.sender = host, port, user, password, sender
+        self.host, self.port, self.user, self.password, self.sender = (
+            host,
+            port,
+            user,
+            password,
+            sender,
+        )
 
     def send(self, recipient: str, subject: str, body: str) -> str | None:
         message = EmailMessage()
@@ -43,7 +49,9 @@ class EmailSender:
 
 
 class TelegramSender:
-    def __init__(self, *, token: str, admin_chat_id: str, client: httpx.Client | None = None) -> None:
+    def __init__(
+        self, *, token: str, admin_chat_id: str, client: httpx.Client | None = None
+    ) -> None:
         self.url = f"https://api.telegram.org/bot{token}/sendMessage"
         self.admin_chat_id = admin_chat_id
         self.client = client or httpx.Client(timeout=10)
@@ -59,14 +67,19 @@ class TelegramSender:
 def build_senders(settings: Settings) -> dict[str, Sender]:
     email: Sender = (
         EmailSender(
-            host=settings.smtp_host, port=settings.smtp_port, user=settings.smtp_user,
-            password=settings.smtp_password, sender=settings.mail_from,
+            host=settings.smtp_host,
+            port=settings.smtp_port,
+            user=settings.smtp_user,
+            password=settings.smtp_password,
+            sender=settings.mail_from,
         )
         if settings.smtp_host
         else LogSender("email")
     )
     telegram: Sender = (
-        TelegramSender(token=settings.telegram_bot_token, admin_chat_id=settings.telegram_admin_chat_id)
+        TelegramSender(
+            token=settings.telegram_bot_token, admin_chat_id=settings.telegram_admin_chat_id
+        )
         if settings.telegram_bot_token and settings.telegram_admin_chat_id
         else LogSender("telegram")
     )

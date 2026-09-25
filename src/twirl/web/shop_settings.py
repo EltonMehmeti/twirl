@@ -18,12 +18,28 @@ from twirl.web.templating import render
 router = APIRouter(prefix="/shop/settings")
 
 WEEKDAY_NAMES = [
-    N_("Monday"), N_("Tuesday"), N_("Wednesday"), N_("Thursday"), N_("Friday"), N_("Saturday"),
+    N_("Monday"),
+    N_("Tuesday"),
+    N_("Wednesday"),
+    N_("Thursday"),
+    N_("Friday"),
+    N_("Saturday"),
     N_("Sunday"),
 ]
 FIELDS = (
-    "name", "city", "address", "phone", "whatsapp", "viber", "instagram", "terms_text",
-    "pickup_lead_days", "return_after_days", "prep_days", "cleaning_days", "max_rental_days",
+    "name",
+    "city",
+    "address",
+    "phone",
+    "whatsapp",
+    "viber",
+    "instagram",
+    "terms_text",
+    "pickup_lead_days",
+    "return_after_days",
+    "prep_days",
+    "cleaning_days",
+    "max_rental_days",
 )
 OPTIONAL_TEXT = ("phone", "whatsapp", "viber", "instagram")
 
@@ -78,17 +94,31 @@ def _values_from_shop(ctx: ShopContext) -> dict:
 
 def _values_from_form(form: FormData) -> dict:
     values = {f: form.get(f, "") for f in FIELDS}
-    values["closed_weekdays"] = [int(v) for v in form.getlist("closed_weekdays") if str(v).isdigit()]
+    values["closed_weekdays"] = [
+        int(v) for v in form.getlist("closed_weekdays") if str(v).isdigit()
+    ]
     return values
 
 
-def _page(request: Request, ctx: ShopContext, *, values: dict, errors: dict | None = None,
-          status_code: int = 200, saved: bool = False):
+def _page(
+    request: Request,
+    ctx: ShopContext,
+    *,
+    values: dict,
+    errors: dict | None = None,
+    status_code: int = 200,
+    saved: bool = False,
+):
     return render(
-        request, "shop/settings.html",
+        request,
+        "shop/settings.html",
         {
-            "ctx": ctx, "values": values, "errors": errors or {}, "saved": saved,
-            "weekdays": list(enumerate(WEEKDAY_NAMES)), "closures": ctx.shop.closures,
+            "ctx": ctx,
+            "values": values,
+            "errors": errors or {},
+            "saved": saved,
+            "weekdays": list(enumerate(WEEKDAY_NAMES)),
+            "closures": ctx.shop.closures,
         },
         status_code=status_code,
     )
@@ -135,7 +165,9 @@ def add_closure(
     if parsed is None:
         return _page(request, ctx, values=_values_from_shop(ctx), errors=errors, status_code=400)
     ctx.shop.closures.append(
-        ShopClosure(starts_on=parsed.starts_on, ends_on=parsed.ends_on, reason=parsed.reason.strip())
+        ShopClosure(
+            starts_on=parsed.starts_on, ends_on=parsed.ends_on, reason=parsed.reason.strip()
+        )
     )
     db.commit()
     return RedirectResponse("/shop/settings", status_code=303)

@@ -10,8 +10,12 @@ from twirl.models import Booking, BookingEvent, BookingStatus
 def record_created(session: Session, booking: Booking, actor: Actor) -> None:
     session.add(
         BookingEvent(
-            booking_id=booking.id, from_status=None, to_status=booking.status,
-            actor_id=actor.id, actor_kind=actor.kind.value, reason="",
+            booking_id=booking.id,
+            from_status=None,
+            to_status=booking.status,
+            actor_id=actor.id,
+            actor_kind=actor.kind.value,
+            reason="",
         )
     )
 
@@ -29,8 +33,12 @@ def transition(
                 booking.reason = reason
             session.add(
                 BookingEvent(
-                    booking_id=booking.id, from_status=src.value, to_status=to.value,
-                    actor_id=actor.id, actor_kind=actor.kind.value, reason=reason,
+                    booking_id=booking.id,
+                    from_status=src.value,
+                    to_status=to.value,
+                    actor_id=actor.id,
+                    actor_kind=actor.kind.value,
+                    reason=reason,
                 )
             )
             session.flush()

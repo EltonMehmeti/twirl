@@ -8,8 +8,14 @@ from twirl import clock
 from twirl.booking.actor import Actor
 from twirl.booking.errors import ItemConflict
 from twirl.booking.staff import (
-    cancel_block, create_block, create_staff_booking, decline, mark_returned, set_item_status,
-    swap_candidates, swap_item,
+    cancel_block,
+    create_block,
+    create_staff_booking,
+    decline,
+    mark_returned,
+    set_item_status,
+    swap_candidates,
+    swap_item,
 )
 from twirl.models import ActorKind, BookingEvent, ItemConditionEvent, Notification, ShopCustomer
 
@@ -26,15 +32,26 @@ def _setup(db):
 
 def _walk_in(db, shop, item, **kw):
     return create_staff_booking(
-        db, shop=shop, item=item, pickup=kw.pop("pickup", PICK), return_=kw.pop("return_", RET),
-        name="Blerta", phone="044 555 666", actor=STAFF, **kw,
+        db,
+        shop=shop,
+        item=item,
+        pickup=kw.pop("pickup", PICK),
+        return_=kw.pop("return_", RET),
+        name="Blerta",
+        phone="044 555 666",
+        actor=STAFF,
+        **kw,
     )
 
 
 def test_walk_in_without_conflict_is_confirmed(db):
     shop, _, item = _setup(db)
     booking = _walk_in(db, shop, item)
-    assert (booking.status, booking.kind, booking.customer.phone) == ("confirmed", "walk_in", "+38344555666")
+    assert (booking.status, booking.kind, booking.customer.phone) == (
+        "confirmed",
+        "walk_in",
+        "+38344555666",
+    )
     link = db.scalar(select(ShopCustomer).where(ShopCustomer.shop_id == shop.id))
     assert link.user_id == booking.customer_id
 
@@ -43,8 +60,13 @@ def test_walk_in_picked_up_now_goes_straight_to_picked_up(db):
     shop, _, item = _setup(db)
     booking = _walk_in(db, shop, item, picked_up_now=True)
     assert booking.status == "picked_up"
-    events = db.scalars(select(BookingEvent).where(BookingEvent.booking_id == booking.id).order_by(BookingEvent.id))
-    assert [(e.from_status, e.to_status) for e in events] == [(None, "confirmed"), ("confirmed", "picked_up")]
+    events = db.scalars(
+        select(BookingEvent).where(BookingEvent.booking_id == booking.id).order_by(BookingEvent.id)
+    )
+    assert [(e.from_status, e.to_status) for e in events] == [
+        (None, "confirmed"),
+        ("confirmed", "picked_up"),
+    ]
 
 
 def test_conflict_with_online_booking_requires_a_reason(db):
@@ -59,12 +81,20 @@ def test_conflict_with_online_booking_requires_a_reason(db):
 def test_override_flags_online_booking_at_risk_and_alerts_admin(db):
     shop, _, item = _setup(db)
     online = make_booking(
-        db, item, pickup=PICK, return_=RET, kind="online", status="confirmed", customer=make_renter(db)
+        db,
+        item,
+        pickup=PICK,
+        return_=RET,
+        kind="online",
+        status="confirmed",
+        customer=make_renter(db),
     )
     walk_in = _walk_in(db, shop, item, override_reason="customer paid cash")
     db.refresh(online)
     assert (online.status, walk_in.status) == ("at_risk", "confirmed")
-    alert = db.scalars(select(Notification).where(Notification.template == "booking_at_risk_admin")).one()
+    alert = db.scalars(
+        select(Notification).where(Notification.template == "booking_at_risk_admin")
+    ).one()
     assert alert.payload["ref"] == online.ref
     assert alert.payload["reason"] == "customer paid cash"
 
@@ -103,7 +133,11 @@ def test_swap_at_risk_booking_to_free_item_confirms_it(db):
     swap_item(db, online, other, actor=STAFF)
     db.refresh(online)
     assert (online.item_id, online.status) == (other.id, "confirmed")
-    last = db.scalars(select(BookingEvent).where(BookingEvent.booking_id == online.id).order_by(BookingEvent.id.desc())).first()
+    last = db.scalars(
+        select(BookingEvent)
+        .where(BookingEvent.booking_id == online.id)
+        .order_by(BookingEvent.id.desc())
+    ).first()
     assert last.reason == f"swap {item.code} -> {other.code}"
 
 
@@ -133,7 +167,11 @@ def test_return_with_issue_logs_condition(db):
     mark_returned(db, booking, STAFF, ok=False, note="stain on hem")
     assert booking.status == "completed"
     event = db.scalars(select(ItemConditionEvent)).one()
-    assert (event.kind, event.note, event.booking_id) == ("returned_issue", "stain on hem", booking.id)
+    assert (event.kind, event.note, event.booking_id) == (
+        "returned_issue",
+        "stain on hem",
+        booking.id,
+    )
 
 
 def test_decline_requires_a_reason(db):

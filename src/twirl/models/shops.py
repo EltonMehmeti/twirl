@@ -2,7 +2,16 @@ from datetime import date, datetime, time
 from enum import StrEnum
 
 from sqlalchemy import (
-    Boolean, CheckConstraint, Date, DateTime, ForeignKey, SmallInteger, String, Text, Time, func,
+    Boolean,
+    CheckConstraint,
+    Date,
+    DateTime,
+    ForeignKey,
+    SmallInteger,
+    String,
+    Text,
+    Time,
+    func,
     text,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -78,7 +87,9 @@ class ShopHours(Base):
     __tablename__ = "shop_hours"
     __table_args__ = (CheckConstraint("weekday BETWEEN 0 AND 6", name="weekday"),)
 
-    shop_id: Mapped[int] = mapped_column(ForeignKey("shops.id", ondelete="CASCADE"), primary_key=True)
+    shop_id: Mapped[int] = mapped_column(
+        ForeignKey("shops.id", ondelete="CASCADE"), primary_key=True
+    )
     weekday: Mapped[int] = mapped_column(SmallInteger, primary_key=True)
     opens: Mapped[time | None] = mapped_column(Time)
     closes: Mapped[time | None] = mapped_column(Time)

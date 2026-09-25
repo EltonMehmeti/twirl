@@ -18,8 +18,13 @@ def _dress(db, shop):
 
 
 def _request_data(**over):
-    data = {"event_date": EVENT.isoformat(), "size": "38", "name": "Arta",
-            "phone": "044 123 456", "note": "Për maturë"}
+    data = {
+        "event_date": EVENT.isoformat(),
+        "size": "38",
+        "name": "Arta",
+        "phone": "044 123 456",
+        "note": "Për maturë",
+    }
     data.update(over)
     return data
 
@@ -58,7 +63,9 @@ def test_availability_fragment_marks_taken_sizes(client, db, shop):
 
 def test_availability_for_too_soon_date_shows_error(client, db, shop):
     style, _, _ = _dress(db, shop)
-    response = client.get(f"/bella/{style.code}/availability?event_date={clock.today().isoformat()}")
+    response = client.get(
+        f"/bella/{style.code}/availability?event_date={clock.today().isoformat()}"
+    )
     assert 'class="error"' in response.text
 
 
@@ -83,7 +90,9 @@ def test_confirmation_links_to_shop_whatsapp(client, db, shop):
 
 def test_honeypot_silently_drops_bots(client, db, shop):
     style, _, _ = _dress(db, shop)
-    response = post(client, f"/bella/{style.code}/request", _request_data(website="http://spam.example"))
+    response = post(
+        client, f"/bella/{style.code}/request", _request_data(website="http://spam.example")
+    )
     assert (response.status_code, response.headers["location"]) == (303, "/bella")
     assert db.scalar(select(func.count()).select_from(Booking)) == 0
 
@@ -95,13 +104,17 @@ def test_unavailable_size_is_409(client, db, shop):
 
 def test_bad_phone_is_400(client, db, shop):
     style, _, _ = _dress(db, shop)
-    assert post(client, f"/bella/{style.code}/request", _request_data(phone="123")).status_code == 400
+    assert (
+        post(client, f"/bella/{style.code}/request", _request_data(phone="123")).status_code == 400
+    )
 
 
 def test_requests_are_rate_limited(client, db, shop):
     style, _, _ = _dress(db, shop)
-    statuses = [post(client, f"/bella/{style.code}/request", _request_data(size="42")).status_code
-                for _ in range(6)]
+    statuses = [
+        post(client, f"/bella/{style.code}/request", _request_data(size="42")).status_code
+        for _ in range(6)
+    ]
     assert statuses == [409, 409, 409, 409, 409, 429]
 
 

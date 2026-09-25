@@ -13,7 +13,9 @@ def _item(db):
 
 
 def test_blocked_range_includes_prep_and_cleaning_days(db):
-    booking = make_booking(db, _item(db), pickup=D, return_=D + timedelta(2), prep_days=1, cleaning_days=1)
+    booking = make_booking(
+        db, _item(db), pickup=D, return_=D + timedelta(2), prep_days=1, cleaning_days=1
+    )
     db.refresh(booking)
     assert booking.blocked_range.lower == D - timedelta(1)
     assert booking.blocked_range.upper == D + timedelta(4)  # canonical form: upper bound exclusive

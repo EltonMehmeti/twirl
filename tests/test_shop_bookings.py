@@ -15,8 +15,14 @@ def _pending(db, shop):
     style = make_style(db, shop)
     make_item(db, style, size="38")
     return create_request(
-        db, RentalRequest(style_id=style.id, size="38", event_date=T + timedelta(days=20),
-                          name="Arta", phone="044 123 456"),
+        db,
+        RentalRequest(
+            style_id=style.id,
+            size="38",
+            event_date=T + timedelta(days=20),
+            name="Arta",
+            phone="044 123 456",
+        ),
         today=T,
     )
 
@@ -32,7 +38,7 @@ def test_booking_page_offers_accept(owner_client, db, shop):
     booking = _pending(db, shop)
     response = owner_client.get(f"/shop/bookings/{booking.id}")
     assert response.status_code == 200
-    assert f'/shop/bookings/{booking.id}/accept' in response.text
+    assert f"/shop/bookings/{booking.id}/accept" in response.text
 
 
 def test_accept_request(owner_client, db, shop):
@@ -44,7 +50,12 @@ def test_accept_request(owner_client, db, shop):
 def test_decline_needs_a_reason(owner_client, db, shop):
     booking = _pending(db, shop)
     assert post(owner_client, f"/shop/bookings/{booking.id}/decline").status_code == 400
-    assert post(owner_client, f"/shop/bookings/{booking.id}/decline", {"reason": "damaged"}).status_code == 303
+    assert (
+        post(
+            owner_client, f"/shop/bookings/{booking.id}/decline", {"reason": "damaged"}
+        ).status_code
+        == 303
+    )
     assert (booking.status, booking.reason) == ("declined", "damaged")
 
 
@@ -62,9 +73,15 @@ def test_other_shops_booking_is_404(owner_client, db):
 
 
 def _walk_in_data(item, **over):
-    data = {"code": item.code.lower(), "kind": "walk_in", "pickup_date": T.isoformat(),
-            "return_date": (T + timedelta(days=2)).isoformat(), "name": "Blerta",
-            "phone": "044 555 666", "picked_up_now": "on"}
+    data = {
+        "code": item.code.lower(),
+        "kind": "walk_in",
+        "pickup_date": T.isoformat(),
+        "return_date": (T + timedelta(days=2)).isoformat(),
+        "name": "Blerta",
+        "phone": "044 555 666",
+        "picked_up_now": "on",
+    }
     data.update(over)
     return data
 
@@ -86,10 +103,21 @@ def test_walk_in_created_and_picked_up(owner_client, db, shop):
 
 def test_walk_in_conflict_offers_override(owner_client, db, shop):
     item = make_item(db, make_style(db, shop))
-    online = make_booking(db, item, pickup=T + timedelta(days=5), return_=T + timedelta(days=7),
-                          kind="online", status="confirmed", customer=make_renter(db))
-    data = _walk_in_data(item, pickup_date=(T + timedelta(days=5)).isoformat(),
-                         return_date=(T + timedelta(days=6)).isoformat(), picked_up_now="")
+    online = make_booking(
+        db,
+        item,
+        pickup=T + timedelta(days=5),
+        return_=T + timedelta(days=7),
+        kind="online",
+        status="confirmed",
+        customer=make_renter(db),
+    )
+    data = _walk_in_data(
+        item,
+        pickup_date=(T + timedelta(days=5)).isoformat(),
+        return_date=(T + timedelta(days=6)).isoformat(),
+        picked_up_now="",
+    )
     first = post(owner_client, "/shop/walk-in", data)
     assert first.status_code == 409
     assert online.ref in first.text
@@ -108,8 +136,14 @@ def test_walk_in_unknown_code(owner_client, db, shop):
 def test_swap_via_route(owner_client, db, shop):
     style = make_style(db, shop)
     item, other = make_item(db, style), make_item(db, style)
-    booking = make_booking(db, item, pickup=T + timedelta(days=3), return_=T + timedelta(days=4),
-                           kind="online", status="at_risk")
+    booking = make_booking(
+        db,
+        item,
+        pickup=T + timedelta(days=3),
+        return_=T + timedelta(days=4),
+        kind="online",
+        status="at_risk",
+    )
     response = post(owner_client, f"/shop/bookings/{booking.id}/swap", {"item_id": str(other.id)})
     assert response.status_code == 303
     db.refresh(booking)
@@ -118,8 +152,14 @@ def test_swap_via_route(owner_client, db, shop):
 
 def test_calendar_shows_block(owner_client, db, shop):
     item = make_item(db, make_style(db, shop))
-    make_booking(db, item, pickup=T + timedelta(days=1), return_=T + timedelta(days=2), kind="block",
-                 cleaning_days=0)
+    make_booking(
+        db,
+        item,
+        pickup=T + timedelta(days=1),
+        return_=T + timedelta(days=2),
+        kind="block",
+        cleaning_days=0,
+    )
     response = owner_client.get(f"/shop/calendar?start={T.isoformat()}")
     assert response.status_code == 200
     assert item.code in response.text

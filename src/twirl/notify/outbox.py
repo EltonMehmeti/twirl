@@ -19,7 +19,10 @@ def enqueue(
 
 def notify_admin(session: Session, template: str, payload: dict) -> Notification:
     return enqueue(
-        session, channel=Channel.TELEGRAM, recipient=ADMIN_RECIPIENT, template=template,
+        session,
+        channel=Channel.TELEGRAM,
+        recipient=ADMIN_RECIPIENT,
+        template=template,
         payload=payload,
     )
 

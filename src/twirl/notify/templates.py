@@ -9,7 +9,8 @@ def _new_request_shop(p: dict, base_url: str) -> Rendered:
     pending = p.get("status") == "pending_shop"
     subject = f"Kërkesë e re: {p['style_name']}, masa {p['size']} ({p['ref']})"
     lines = [
-        "Keni një kërkesë të re për rezervim në Twirl." if pending
+        "Keni një kërkesë të re për rezervim në Twirl."
+        if pending
         else "Keni një rezervim të ri në Twirl.",
         "",
         f"Fustani: {p['style_name']} ({p['style_code']}), masa {p['size']}, kodi {p['item_code']}",
@@ -28,7 +29,8 @@ def _new_request_shop(p: dict, base_url: str) -> Rendered:
 def _new_request_admin(p: dict, base_url: str) -> Rendered:
     return "", (
         f"New {p['status']} booking {p['ref']} at {p['shop_name']}: {p['style_name']} "
-        f"size {p['size']}, event {p['event_date']}. {base_url}/admin/booking/list?search={p['ref']}"
+        f"size {p['size']}, event {p['event_date']}. "
+        f"{base_url}/admin/booking/list?search={p['ref']}"
     )
 
 

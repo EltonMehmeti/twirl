@@ -2,7 +2,14 @@ from datetime import date
 
 import pytest
 
-from tests.factories import make_booking, make_item, make_renter, make_shop, make_shop_user, make_style
+from tests.factories import (
+    make_booking,
+    make_item,
+    make_renter,
+    make_shop,
+    make_shop_user,
+    make_style,
+)
 from twirl.models import Channel, Notification
 from twirl.notify.outbox import enqueue, notify_admin, notify_shop_owners
 from twirl.notify.payloads import booking_payload
@@ -35,8 +42,14 @@ def test_booking_payload_and_every_template_render(db):
     style = make_style(db, shop, name="Red gown")
     item = make_item(db, style, size="38")
     booking = make_booking(
-        db, item, pickup=date(2027, 5, 13), return_=date(2027, 5, 16), kind="online",
-        status="pending_shop", customer=make_renter(db, name="Arta"), event_date=date(2027, 5, 15),
+        db,
+        item,
+        pickup=date(2027, 5, 13),
+        return_=date(2027, 5, 16),
+        kind="online",
+        status="pending_shop",
+        customer=make_renter(db, name="Arta"),
+        event_date=date(2027, 5, 15),
     )
     payload = booking_payload(booking)
     assert payload["pickup_date"] == "13.05.2027"
@@ -44,5 +57,7 @@ def test_booking_payload_and_every_template_render(db):
     assert payload["customer_name"] == "Arta"
     assert payload["path"] == f"/shop/bookings/{booking.id}"
     for name in TEMPLATES:
-        subject, body = render(name, {**payload, "reason": "r", "hours": 24}, base_url="https://twirl.test")
+        subject, body = render(
+            name, {**payload, "reason": "r", "hours": 24}, base_url="https://twirl.test"
+        )
         assert booking.ref in subject + body

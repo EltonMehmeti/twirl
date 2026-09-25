@@ -16,8 +16,12 @@ MIN_PASSWORD_LENGTH = 8
 def _login_user(session: Session, *, kind: UserKind, email: str, name: str, password: str) -> User:
     if len(password) < MIN_PASSWORD_LENGTH:
         raise ValueError("password must be at least 8 characters")
-    user = User(kind=kind.value, name=name.strip(), email=email.strip().lower(),
-                password_hash=hash_password(password))
+    user = User(
+        kind=kind.value,
+        name=name.strip(),
+        email=email.strip().lower(),
+        password_hash=hash_password(password),
+    )
     session.add(user)
     session.flush()
     return user
@@ -28,20 +32,34 @@ def cmd_create_admin(session: Session, *, email: str, name: str, password: str) 
 
 
 def cmd_create_shop(
-    session: Session, *, slug: str, name: str, city: str, owner_email: str, owner_name: str,
-    owner_password: str, staff_email: str | None = None, staff_password: str | None = None,
+    session: Session,
+    *,
+    slug: str,
+    name: str,
+    city: str,
+    owner_email: str,
+    owner_name: str,
+    owner_password: str,
+    staff_email: str | None = None,
+    staff_password: str | None = None,
 ) -> Shop:
     if not is_valid_slug(slug):
         raise ValueError(f"invalid or reserved slug: {slug}")
     shop = Shop(slug=slug, name=name.strip(), city=city.strip(), status=ShopStatus.DRAFT.value)
     session.add(shop)
     session.flush()
-    owner = _login_user(session, kind=UserKind.SHOP, email=owner_email, name=owner_name,
-                        password=owner_password)
+    owner = _login_user(
+        session, kind=UserKind.SHOP, email=owner_email, name=owner_name, password=owner_password
+    )
     session.add(ShopUser(shop_id=shop.id, user_id=owner.id, role=ShopRole.OWNER.value))
     if staff_email:
-        staff = _login_user(session, kind=UserKind.SHOP, email=staff_email, name=f"{name} staff",
-                            password=staff_password or "")
+        staff = _login_user(
+            session,
+            kind=UserKind.SHOP,
+            email=staff_email,
+            name=f"{name} staff",
+            password=staff_password or "",
+        )
         session.add(ShopUser(shop_id=shop.id, user_id=staff.id, role=ShopRole.STAFF.value))
     session.flush()
     return shop
@@ -71,11 +89,17 @@ def main(argv: list[str] | None = None) -> int:
     db = Database(get_settings().database_url)
     with db.sessionmaker() as session:
         if args.command == "create-admin":
-            cmd_create_admin(session, email=args.email, name=args.name, password=getpass("Admin password: "))
+            cmd_create_admin(
+                session, email=args.email, name=args.name, password=getpass("Admin password: ")
+            )
         elif args.command == "create-shop":
             cmd_create_shop(
-                session, slug=args.slug, name=args.name, city=args.city,
-                owner_email=args.owner_email, owner_name=args.owner_name,
+                session,
+                slug=args.slug,
+                name=args.name,
+                city=args.city,
+                owner_email=args.owner_email,
+                owner_name=args.owner_name,
                 owner_password=getpass("Owner password: "),
                 staff_email=args.staff_email,
                 staff_password=getpass("Staff password: ") if args.staff_email else None,

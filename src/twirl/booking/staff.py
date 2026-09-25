@@ -7,13 +7,26 @@ from sqlalchemy.orm import Session
 from twirl.booking.actor import Actor
 from twirl.booking.availability import free_items_stmt, overlapping_bookings
 from twirl.booking.dates import RentalDates, blocked_range
-from twirl.booking.errors import InvalidDates, InvalidTransition, ItemConflict, is_exclusion_violation
+from twirl.booking.errors import (
+    InvalidDates,
+    InvalidTransition,
+    ItemConflict,
+    is_exclusion_violation,
+)
 from twirl.booking.timeline import record_created, transition
 from twirl.codes import new_booking_ref
 from twirl.customers import get_or_create_customer, link_customer
 from twirl.models import (
-    ACTIVE_STATUSES, Booking, BookingEvent, BookingKind, BookingStatus, ConditionKind, Item,
-    ItemConditionEvent, ItemStatus, Shop,
+    ACTIVE_STATUSES,
+    Booking,
+    BookingEvent,
+    BookingKind,
+    BookingStatus,
+    ConditionKind,
+    Item,
+    ItemConditionEvent,
+    ItemStatus,
+    Shop,
 )
 from twirl.notify.outbox import notify_admin
 from twirl.notify.payloads import booking_payload
@@ -22,7 +35,9 @@ from twirl.phones import normalize_phone
 MAX_STAFF_RENTAL_DAYS = 30
 OVERRIDABLE = {BookingStatus.PENDING_SHOP.value, BookingStatus.CONFIRMED.value}
 SWAPPABLE = {
-    BookingStatus.PENDING_SHOP.value, BookingStatus.CONFIRMED.value, BookingStatus.AT_RISK.value,
+    BookingStatus.PENDING_SHOP.value,
+    BookingStatus.CONFIRMED.value,
+    BookingStatus.AT_RISK.value,
 }
 
 
@@ -81,13 +96,25 @@ def create_staff_booking(
             raise ItemConflict(conflicts, overridable=overridable)
         for conflict in conflicts:
             if conflict.status == BookingStatus.PENDING_SHOP.value:
-                transition(session, conflict, BookingStatus.DECLINED, actor=actor,
-                           reason=f"item taken in store: {reason}")
+                transition(
+                    session,
+                    conflict,
+                    BookingStatus.DECLINED,
+                    actor=actor,
+                    reason=f"item taken in store: {reason}",
+                )
             else:
-                transition(session, conflict, BookingStatus.AT_RISK, actor=actor,
-                           reason=f"item taken in store: {reason}")
+                transition(
+                    session,
+                    conflict,
+                    BookingStatus.AT_RISK,
+                    actor=actor,
+                    reason=f"item taken in store: {reason}",
+                )
                 notify_admin(
-                    session, "booking_at_risk_admin", {**booking_payload(conflict), "reason": reason}
+                    session,
+                    "booking_at_risk_admin",
+                    {**booking_payload(conflict), "reason": reason},
                 )
 
     customer = get_or_create_customer(session, phone=phone_e164, name=name)
@@ -147,7 +174,9 @@ def create_block(
 def cancel_block(session: Session, booking: Booking, actor: Actor) -> Booking:
     if booking.kind != BookingKind.BLOCK.value:
         raise ValueError("not a block")
-    return transition(session, booking, BookingStatus.CANCELLED_BY_SHOP, actor=actor, reason="block removed")
+    return transition(
+        session, booking, BookingStatus.CANCELLED_BY_SHOP, actor=actor, reason="block removed"
+    )
 
 
 def swap_candidates(session: Session, booking: Booking, limit: int = 20) -> list[Item]:
@@ -173,7 +202,9 @@ def swap_item(session: Session, booking: Booking, new_item: Item, *, actor: Acto
         raise InvalidTransition(booking.status, "swap")
     old_code = booking.item.code
     old_status = booking.status
-    new_status = BookingStatus.CONFIRMED.value if old_status == BookingStatus.AT_RISK.value else old_status
+    new_status = (
+        BookingStatus.CONFIRMED.value if old_status == BookingStatus.AT_RISK.value else old_status
+    )
     try:
         with session.begin_nested():
             booking.item_id = new_item.id
@@ -186,8 +217,11 @@ def swap_item(session: Session, booking: Booking, new_item: Item, *, actor: Acto
         raise
     session.add(
         BookingEvent(
-            booking_id=booking.id, from_status=old_status, to_status=new_status,
-            actor_id=actor.id, actor_kind=actor.kind.value,
+            booking_id=booking.id,
+            from_status=old_status,
+            to_status=new_status,
+            actor_id=actor.id,
+            actor_kind=actor.kind.value,
             reason=f"swap {old_code} -> {new_item.code}",
         )
     )
@@ -208,12 +242,18 @@ def _require_reason(reason: str) -> str:
 
 
 def decline(session: Session, booking: Booking, actor: Actor, reason: str) -> Booking:
-    return transition(session, booking, BookingStatus.DECLINED, actor=actor, reason=_require_reason(reason))
+    return transition(
+        session, booking, BookingStatus.DECLINED, actor=actor, reason=_require_reason(reason)
+    )
 
 
 def cancel_by_shop(session: Session, booking: Booking, actor: Actor, reason: str) -> Booking:
     return transition(
-        session, booking, BookingStatus.CANCELLED_BY_SHOP, actor=actor, reason=_require_reason(reason)
+        session,
+        booking,
+        BookingStatus.CANCELLED_BY_SHOP,
+        actor=actor,
+        reason=_require_reason(reason),
     )
 
 
@@ -252,8 +292,10 @@ def set_item_status(
     item.status = new_status
     session.add(
         ItemConditionEvent(
-            item_id=item.id, kind=ConditionKind.STATUS_CHANGE.value,
-            note=note.strip() or f"{old_status} -> {new_status}", created_by=actor.id,
+            item_id=item.id,
+            kind=ConditionKind.STATUS_CHANGE.value,
+            note=note.strip() or f"{old_status} -> {new_status}",
+            created_by=actor.id,
         )
     )
     session.flush()

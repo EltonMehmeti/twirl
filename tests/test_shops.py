@@ -41,8 +41,15 @@ def test_user_belongs_to_at_most_one_shop(db):
 
 @pytest.mark.parametrize(
     "slug, valid",
-    [("bella-dresses", True), ("b1", True), ("Bella", False), ("-bella", False),
-     ("admin", False), ("shop", False), ("a", False)],
+    [
+        ("bella-dresses", True),
+        ("b1", True),
+        ("Bella", False),
+        ("-bella", False),
+        ("admin", False),
+        ("shop", False),
+        ("a", False),
+    ],
 )
 def test_slug_validation(slug, valid):
     assert is_valid_slug(slug) is valid

@@ -42,7 +42,9 @@ class RequestForm(BaseModel):
 
 
 def _shop(db: Session, slug: str) -> Shop:
-    shop = db.scalar(select(Shop).where(Shop.slug == slug, Shop.status == ShopStatus.PUBLISHED.value))
+    shop = db.scalar(
+        select(Shop).where(Shop.slug == slug, Shop.status == ShopStatus.PUBLISHED.value)
+    )
     if shop is None:
         raise HTTPException(status_code=404)
     return shop
@@ -51,7 +53,9 @@ def _shop(db: Session, slug: str) -> Shop:
 def _style(db: Session, shop: Shop, code: str) -> Style:
     style = db.scalar(
         select(Style).where(
-            Style.shop_id == shop.id, Style.code == code, Style.published.is_(True),
+            Style.shop_id == shop.id,
+            Style.code == code,
+            Style.published.is_(True),
             Style.deleted_at.is_(None),
         )
     )
@@ -60,10 +64,17 @@ def _style(db: Session, shop: Shop, code: str) -> Style:
     return style
 
 
-def _style_context(request: Request, db: Session, storage: Storage, shop: Shop, style: Style) -> dict:
+def _style_context(
+    request: Request, db: Session, storage: Storage, shop: Shop, style: Style
+) -> dict:
     sizes = sorted(
-        set(db.scalars(select(Item.size).where(Item.style_id == style.id,
-                                               Item.status == ItemStatus.ACTIVE.value))),
+        set(
+            db.scalars(
+                select(Item.size).where(
+                    Item.style_id == style.id, Item.status == ItemStatus.ACTIVE.value
+                )
+            )
+        ),
         key=size_sort_key,
     )
     images = [
@@ -72,22 +83,31 @@ def _style_context(request: Request, db: Session, storage: Storage, shop: Shop, 
     ]
     base_url = request.app.state.settings.base_url
     return {
-        "shop": shop, "style": style, "sizes": sizes, "images": images,
+        "shop": shop,
+        "style": style,
+        "sizes": sizes,
+        "images": images,
         "og_image": f"{base_url}{images[0]['detail']}" if images else None,
         "min_date": (clock.today() + timedelta(days=1)).isoformat(),
     }
 
 
 @router.get("/{slug}", response_class=HTMLResponse)
-def shop_page(request: Request, slug: str, db: Session = Depends(get_db),
-              storage: Storage = Depends(get_storage)):
+def shop_page(
+    request: Request,
+    slug: str,
+    db: Session = Depends(get_db),
+    storage: Storage = Depends(get_storage),
+):
     shop = _shop(db, slug)
     styles = db.scalars(
         select(Style)
         .where(Style.shop_id == shop.id, Style.published.is_(True), Style.deleted_at.is_(None))
         .order_by(Style.created_at.desc())
     ).all()
-    cards = [{"style": s, "thumb": image_url(storage, s.images[0]) if s.images else None} for s in styles]
+    cards = [
+        {"style": s, "thumb": image_url(storage, s.images[0]) if s.images else None} for s in styles
+    ]
     return render(request, "storefront/shop.html", {"shop": shop, "cards": cards})
 
 
@@ -95,26 +115,36 @@ def shop_page(request: Request, slug: str, db: Session = Depends(get_db),
 def confirmation(request: Request, slug: str, ref: str, db: Session = Depends(get_db)):
     shop = _shop(db, slug)
     booking = db.scalar(
-        select(Booking).where(Booking.shop_id == shop.id, Booking.ref == ref,
-                              Booking.kind == BookingKind.ONLINE.value)
+        select(Booking).where(
+            Booking.shop_id == shop.id, Booking.ref == ref, Booking.kind == BookingKind.ONLINE.value
+        )
     )
     if booking is None:
         raise HTTPException(status_code=404)
     text = quote(f"Përshëndetje! Kam një kërkesë në Twirl me kodin {booking.ref}.")
     return render(
-        request, "storefront/confirmation.html",
+        request,
+        "storefront/confirmation.html",
         {
-            "shop": shop, "booking": booking,
+            "shop": shop,
+            "booking": booking,
             "status_text": RENTER_STATUS.get(booking.status, CLOSED_STATUS),
-            "whatsapp_url": f"https://wa.me/{shop.whatsapp.lstrip('+')}?text={text}" if shop.whatsapp else None,
+            "whatsapp_url": f"https://wa.me/{shop.whatsapp.lstrip('+')}?text={text}"
+            if shop.whatsapp
+            else None,
             "viber_url": f"viber://chat?number={quote(shop.viber)}" if shop.viber else None,
         },
     )
 
 
 @router.get("/{slug}/{code}", response_class=HTMLResponse)
-def style_page(request: Request, slug: str, code: str, db: Session = Depends(get_db),
-               storage: Storage = Depends(get_storage)):
+def style_page(
+    request: Request,
+    slug: str,
+    code: str,
+    db: Session = Depends(get_db),
+    storage: Storage = Depends(get_storage),
+):
     shop = _shop(db, slug)
     style = _style(db, shop, code)
     context = _style_context(request, db, storage, shop, style)
@@ -122,8 +152,13 @@ def style_page(request: Request, slug: str, code: str, db: Session = Depends(get
 
 
 @router.get("/{slug}/{code}/availability", response_class=HTMLResponse)
-def availability(request: Request, slug: str, code: str,
-                 event_date: date | None = Query(None), db: Session = Depends(get_db)):
+def availability(
+    request: Request,
+    slug: str,
+    code: str,
+    event_date: date | None = Query(None),
+    db: Session = Depends(get_db),
+):
     shop = _shop(db, slug)
     style = _style(db, shop, code)
     context = {"availability": None, "error": None}
@@ -136,17 +171,29 @@ def availability(request: Request, slug: str, code: str,
 
 
 @router.post("/{slug}/{code}/request", dependencies=[Depends(verify_csrf)])
-def request_dress(request: Request, slug: str, code: str, form: FormData = Depends(form_data),
-                  db: Session = Depends(get_db), storage: Storage = Depends(get_storage)):
+def request_dress(
+    request: Request,
+    slug: str,
+    code: str,
+    form: FormData = Depends(form_data),
+    db: Session = Depends(get_db),
+    storage: Storage = Depends(get_storage),
+):
     shop = _shop(db, slug)
     style = _style(db, shop, code)
     settings = request.app.state.settings
-    values = {key: str(form.get(key) or "") for key in ("event_date", "size", "name", "phone", "note")}
+    values = {
+        key: str(form.get(key) or "") for key in ("event_date", "size", "name", "phone", "note")
+    }
 
     def page(error: str, status_code: int = 400):
         context = _style_context(request, db, storage, shop, style)
-        return render(request, "storefront/style.html", {**context, "values": values, "error": error},
-                      status_code=status_code)
+        return render(
+            request,
+            "storefront/style.html",
+            {**context, "values": values, "error": error},
+            status_code=status_code,
+        )
 
     if form.get("website"):
         return RedirectResponse(f"/{shop.slug}", status_code=303)
@@ -160,8 +207,14 @@ def request_dress(request: Request, slug: str, code: str, form: FormData = Depen
     try:
         booking = create_request(
             db,
-            RentalRequest(style_id=style.id, size=parsed.size, event_date=parsed.event_date,
-                          name=parsed.name, phone=parsed.phone, note=parsed.note),
+            RentalRequest(
+                style_id=style.id,
+                size=parsed.size,
+                event_date=parsed.event_date,
+                name=parsed.name,
+                phone=parsed.phone,
+                note=parsed.note,
+            ),
             today=clock.today(),
         )
     except InvalidPhone:
@@ -172,7 +225,9 @@ def request_dress(request: Request, slug: str, code: str, form: FormData = Depen
         return page(DATE_ERRORS.get(exc.code, GENERIC_DATE_ERROR))
     except NoAvailability:
         db.rollback()
-        return page(N_("Sorry, that size is not free for your date. Try another size or date."), 409)
+        return page(
+            N_("Sorry, that size is not free for your date. Try another size or date."), 409
+        )
     except ShopNotBookable as exc:
         db.rollback()
         raise HTTPException(status_code=404) from exc

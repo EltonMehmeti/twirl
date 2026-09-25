@@ -9,7 +9,8 @@ from twirl.ratelimit import RateLimiter
 def _login_post(client, email, password):
     token = csrf_from(client, "/login")
     return client.post(
-        "/login", data={"email": email, "password": password, "csrf_token": token},
+        "/login",
+        data={"email": email, "password": password, "csrf_token": token},
         follow_redirects=False,
     )
 

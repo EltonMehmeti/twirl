@@ -41,7 +41,8 @@ def test_disallowed_transition_raises_and_keeps_status(db):
 
 
 @pytest.mark.parametrize(
-    "terminal", ["completed", "declined", "expired", "no_show", "cancelled_by_renter", "cancelled_by_shop"]
+    "terminal",
+    ["completed", "declined", "expired", "no_show", "cancelled_by_renter", "cancelled_by_shop"],
 )
 def test_terminal_statuses_have_no_exits(terminal):
     assert not any(can_transition(BookingStatus(terminal), dst) for dst in BookingStatus)
@@ -49,7 +50,9 @@ def test_terminal_statuses_have_no_exits(terminal):
 
 def test_at_risk_cannot_return_to_confirmed_when_item_is_taken(db):
     item = _item(db)
-    at_risk = make_booking(db, item, pickup=D, return_=D + timedelta(2), status="at_risk", kind="online")
+    at_risk = make_booking(
+        db, item, pickup=D, return_=D + timedelta(2), status="at_risk", kind="online"
+    )
     make_booking(db, item, pickup=D, return_=D + timedelta(2), status="confirmed")
     with pytest.raises(ItemConflict):
         transition(db, at_risk, BookingStatus.CONFIRMED, actor=SHOP_ACTOR)

@@ -7,7 +7,13 @@ from sqlalchemy.dialects.postgresql import Range
 from sqlalchemy.orm import Session, joinedload
 
 from twirl.models import (
-    ACTIVE_STATUSES, Booking, BookingKind, BookingStatus, Item, ItemStatus, Style,
+    ACTIVE_STATUSES,
+    Booking,
+    BookingKind,
+    BookingStatus,
+    Item,
+    ItemStatus,
+    Style,
 )
 
 
@@ -21,7 +27,9 @@ class TodayBoard:
     overdue_returns: list[Booking]
 
 
-def _bookings(session: Session, shop_id: int, *conditions, order=Booking.pickup_date) -> list[Booking]:
+def _bookings(
+    session: Session, shop_id: int, *conditions, order=Booking.pickup_date
+) -> list[Booking]:
     stmt = (
         select(Booking)
         .where(Booking.shop_id == shop_id, Booking.kind != BookingKind.BLOCK.value, *conditions)
@@ -34,14 +42,24 @@ def _bookings(session: Session, shop_id: int, *conditions, order=Booking.pickup_
 def today_board(session: Session, shop_id: int, today: date) -> TodayBoard:
     s = BookingStatus
     return TodayBoard(
-        pending=_bookings(session, shop_id, Booking.status == s.PENDING_SHOP.value, order=Booking.created_at),
+        pending=_bookings(
+            session, shop_id, Booking.status == s.PENDING_SHOP.value, order=Booking.created_at
+        ),
         at_risk=_bookings(session, shop_id, Booking.status == s.AT_RISK.value),
-        pickups_today=_bookings(session, shop_id, Booking.status == s.CONFIRMED.value, Booking.pickup_date == today),
-        returns_today=_bookings(session, shop_id, Booking.status == s.PICKED_UP.value, Booking.return_date == today),
-        overdue_pickups=_bookings(session, shop_id, Booking.status == s.CONFIRMED.value, Booking.pickup_date < today),
+        pickups_today=_bookings(
+            session, shop_id, Booking.status == s.CONFIRMED.value, Booking.pickup_date == today
+        ),
+        returns_today=_bookings(
+            session, shop_id, Booking.status == s.PICKED_UP.value, Booking.return_date == today
+        ),
+        overdue_pickups=_bookings(
+            session, shop_id, Booking.status == s.CONFIRMED.value, Booking.pickup_date < today
+        ),
         overdue_returns=_bookings(
-            session, shop_id,
-            Booking.status.in_([s.PICKED_UP.value, s.NOT_RETURNED.value]), Booking.return_date < today,
+            session,
+            shop_id,
+            Booking.status.in_([s.PICKED_UP.value, s.NOT_RETURNED.value]),
+            Booking.return_date < today,
         ),
     )
 
@@ -52,12 +70,18 @@ class CalendarRow:
     cells: list[Booking | None]
 
 
-def week_calendar(session: Session, shop_id: int, start: date) -> tuple[list[date], list[CalendarRow]]:
+def week_calendar(
+    session: Session, shop_id: int, start: date
+) -> tuple[list[date], list[CalendarRow]]:
     days = [start + timedelta(days=i) for i in range(7)]
     items = session.scalars(
         select(Item)
         .join(Style, Style.id == Item.style_id)
-        .where(Item.shop_id == shop_id, Item.status != ItemStatus.RETIRED.value, Style.deleted_at.is_(None))
+        .where(
+            Item.shop_id == shop_id,
+            Item.status != ItemStatus.RETIRED.value,
+            Style.deleted_at.is_(None),
+        )
         .options(joinedload(Item.style))
         .order_by(Style.code, Item.size, Item.code)
     ).all()
@@ -75,7 +99,11 @@ def week_calendar(session: Session, shop_id: int, start: date) -> tuple[list[dat
     for item in items:
         cells = [
             next(
-                (b for b in by_item[item.id] if b.blocked_range.lower <= day < b.blocked_range.upper),
+                (
+                    b
+                    for b in by_item[item.id]
+                    if b.blocked_range.lower <= day < b.blocked_range.upper
+                ),
                 None,
             )
             for day in days

@@ -4,7 +4,11 @@ import pytest
 
 from tests.factories import make_shop
 from twirl.booking.dates import (
-    RentalDates, ShopRules, blocked_range, derive_rental_dates, validate_rental_dates,
+    RentalDates,
+    ShopRules,
+    blocked_range,
+    derive_rental_dates,
+    validate_rental_dates,
 )
 from twirl.booking.errors import InvalidDates
 from twirl.booking.rules import rules_for_shop
@@ -19,7 +23,9 @@ def test_fixture_date_is_a_saturday():
 
 
 def test_default_rules_pickup_two_days_before_return_one_day_after():
-    assert derive_rental_dates(SAT, ShopRules()) == RentalDates(date(2027, 5, 13), date(2027, 5, 16))
+    assert derive_rental_dates(SAT, ShopRules()) == RentalDates(
+        date(2027, 5, 13), date(2027, 5, 16)
+    )
 
 
 def test_return_rolls_forward_past_closed_sunday():
@@ -72,7 +78,10 @@ def test_validate_accepts_derived_dates():
 
 def test_blocked_range_applies_buffers():
     dates = RentalDates(date(2027, 5, 13), date(2027, 5, 16))
-    assert blocked_range(dates, prep_days=1, cleaning_days=2) == (date(2027, 5, 12), date(2027, 5, 18))
+    assert blocked_range(dates, prep_days=1, cleaning_days=2) == (
+        date(2027, 5, 12),
+        date(2027, 5, 18),
+    )
 
 
 def test_rules_for_shop_reads_hours_and_closures(db):

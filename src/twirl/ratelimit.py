@@ -7,9 +7,14 @@ from starlette.requests import Request
 
 
 class RateLimiter:
-    """In-process sliding window. Correct for a single web process, which is the deployment target."""
+    """In-process sliding window.
 
-    def __init__(self, max_events: int, window_seconds: float, clock: Callable[[], float] = time.monotonic):
+    Correct for a single web process, which is the deployment target.
+    """
+
+    def __init__(
+        self, max_events: int, window_seconds: float, clock: Callable[[], float] = time.monotonic
+    ):
         self.max_events = max_events
         self.window = window_seconds
         self._clock = clock

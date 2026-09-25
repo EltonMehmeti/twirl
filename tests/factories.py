@@ -48,7 +48,10 @@ from twirl.models import Item, Style  # noqa: E402
 def make_style(db, shop, *, name="Silk gown", price_cents=5000, published=True, code=None):
     n = next(_seq)
     style = Style(
-        shop_id=shop.id, code=code or f"S{n:04d}", name=name, price_cents=price_cents,
+        shop_id=shop.id,
+        code=code or f"S{n:04d}",
+        name=name,
+        price_cents=price_cents,
         published=published,
     )
     db.add(style)
@@ -58,7 +61,10 @@ def make_style(db, shop, *, name="Silk gown", price_cents=5000, published=True, 
 
 def make_item(db, style, *, size="38", status="active", code=None):
     item = Item(
-        shop_id=style.shop_id, style_id=style.id, size=size, status=status,
+        shop_id=style.shop_id,
+        style_id=style.id,
+        size=size,
+        status=status,
         code=code or new_item_code(db, style.shop_id),
     )
     db.add(item)
@@ -78,8 +84,18 @@ def make_renter(db, *, name="Arta", phone=None):
 
 
 def make_booking(
-    db, item, *, pickup, return_, status="confirmed", kind="walk_in", prep_days=0,
-    cleaning_days=1, customer=None, event_date=None, created_at=None,
+    db,
+    item,
+    *,
+    pickup,
+    return_,
+    status="confirmed",
+    kind="walk_in",
+    prep_days=0,
+    cleaning_days=1,
+    customer=None,
+    event_date=None,
+    created_at=None,
 ):
     booking = Booking(
         ref=f"T{next(_seq):05d}",

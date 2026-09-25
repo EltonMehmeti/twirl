@@ -53,9 +53,16 @@ def expire_stale_requests(session: Session, *, now: datetime, sla_hours: int) ->
         )
     ).all()
     for booking in rows:
-        transition(session, booking, BookingStatus.CANCELLED_BY_SHOP, actor=SYSTEM,
-                   reason="no reply within SLA")
-        notify_admin(session, "request_expired_admin", {**booking_payload(booking), "hours": sla_hours})
+        transition(
+            session,
+            booking,
+            BookingStatus.CANCELLED_BY_SHOP,
+            actor=SYSTEM,
+            reason="no reply within SLA",
+        )
+        notify_admin(
+            session, "request_expired_admin", {**booking_payload(booking), "hours": sla_hours}
+        )
     return len(rows)
 
 
@@ -68,7 +75,9 @@ def mark_no_shows(session: Session, *, today: date) -> int:
         )
     ).all()
     for booking in rows:
-        transition(session, booking, BookingStatus.NO_SHOW, actor=SYSTEM, reason="pickup date passed")
+        transition(
+            session, booking, BookingStatus.NO_SHOW, actor=SYSTEM, reason="pickup date passed"
+        )
     return len(rows)
 
 
@@ -80,5 +89,7 @@ def mark_not_returned(session: Session, *, today: date) -> int:
         )
     ).all()
     for booking in rows:
-        transition(session, booking, BookingStatus.NOT_RETURNED, actor=SYSTEM, reason="return overdue")
+        transition(
+            session, booking, BookingStatus.NOT_RETURNED, actor=SYSTEM, reason="return overdue"
+        )
     return len(rows)

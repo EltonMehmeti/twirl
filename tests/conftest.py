@@ -63,7 +63,8 @@ def app(settings, db):
     application = create_app(settings)
 
     def _db_override():
-        # Release the test's savepoint first, so a route's rollback only undoes the route's own work.
+        # Release the test's savepoint first,
+        # so a route's rollback only undoes the route's own work.
         db.commit()
         yield db
 
