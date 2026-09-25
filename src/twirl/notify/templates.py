@@ -50,11 +50,19 @@ def _request_expired_admin(p: dict, base_url: str) -> Rendered:
     )
 
 
+def _provider_published_admin(p: dict, base_url: str) -> Rendered:
+    return "", (
+        f"New listing: {p.get('style_name', '')} by {p.get('shop_name', '')} "
+        f"({p.get('kind', '')}, {p.get('city', '')}). {base_url}{p.get('path', '')}"
+    )
+
+
 TEMPLATES: dict[str, Callable[[dict, str], Rendered]] = {
     "new_request_shop": _new_request_shop,
     "new_request_admin": _new_request_admin,
     "booking_at_risk_admin": _booking_at_risk_admin,
     "request_expired_admin": _request_expired_admin,
+    "provider_published_admin": _provider_published_admin,
 }
 
 
