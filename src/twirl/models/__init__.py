@@ -1,4 +1,8 @@
 from twirl.models.base import Base
+from twirl.models.bookings import (
+    ACTIVE_STATUSES, ActorKind, Booking, BookingEvent, BookingKind, BookingStatus, ConditionKind,
+    ItemConditionEvent,
+)
 from twirl.models.catalog import ColourFamily, DressLength, Item, ItemStatus, Occasion, Style, StyleImage
 from twirl.models.shops import (
     BookingMode, Shop, ShopClosure, ShopCustomer, ShopHours, ShopRole, ShopStatus, ShopUser,
@@ -6,7 +10,8 @@ from twirl.models.shops import (
 from twirl.models.users import User, UserKind
 
 __all__ = [
-    "Base", "BookingMode", "ColourFamily", "DressLength", "Item", "ItemStatus", "Occasion",
-    "Shop", "ShopClosure", "ShopCustomer", "ShopHours", "ShopRole", "ShopStatus", "ShopUser",
-    "Style", "StyleImage", "User", "UserKind",
+    "ACTIVE_STATUSES", "ActorKind", "Base", "Booking", "BookingEvent", "BookingKind",
+    "BookingMode", "BookingStatus", "ColourFamily", "ConditionKind", "DressLength", "Item",
+    "ItemConditionEvent", "ItemStatus", "Occasion", "Shop", "ShopClosure", "ShopCustomer",
+    "ShopHours", "ShopRole", "ShopStatus", "ShopUser", "Style", "StyleImage", "User", "UserKind",
 ]

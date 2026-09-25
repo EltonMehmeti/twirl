@@ -19,3 +19,14 @@ def new_item_code(session: Session, shop_id: int) -> str:
         if not taken:
             return code
     raise RuntimeError("could not allocate a free item code")
+
+
+from twirl.models import Booking  # noqa: E402
+
+
+def new_booking_ref(session: Session) -> str:
+    for _ in range(20):
+        ref = random_code(6)
+        if not session.scalar(select(exists().where(Booking.ref == ref))):
+            return ref
+    raise RuntimeError("could not allocate a free booking reference")

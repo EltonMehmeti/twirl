@@ -64,3 +64,39 @@ def make_item(db, style, *, size="38", status="active", code=None):
     db.add(item)
     db.flush()
     return item
+
+
+from twirl.models import Booking  # noqa: E402
+
+
+def make_renter(db, *, name="Arta", phone=None):
+    n = next(_seq)
+    user = User(kind="renter", name=name, phone=phone or f"+3834400{n:04d}")
+    db.add(user)
+    db.flush()
+    return user
+
+
+def make_booking(
+    db, item, *, pickup, return_, status="confirmed", kind="walk_in", prep_days=0,
+    cleaning_days=1, customer=None, event_date=None, created_at=None,
+):
+    booking = Booking(
+        ref=f"T{next(_seq):05d}",
+        shop_id=item.shop_id,
+        style_id=item.style_id,
+        item_id=item.id,
+        kind=kind,
+        status=status,
+        pickup_date=pickup,
+        return_date=return_,
+        prep_days=prep_days,
+        cleaning_days=cleaning_days,
+        customer_id=customer.id if customer else None,
+        event_date=event_date,
+    )
+    if created_at is not None:
+        booking.created_at = created_at
+    db.add(booking)
+    db.flush()
+    return booking
