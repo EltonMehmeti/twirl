@@ -10,14 +10,14 @@ def test_home_defaults_to_albanian(client):
     response = client.get("/")
     assert response.status_code == 200
     assert 'lang="sq"' in response.text
-    assert "Merr fustanin me qira" in response.text
+    assert "Gjej fustanin për eventin tënd" in response.text
 
 
 def test_home_in_english_with_cookie(client):
     client.cookies.set("lang", "en")
     response = client.get("/")
     assert 'lang="en"' in response.text
-    assert "Rent the dress" in response.text
+    assert "Find the dress for your event" in response.text
 
 
 def test_language_switch_sets_cookie_and_redirects(client):

@@ -8,7 +8,7 @@ from starlette.requests import Request
 from starlette.responses import HTMLResponse
 
 from twirl.auth.csrf import get_csrf_token
-from twirl.i18n import get_translations, pick_locale
+from twirl.i18n import MONTHS, get_translations, pick_locale
 
 _NULL_TRANSLATIONS = NullTranslations()
 _current: ContextVar[NullTranslations | None] = ContextVar("twirl_translations", default=None)
@@ -61,6 +61,14 @@ def format_date(value: date | None) -> str:
     return value.strftime("%d.%m.%Y") if value else ""
 
 
+def format_day_month(value: date | None, locale: str) -> str:
+    """12 tetor / 12 October: easier to take in than 12.10.2026 on a search page."""
+    if not value:
+        return ""
+    month = _gettext(MONTHS[value.month - 1])
+    return f"{value.day} {month.lower() if locale == 'sq' else month}"
+
+
 def _build_env() -> Environment:
     env = Environment(
         loader=PackageLoader("twirl", "templates"),
@@ -70,6 +78,7 @@ def _build_env() -> Environment:
     env.install_gettext_callables(_gettext, _ngettext, newstyle=True)
     env.filters["money"] = format_money
     env.filters["date"] = format_date
+    env.filters["day_month"] = format_day_month
     env.filters["reason"] = translate_reason
     env.globals["csrf_token"] = get_csrf_token
     return env

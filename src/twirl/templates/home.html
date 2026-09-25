@@ -1,18 +1,170 @@
 {% extends "base.html" %}
+{% block title %}{{ brand }} · {{ _("Dresses to rent in Kosovo") }}<script>
+  document.addEventListener("htmx:afterSettle", function () {
+    if (!window.vScrollToResults) return;
+    window.vScrollToResults = false;
+    document.getElementById("results").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+</script>
+{% endblock %}
+{% block head %}
+<meta name="description" content="{{ _('Pick your event date and see only the dresses that are free that day, from shops across Kosovo.') }}">
+<meta property="og:title" content="{{ brand }} · {{ _('Dresses to rent in Kosovo') }}">
+{% if filters.page > 1 or filters.sort != "newest" %}<meta name="robots" content="noindex">{% endif %}
+<script>
+  document.addEventListener("htmx:afterSettle", function () {
+    if (!window.vScrollToResults) return;
+    window.vScrollToResults = false;
+    document.getElementById("results").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+</script>
+{% endblock %}
 {% block content %}
-<section class="v-hero">
-  <div class="v-eyebrow">{{ _("Kosovo · dress rental") }}</div>
-  <h1>{{ _("Rent the dress. Skip the price tag.") }}</h1>
-  <p>{{ _("Dress rental shops in Kosovo, bookable online.") }}</p>
-  <div class="v-split">
-    <a class="v-bigcard" href="/listo">
-      <strong>{{ _("List your clothes") }} →</strong>
-      <span>{{ _("For salons and for people with a dress to rent out. A phone number is enough to start.") }}</span>
-    </a>
-    <a class="v-bigcard" href="/login">
-      <strong>{{ _("Shop login") }} →</strong>
-      <span>{{ _("Today's pickups, returns and requests, in one place.") }}</span>
-    </a>
-  </div>
+<section class="v-find">
+  <h1>{{ _("Find the dress for your event.") }}</h1>
+  <p class="v-find__lede">{{ _("Pick the date and we show only what is free that day. No payment online: the shop confirms, you pay when you pick it up.") }}</p>
+
+  <form class="v-search" method="get" action="/" role="search"
+    hx-get="/" hx-trigger="change, submit" hx-target="#results" hx-select="#results" hx-swap="outerHTML" hx-push-url="true"
+    hx-indicator="#results" onsubmit="window.vScrollToResults = true">
+    <div class="v-search__main">
+      <label class="v-search__date">{{ _("Event date") }}
+        <input type="date" name="date" min="{{ min_date }}" value="{{ filters.event_date.isoformat() if filters.event_date else '' }}"
+          {% if date_error %}aria-invalid="true" aria-describedby="date-error"{% endif %}></label>
+      <label>{{ _("Size") }}
+        <select name="size">
+          <option value="">{{ _("Any size") }}</option>
+          {% for size in sizes %}<option value="{{ size }}"{% if filters.size == size %} selected{% endif %}>{{ _("Made to measure") if size == custom_size else size }}</option>{% endfor %}
+        </select></label>
+      <label>{{ _("City") }}
+        <select name="city">
+          <option value="">{{ _("All of Kosovo") }}</option>
+          {% for city in cities %}<option{% if filters.city == city %} selected{% endif %}>{{ city }}</option>{% endfor %}
+        </select></label>
+      <button type="submit">{{ _("Search") }}</button>
+    </div>
+    {% if date_error %}<p class="v-search__error" id="date-error" role="alert">{{ _(date_error) }}</p>{% endif %}
+
+    <div class="v-search__more">
+      <fieldset class="v-chips">
+        <legend class="v-sr">{{ _("Category") }}</legend>
+        <label class="v-chip"><input type="radio" name="category" value=""{% if not filters.category %} checked{% endif %}><span>{{ _("All") }}</span></label>
+        {% for value, label in categories %}
+        <label class="v-chip"><input type="radio" name="category" value="{{ value }}"{% if filters.category == value %} checked{% endif %}><span>{{ _(label) }}</span></label>
+        {% endfor %}
+      </fieldset>
+      <div class="v-search__tools">
+        <label class="v-compact">{{ _("Up to") }}
+          <select name="max">
+            <option value="">{{ _("Any price") }}</option>
+            {% for cap in price_caps %}<option value="{{ cap }}"{% if filters.max_price_cents == cap * 100 %} selected{% endif %}>{{ (cap * 100)|money(locale) }}</option>{% endfor %}
+          </select></label>
+        <label class="v-compact">{{ _("Sort") }}
+          <select name="sort">
+            {% for value, label in sorts %}<option value="{{ value }}"{% if filters.sort == value %} selected{% endif %}>{{ _(label) }}</option>{% endfor %}
+          </select></label>
+      </div>
+    </div>
+  </form>
 </section>
+
+<section id="results" class="v-results" aria-live="polite">
+  <div class="v-results__head">
+    <h2>
+      {%- if filters.event_date -%}{{ _("Free on %(day)s", day=filters.event_date|day_month(locale)) }}
+      {%- elif filters.active -%}{{ _("Results") }}
+      {%- else -%}{{ _("Newest dresses") }}{%- endif -%}
+    </h2>
+    {% if results.total %}<span class="v-results__count">{{ _("%(n)s to rent", n=results.total) }}</span>{% endif %}
+    {% if filters.active %}<a class="v-results__clear" href="/">{{ _("Clear filters") }}</a>{% endif %}
+  </div>
+
+  {% if cards %}
+  {% if not filters.event_date %}<p class="v-results__hint">{{ _("Tip: add your event date to hide dresses that are already booked.") }}</p>{% endif %}
+  <ul class="v-grid">
+    {% for row in cards %}{% set card = row.card %}
+    <li>
+      <a class="v-tile" href="{{ row.href }}">
+        <div class="v-tile__img">{% if row.thumb %}<img src="{{ row.thumb }}" alt="{{ card.style.name }}" width="400" height="533" loading="{{ 'eager' if loop.index <= 4 else 'lazy' }}">{% else %}<div class="v-noimg">{% include "_logo.html" %}</div>{% endif %}</div>
+        <div class="v-tile__body"><span class="v-tile__name">{{ card.style.name }}</span><span class="v-tile__price">{{ card.style.price_cents|money(locale) }}</span></div>
+        <div class="v-tile__shop">{{ card.shop.name }} · {{ card.shop.city }}</div>
+        {% if card.sizes %}<div class="v-tile__sizes"{% if filters.event_date %} title="{{ _('Free sizes for your date') }}"{% endif %}>
+          {% for size in card.sizes[:5] %}<span{% if filters.size == size %} class="is-match"{% endif %}>{{ _("Made to measure") if size == custom_size else size }}</span>{% endfor %}
+          {% if card.sizes|length > 5 %}<span>+{{ card.sizes|length - 5 }}</span>{% endif %}
+        </div>{% endif %}
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% if results.pages > 1 %}
+  <nav class="v-pager" aria-label="{{ _('Pages') }}">
+    {% if results.page > 1 %}<a href="{{ query(page=results.page - 1) }}" rel="prev">← {{ _("Previous") }}</a>{% else %}<span></span>{% endif %}
+    <span>{{ _("Page %(page)s of %(pages)s", page=results.page, pages=results.pages) }}</span>
+    {% if results.page < results.pages %}<a href="{{ query(page=results.page + 1) }}" rel="next">{{ _("Next") }} →</a>{% else %}<span></span>{% endif %}
+  </nav>
+  {% endif %}
+
+  {% elif results.date_unreachable %}
+  <div class="v-nores">
+    <strong>{{ _("That date is too close.") }}</strong>
+    <p>{{ _("Shops need a few days to get a dress ready. Try a later date, or call a shop directly: some can still help.") }}</p>
+    <div class="v-nores__links"><a href="{{ query(date='') }}">{{ _("See all dresses") }}</a></div>
+  </div>
+
+  {% elif filters.active %}
+  <div class="v-nores">
+    <strong>{{ _("Nothing free with these filters.") }}</strong>
+    <p>{{ _("Loosen one of them:") }}</p>
+    <div class="v-nores__links">
+      {% if filters.size %}<a href="{{ query(size='') }}">{{ _("Any size") }}</a>{% endif %}
+      {% if filters.city %}<a href="{{ query(city='') }}">{{ _("All of Kosovo") }}</a>{% endif %}
+      {% if filters.category %}<a href="{{ query(category='') }}">{{ _("All categories") }}</a>{% endif %}
+      {% if filters.max_price_cents %}<a href="{{ query(max='') }}">{{ _("Any price") }}</a>{% endif %}
+      {% if filters.event_date %}<a href="{{ query(date='') }}">{{ _("Any date") }}</a>{% endif %}
+      <a href="/">{{ _("Clear filters") }}</a>
+    </div>
+  </div>
+
+  {% else %}
+  <div class="v-nores">
+    <strong>{{ _("The first dresses are on their way.") }}</strong>
+    <p>{{ _("Shops are putting their collections online. Come back soon.") }}</p>
+  </div>
+  {% endif %}
+</section>
+
+{% if shops %}
+<section class="v-shops">
+  <div class="v-results__head"><h2>{{ _("Shops") }}{% if filters.city %} · {{ filters.city }}{% endif %}</h2></div>
+  <ul class="v-shoplist">
+    {% for row in shops %}{% set shop = row.card.shop %}
+    <li>
+      <a class="v-shoptile" href="/{{ shop.slug }}">
+        <span class="v-shoptile__img">{% if row.thumb %}<img src="{{ row.thumb }}" alt="" width="80" height="106" loading="lazy">{% else %}{% include "_logo.html" %}{% endif %}</span>
+        <span class="v-shoptile__body">
+          <strong>{{ shop.name }}</strong>
+          <span>{{ shop.city }}{% if shop.verified_at %} · ✓ {{ _("Verified") }}{% endif %}</span>
+          <span class="v-shoptile__count">{{ _("Dresses") }}: {{ row.card.dresses }}</span>
+        </span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+<section class="v-listcta">
+  <div>
+    <strong>{{ _("Have a dress to rent out?") }}</strong>
+    <p>{{ _("Salons and individuals list for free. A phone number is enough to start.") }}</p>
+  </div>
+  <a class="v-cta" href="/listo">{{ _("List your clothes") }} →</a>
+</section>
+<script>
+  document.addEventListener("htmx:afterSettle", function () {
+    if (!window.vScrollToResults) return;
+    window.vScrollToResults = false;
+    document.getElementById("results").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+</script>
 {% endblock %}

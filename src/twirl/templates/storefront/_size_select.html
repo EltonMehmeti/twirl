@@ -1,0 +1,9 @@
+{% macro size_select(sizes, selected, availability, oob=False) -%}
+{%- set any_free = not availability or (availability.sizes.values()|select|list) -%}
+<select name="size" id="size-select" required{% if oob %} hx-swap-oob="true"{% endif %}>
+  {% if not any_free %}<option value="">{{ _("No size free on this date") }}</option>{% endif %}
+  {% for size in sizes %}{% set free = not availability or availability.sizes.get(size) %}
+  <option value="{{ size }}"{% if selected == size %} selected{% endif %}{% if not free %} disabled{% endif %}>{{ _("Made to measure") if size == "CUSTOM" else size }}{% if not free %} · {{ _("taken") }}{% endif %}</option>
+  {% endfor %}
+</select>
+{%- endmacro %}

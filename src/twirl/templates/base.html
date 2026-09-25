@@ -16,7 +16,7 @@
   <header class="v-appbar">
     <div class="v-appbar__inner">
       <a href="{% block home_url %}/{% endblock %}" class="v-brand">{% include "_logo.html" %}<span class="v-brand__name">{{ brand }}</span>{% block tagline %}{% endblock %}</a>
-      <nav class="v-nav-links" aria-label="{{ _('Main') }}">{% block nav %}{% endblock %}</nav>
+      <nav class="v-nav-links" aria-label="{{ _('Main') }}">{% block nav %}<a href="/listo">{{ _("List your clothes") }}</a><a href="/login">{{ _("Shop login") }}</a>{% endblock %}</nav>
       <span class="v-lang">
         <a href="/lang/sq?next={{ request.url.path }}"{% if locale == "sq" %} aria-current="true"{% endif %}>SQ</a>
         <a href="/lang/en?next={{ request.url.path }}"{% if locale == "en" %} aria-current="true"{% endif %}>EN</a>

@@ -25,3 +25,19 @@ def get_translations(locale: str) -> NullTranslations:
 def pick_locale(request: Request) -> str:
     value = request.cookies.get(LOCALE_COOKIE)
     return value if value in SUPPORTED_LOCALES else DEFAULT_LOCALE
+
+
+MONTHS = [
+    N_("January"),
+    N_("February"),
+    N_("March"),
+    N_("April"),
+    N_("May"),
+    N_("June"),
+    N_("July"),
+    N_("August"),
+    N_("September"),
+    N_("October"),
+    N_("November"),
+    N_("December"),
+]

@@ -19,7 +19,7 @@ from twirl.auth.deps import SESSION_USER_KEY, login_user
 from twirl.booking.actor import Actor
 from twirl.catalog import delete_style_image, image_url, save_style_image
 from twirl.db import get_db
-from twirl.i18n import N_
+from twirl.i18n import MONTHS, N_
 from twirl.images import MAX_UPLOAD_BYTES, InvalidImage
 from twirl.models import ActorKind, ItemStatus, Shop, ShopKind, Style, StyleImage, User
 from twirl.onboarding import (
@@ -83,20 +83,6 @@ CATEGORY_LABELS = [
 CATEGORY_LABEL = dict(CATEGORY_LABELS)
 PHOTO_LABELS = [N_("Front"), N_("Side"), N_("Detail")]
 WEEKDAY_SHORT = [N_("Mon"), N_("Tue"), N_("Wed"), N_("Thu"), N_("Fri"), N_("Sat"), N_("Sun")]
-MONTHS = [
-    N_("January"),
-    N_("February"),
-    N_("March"),
-    N_("April"),
-    N_("May"),
-    N_("June"),
-    N_("July"),
-    N_("August"),
-    N_("September"),
-    N_("October"),
-    N_("November"),
-    N_("December"),
-]
 
 ERRORS = {
     "phone": N_("Write the number like 044 123 456."),

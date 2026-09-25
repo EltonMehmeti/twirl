@@ -6,7 +6,8 @@
 {% if og_image %}<meta property="og:image" content="{{ og_image }}">{% endif %}
 {% endblock %}
 {% block content %}
-<p class="v-crumb"><a href="/{{ shop.slug }}">← {{ shop.name }}</a></p>
+{% from "storefront/_size_select.html" import size_select with context %}
+<p class="v-crumb"><a href="/{% if search_date %}?date={{ search_date.isoformat() }}{% endif %}">← {{ _("All dresses") }}</a> <span aria-hidden="true">/</span> <a href="/{{ shop.slug }}">{{ shop.name }}</a></p>
 <div class="v-product">
   <div>
     {% if images %}
@@ -37,12 +38,10 @@
         <label>{{ _("Event date") }}
           <input type="date" name="event_date" min="{{ min_date }}" value="{{ values.event_date or '' }}" required
             hx-get="/{{ shop.slug }}/{{ style.code }}/availability" hx-trigger="change" hx-target="#availability"
-            hx-include="this"></label>
-        <div id="availability" class="v-avail" aria-live="polite"><p class="muted">{{ _("Pick your event date to see which sizes are free.") }}</p></div>
+            hx-include="this, #size-select"></label>
+        <div id="availability" class="v-avail" aria-live="polite">{% include "storefront/_availability.html" %}</div>
         <label>{{ _("Size") }}
-          <select name="size" required>
-            {% for size in sizes %}<option value="{{ size }}" {% if values.size == size %}selected{% endif %}>{{ _("Made to measure") if size == "CUSTOM" else size }}</option>{% endfor %}
-          </select></label>
+          {{ size_select(sizes, values.size, availability) }}</label>
         <label>{{ _("Your name") }} <input name="name" value="{{ values.name or '' }}" required maxlength="120" autocomplete="name"></label>
         <label>{{ _("Phone") }} <input type="tel" name="phone" value="{{ values.phone or '' }}" required placeholder="044 123 456" autocomplete="tel"></label>
         <label>{{ _("Note for the shop (optional)") }} <textarea name="note" maxlength="500">{{ values.note or '' }}</textarea></label>

@@ -64,19 +64,17 @@ def _style(db: Session, shop: Shop, code: str) -> Style:
     return style
 
 
+def _style_sizes(db: Session, style: Style) -> list[str]:
+    sizes = db.scalars(
+        select(Item.size).where(Item.style_id == style.id, Item.status == ItemStatus.ACTIVE.value)
+    )
+    return sorted(set(sizes), key=size_sort_key)
+
+
 def _style_context(
     request: Request, db: Session, storage: Storage, shop: Shop, style: Style
 ) -> dict:
-    sizes = sorted(
-        set(
-            db.scalars(
-                select(Item.size).where(
-                    Item.style_id == style.id, Item.status == ItemStatus.ACTIVE.value
-                )
-            )
-        ),
-        key=size_sort_key,
-    )
+    sizes = _style_sizes(db, style)
     images = [
         {"thumb": image_url(storage, i, "thumb"), "detail": image_url(storage, i, "detail")}
         for i in style.images
@@ -137,18 +135,57 @@ def confirmation(request: Request, slug: str, ref: str, db: Session = Depends(ge
     )
 
 
+def _availability_context(db: Session, style: Style, event_date: date | None) -> dict:
+    context = {"availability": None, "date_error": None}
+    if event_date is not None:
+        try:
+            context["availability"] = style_availability(db, style, event_date, today=clock.today())
+        except InvalidDates as exc:
+            context["date_error"] = DATE_ERRORS.get(exc.code, GENERIC_DATE_ERROR)
+    return context
+
+
+def _parse_date(raw: str | None) -> date | None:
+    try:
+        return date.fromisoformat(raw) if raw else None
+    except ValueError:
+        return None
+
+
+def _pick_size(sizes: list[str], wanted: str | None, availability) -> str | None:
+    """Keep the renter's size if it is free; otherwise preselect the first free one."""
+    if availability is None:
+        return wanted if wanted in sizes else None
+    if wanted and availability.sizes.get(wanted):
+        return wanted
+    return next((size for size, free in availability.sizes.items() if free), None)
+
+
 @router.get("/{slug}/{code}", response_class=HTMLResponse)
 def style_page(
     request: Request,
     slug: str,
     code: str,
+    event_date: str | None = None,
+    size: str | None = None,
     db: Session = Depends(get_db),
     storage: Storage = Depends(get_storage),
 ):
+    """Opened from search with ?event_date=&size=, the form starts filled in and checked."""
     shop = _shop(db, slug)
     style = _style(db, shop, code)
     context = _style_context(request, db, storage, shop, style)
-    return render(request, "storefront/style.html", {**context, "values": {}, "error": None})
+    wanted_date = _parse_date(event_date)
+    avail = _availability_context(db, style, wanted_date)
+    values = {
+        "event_date": wanted_date.isoformat() if wanted_date else "",
+        "size": _pick_size(context["sizes"], size, avail["availability"]) or "",
+    }
+    return render(
+        request,
+        "storefront/style.html",
+        {**context, **avail, "values": values, "error": None, "search_date": wanted_date},
+    )
 
 
 @router.get("/{slug}/{code}/availability", response_class=HTMLResponse)
@@ -157,16 +194,18 @@ def availability(
     slug: str,
     code: str,
     event_date: date | None = Query(None),
+    size: str | None = Query(None),
     db: Session = Depends(get_db),
 ):
     shop = _shop(db, slug)
     style = _style(db, shop, code)
-    context = {"availability": None, "error": None}
-    if event_date is not None:
-        try:
-            context["availability"] = style_availability(db, style, event_date, today=clock.today())
-        except InvalidDates as exc:
-            context["error"] = DATE_ERRORS.get(exc.code, GENERIC_DATE_ERROR)
+    context = _availability_context(db, style, event_date)
+    sizes = _style_sizes(db, style)
+    context |= {
+        "sizes": sizes,
+        "selected": _pick_size(sizes, size, context["availability"]),
+        "oob": True,
+    }
     return render(request, "storefront/_availability.html", context)
 
 
@@ -188,10 +227,11 @@ def request_dress(
 
     def page(error: str, status_code: int = 400):
         context = _style_context(request, db, storage, shop, style)
+        avail = _availability_context(db, style, _parse_date(values["event_date"]))
         return render(
             request,
             "storefront/style.html",
-            {**context, "values": values, "error": error},
+            {**context, **avail, "values": values, "error": error},
             status_code=status_code,
         )
 

@@ -1,10 +1,13 @@
-{% if error %}
-<p class="error">{{ _(error) }}</p>
+{% from "storefront/_size_select.html" import size_select with context %}
+{% if date_error %}
+<p class="error">{{ _(date_error) }}</p>
 {% elif availability %}
 <p>{{ _("Pickup") }} <strong>{{ availability.dates.pickup|date }}</strong> · {{ _("Return") }} <strong>{{ availability.dates.return_|date }}</strong></p>
 <ul class="sizes">
   {% for size, free in availability.sizes.items() %}<li class="{{ 'free' if free else 'taken' }}">{{ size }}: {{ _("free") if free else _("taken") }}</li>{% endfor %}
 </ul>
+{% if not (availability.sizes.values()|select|list) %}<p class="v-avail__none">{{ _("Every size is taken for this date. Try another date, or another dress.") }}</p>{% endif %}
 {% else %}
 <p class="muted">{{ _("Pick your event date to see which sizes are free.") }}</p>
 {% endif %}
+{% if oob %}{{ size_select(sizes, selected, availability, oob=True) }}{% endif %}
