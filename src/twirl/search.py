@@ -1,7 +1,7 @@
 """Marketplace search: which dresses can a renter actually get for their event date."""
 
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import date, timedelta
 
 from sqlalchemy import ColumnElement, and_, exists, func, or_, select
 from sqlalchemy.dialects.postgresql import distinct_on
@@ -82,11 +82,7 @@ def _date_condition(
 
     Returns None when no shop can serve the date at all (too soon, closed that week).
     """
-    shops = session.scalars(
-        select(Shop)
-        .where(Shop.status == ShopStatus.PUBLISHED.value, *([Shop.city == city] if city else []))
-        .options(selectinload(Shop.hours), selectinload(Shop.closures))
-    ).all()
+    shops = _published_shops(session, city)
     windows: dict[tuple[date, date], list[int]] = {}
     for shop in shops:
         rules = rules_for_shop(shop)
@@ -102,6 +98,51 @@ def _date_condition(
     return or_(
         *(and_(Item.shop_id.in_(ids), _free(start, end)) for (start, end), ids in windows.items())
     )
+
+
+def _can_serve(shop: Shop, event_date: date, today: date) -> bool:
+    rules = rules_for_shop(shop)
+    try:
+        validate_rental_dates(
+            derive_rental_dates(event_date, rules), rules, today=today, event=event_date
+        )
+    except InvalidDates:
+        return False
+    return True
+
+
+def _published_shops(session: Session, city: str | None) -> list[Shop]:
+    return list(
+        session.scalars(
+            select(Shop)
+            .where(
+                Shop.status == ShopStatus.PUBLISHED.value, *([Shop.city == city] if city else [])
+            )
+            .options(selectinload(Shop.hours), selectinload(Shop.closures))
+        ).all()
+    )
+
+
+def upcoming_saturdays(
+    session: Session, city: str | None, *, today: date, count: int = 3, horizon: int = 8
+) -> list[date]:
+    """The next Saturdays at least one shop can still hand a dress out for: date shortcuts."""
+    shops = _published_shops(session, city)
+    first = today + timedelta(days=(5 - today.weekday()) % 7 or 7)
+    candidates = (first + timedelta(weeks=week) for week in range(horizon))
+    return [day for day in candidates if any(_can_serve(s, day, today) for s in shops)][:count]
+
+
+def earliest_date(
+    session: Session, city: str | None, *, today: date, horizon: int = 30
+) -> date | None:
+    """The first event date any shop can still get a dress ready for, when a date is too soon."""
+    shops = _published_shops(session, city)
+    for offset in range(1, horizon + 1):
+        day = today + timedelta(days=offset)
+        if any(_can_serve(shop, day, today) for shop in shops):
+            return day
+    return None
 
 
 def _item_conditions(filters: Filters, date_condition) -> list[ColumnElement[bool]]:

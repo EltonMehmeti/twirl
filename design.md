@@ -44,6 +44,7 @@ is quiet, gold is a signal, not a decoration.
 - `--color-danger-soft` oklch(95.5% 0.016 22)
 - `--color-good`        oklch(54% 0.105 139)
 - `--color-focus`       = ink (17:1 on paper)
+- `--color-shadow`      oklch(19.1% 0 0 / 0.18)  the one floating element (the "see results" bar)
 
 Gold never carries text contrast on its own (1.8:1 on paper): text on gold is ink.
 
@@ -124,6 +125,7 @@ New rules use the same steps.
   --color-good: oklch(54% 0.105 139);
   --color-focus: var(--color-ink);
   --color-veil: oklch(98.4% 0.004 106 / 0.92);
+  --color-shadow: oklch(19.1% 0 0 / 0.18);
   --font-display: "Clash Display", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, "DejaVu Sans Mono", "SFMono-Regular", Menlo, monospace;

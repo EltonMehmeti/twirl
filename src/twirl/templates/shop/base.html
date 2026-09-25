@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block home_url %}/shop{% endblock %}
 {% block tagline %}<span class="v-brand__tag">{{ ctx.shop.name }}</span>{% endblock %}
+{% block footnav %}{% endblock %}
+{% block nav_class %}{% endblock %}
 {% block nav %}
 {% set here = request.url.path %}
 <a href="/shop"{% if here == "/shop" %} aria-current="page"{% endif %}>{{ _("Today") }}</a>

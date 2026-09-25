@@ -4,6 +4,7 @@ from tests.factories import make_booking, make_item, make_shop, make_style
 from twirl import clock
 from twirl.booking.dates import derive_rental_dates
 from twirl.booking.rules import rules_for_shop
+from twirl.search import upcoming_saturdays
 
 EVENT = clock.today() + timedelta(days=30)
 
@@ -50,8 +51,10 @@ def test_bad_filters_are_ignored_not_errors(client, db):
 
 def test_past_date_explains_itself(client, db):
     _gown(db, make_shop(db))
-    response = client.get(f"/?date={clock.today().isoformat()}")
+    today = clock.today().isoformat()
+    response = client.get(f"/?date={today}")
     assert 'id="date-error"' in response.text
+    assert f'value="{today}"' in response.text  # kept in the field so it can be fixed
 
 
 def test_no_results_offers_ways_out(client, db):
@@ -92,3 +95,49 @@ def test_availability_swaps_in_size_select_with_taken_sizes_disabled(client, db,
     assert 'id="size-select" required hx-swap-oob="true"' in response.text
     assert '<option value="38" disabled>' in response.text
     assert '<option value="40" selected>' in response.text
+
+
+def test_date_shortcuts_are_saturdays_a_shop_can_still_serve(db):
+    make_shop(db)
+    today = clock.today()
+    days = upcoming_saturdays(db, None, today=today)
+    assert 1 <= len(days) <= 3
+    assert all(day.weekday() == 5 and day > today for day in days)
+    assert days == sorted(days)
+
+
+def test_no_shops_means_no_date_shortcuts(client, db):
+    assert 'class="v-datepicks"' not in client.get("/").text
+
+
+def test_language_switch_keeps_the_search(client, db):
+    response = client.get("/?date=2030-06-01&size=38")
+    assert "/lang/en?next=/%3Fdate%3D2030-06-01%26size%3D38" in response.text
+    switched = client.get("/lang/en?next=/%3Fdate%3D2030-06-01%26size%3D38", follow_redirects=False)
+    assert switched.headers["location"] == "/?date=2030-06-01&size=38"
+
+
+def test_language_switch_refuses_other_sites(client):
+    for target in ("//evil.example", "/\\evil.example", "https://evil.example"):
+        response = client.get("/lang/en", params={"next": target}, follow_redirects=False)
+        assert response.headers["location"] == "/"
+
+
+def test_loosening_only_offers_filters_that_bring_dresses_back(client, db):
+    _gown(db, make_shop(db, city="Ferizaj"), sizes=("38",))
+    response = client.get("/?size=38&max=5&city=Ferizaj")
+    assert 'href="/?size=38&amp;city=Ferizaj"' in response.text  # drop the price cap: 1 dress
+    assert 'href="/?city=Ferizaj&amp;max=5"' not in response.text  # any size: still nothing
+
+
+def test_too_soon_date_points_to_the_earliest_date_that_works(client, db):
+    _gown(db, make_shop(db))
+    tomorrow = clock.today() + timedelta(days=1)
+    response = client.get(f"/?date={tomorrow.isoformat()}")
+    notice = response.text.split('class="v-nores"')[1].split("</div>")[0]
+    earliest = [
+        day
+        for day in (clock.today() + timedelta(days=n) for n in range(2, 31))
+        if f"/?date={day.isoformat()}" in notice
+    ]
+    assert len(earliest) == 1 and earliest[0] > tomorrow

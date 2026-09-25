@@ -80,10 +80,6 @@ msgstr "Listo veshjen"
 msgid "Shop login"
 msgstr "Hyrja për dyqane"
 
-#: src/twirl/templates/base.html:27
-msgid "Dress rental shops in Kosovo, bookable online."
-msgstr "Dyqanet e fustaneve me qira në Kosovë, me rezervim online."
-
 #: src/twirl/templates/error.html:7
 msgid "You don't have access to this page."
 msgstr "Nuk ke qasje në këtë faqe."
@@ -192,22 +188,9 @@ msgstr "Rezultatet"
 msgid "Newest dresses"
 msgstr "Veshjet më të reja"
 
-#: src/twirl/templates/home.html:64
-#, python-format
-msgid "%(n)s to rent"
-msgstr "%(n)s për qira"
-
 #: src/twirl/templates/home.html:65 src/twirl/templates/home.html:110
 msgid "Clear filters"
 msgstr "Hiq filtrat"
-
-#: src/twirl/templates/home.html:69
-msgid "Tip: add your event date to hide dresses that are already booked."
-msgstr "Këshillë: shto datën e eventit që të fshehim veshjet që janë të zëna."
-
-#: src/twirl/templates/home.html:77
-msgid "Free sizes for your date"
-msgstr "Masat e lira për datën tënde"
 
 #: src/twirl/templates/home.html:86
 msgid "Pages"
@@ -226,18 +209,6 @@ msgstr "Faqja %(page)s nga %(pages)s"
 msgid "Next"
 msgstr "Para"
 
-#: src/twirl/templates/home.html:95
-msgid "That date is too close."
-msgstr "Kjo datë është shumë afër."
-
-#: src/twirl/templates/home.html:96
-msgid ""
-"Shops need a few days to get a dress ready. Try a later date, or call a shop directly: some can "
-"still help."
-msgstr ""
-"Dyqanet kanë nevojë për disa ditë që ta përgatitin veshjen. Provo një datë më vonë, ose thirre "
-"dyqanin drejtpërdrejt: disa mund të të ndihmojnë prapë."
-
 #: src/twirl/templates/home.html:97
 msgid "See all dresses"
 msgstr "Shih të gjitha veshjet"
@@ -246,17 +217,9 @@ msgstr "Shih të gjitha veshjet"
 msgid "Nothing free with these filters."
 msgstr "Asgjë e lirë me këta filtra."
 
-#: src/twirl/templates/home.html:103
-msgid "Loosen one of them:"
-msgstr "Hiq njërin prej tyre:"
-
 #: src/twirl/templates/home.html:107
 msgid "All categories"
 msgstr "Të gjitha kategoritë"
-
-#: src/twirl/templates/home.html:109
-msgid "Any date"
-msgstr "Çdo datë"
 
 #: src/twirl/templates/home.html:116
 msgid "The first dresses are on their way."
@@ -1881,3 +1844,78 @@ msgstr "U kalua në një fustan tjetër"
 #~ msgid "Today's pickups, returns and requests, in one place."
 #~ msgstr "Marrjet, kthimet dhe kërkesat e sotme, në një vend."
 
+msgid "Next Saturdays"
+msgstr "Të shtunat e ardhshme"
+
+msgid "Saturdays"
+msgstr "Të shtunat"
+
+msgid "More filters"
+msgstr "Më shumë filtra"
+
+msgid "The results did not load. Check your connection and try again."
+msgstr "Rezultatet nuk u ngarkuan. Kontrollo lidhjen dhe provo sërish."
+
+msgid "See %(num)s dress"
+msgid_plural "See %(num)s dresses"
+msgstr[0] "Shiko %(num)s fustan"
+msgstr[1] "Shiko %(num)s fustane"
+
+msgid "See results"
+msgstr "Shiko rezultatet"
+
+msgid "%(num)s dress"
+msgid_plural "%(num)s dresses"
+msgstr[0] "%(num)s fustan"
+msgstr[1] "%(num)s fustane"
+
+msgid "The sizes under each dress are the ones free that day."
+msgstr "Masat nën çdo fustan janë ato që janë të lira atë ditë."
+
+msgid ""
+"The sizes under each dress are the ones the shop has. Add your event date "
+"to see only what is free that day."
+msgstr ""
+"Masat nën çdo fustan janë ato që ka dyqani. Shto datën e eventit për të "
+"parë vetëm çka është e lirë atë ditë."
+
+msgid "Free sizes:"
+msgstr "Masat e lira:"
+
+msgid "Sizes:"
+msgstr "Masat:"
+
+msgid "Dress rental shops in Kosovo. Request online, pay at pickup."
+msgstr "Dyqanet e fustaneve me qira në Kosovë. Dërgo kërkesë online, paguaj kur e merr."
+
+msgid "%(day)s is too soon"
+msgstr "%(day)s është shumë afër"
+
+msgid "Shops need a few days to get a dress ready."
+msgstr "Dyqanet kanë nevojë për disa ditë që ta përgatisin fustanin."
+
+msgid "The earliest event date they can still manage is %(day)s."
+msgstr "Data më e afërt që mund ta përgatisin është %(day)s."
+
+msgid "See what is free on %(day)s"
+msgstr "Shiko çka është e lirë më %(day)s"
+
+msgid "Nothing matches these filters."
+msgstr "Asgjë nuk përputhet me këta filtra."
+
+msgid "Drop one filter and there is more to see:"
+msgstr "Hiq një filtër dhe ka më shumë për të parë:"
+
+msgid ""
+"Dropping any single filter still leaves nothing free that day. New dresses "
+"arrive as shops join, so check again closer to the date."
+msgstr ""
+"Edhe pa njërin nga filtrat, asgjë nuk është e lirë atë ditë. Fustane të reja "
+"shtohen sa herë që bashkohet një dyqan, prandaj kontrollo sërish më afër datës."
+
+msgid ""
+"Dropping any single filter still leaves nothing. Clear them to see every "
+"dress."
+msgstr ""
+"Edhe pa njërin nga filtrat nuk ka asgjë. Hiqi të gjithë për të parë çdo "
+"fustan."

@@ -13,17 +13,28 @@
   <script src="{{ url_for('static', path='htmx.min.js') }}" defer></script>
 </head>
 <body class="v-app" hx-headers='{"X-CSRF-Token": "{{ csrf_token(request) }}"}'>
+  {% set here = request.url.path ~ ("?" ~ request.url.query if request.url.query else "") %}
   <header class="v-appbar">
     <div class="v-appbar__inner">
       <a href="{% block home_url %}/{% endblock %}" class="v-brand">{% include "_logo.html" %}<span class="v-brand__name">{{ brand }}</span>{% block tagline %}{% endblock %}</a>
-      <nav class="v-nav-links" aria-label="{{ _('Main') }}">{% block nav %}<a href="/listo">{{ _("List your clothes") }}</a><a href="/login">{{ _("Shop login") }}</a>{% endblock %}</nav>
+      <nav class="v-nav-links{% block nav_class %} v-nav-links--inline{% endblock %}" aria-label="{{ _('Main') }}">{% block nav %}<a href="/listo">{{ _("List your clothes") }}</a><a class="v-nav-links__wide" href="/login">{{ _("Shop login") }}</a>{% endblock %}</nav>
       <span class="v-lang">
-        <a href="/lang/sq?next={{ request.url.path }}"{% if locale == "sq" %} aria-current="true"{% endif %}>SQ</a>
-        <a href="/lang/en?next={{ request.url.path }}"{% if locale == "en" %} aria-current="true"{% endif %}>EN</a>
+        <a href="/lang/sq?next={{ here|urlencode }}"{% if locale == "sq" %} aria-current="true"{% endif %}>SQ</a>
+        <a href="/lang/en?next={{ here|urlencode }}"{% if locale == "en" %} aria-current="true"{% endif %}>EN</a>
       </span>
     </div>
   </header>
   <main class="v-container{% block container_class %}{% endblock %}">{% block content %}{% endblock %}</main>
-  <footer class="v-sitefoot"><span>{{ brand }}</span><span>{{ _("Dress rental shops in Kosovo, bookable online.") }}</span></footer>
+  <footer class="v-sitefoot"><span>{{ brand }}</span><span>{{ _("Dress rental shops in Kosovo. Request online, pay at pickup.") }}</span>{% block footnav %}<a href="/login">{{ _("Shop login") }}</a>{% endblock %}</footer>
+<script>
+  // Searches update the address bar without reloading: take the current one along when switching language.
+  document.querySelectorAll(".v-lang a").forEach(function (link) {
+    link.addEventListener("click", function () {
+      var url = new URL(link.href);
+      url.searchParams.set("next", location.pathname + location.search);
+      link.href = url.toString();
+    });
+  });
+</script>
 </body>
 </html>

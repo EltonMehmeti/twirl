@@ -1,3 +1,4 @@
+from dataclasses import replace
 from datetime import date, timedelta
 from urllib.parse import urlencode
 
@@ -10,7 +11,16 @@ from twirl.catalog import image_url
 from twirl.db import get_db
 from twirl.i18n import LOCALE_COOKIE, N_, SUPPORTED_LOCALES
 from twirl.onboarding import CUSTOM_SIZE
-from twirl.search import SORTS, Filters, city_options, search, shop_cards, size_options
+from twirl.search import (
+    SORTS,
+    Filters,
+    city_options,
+    earliest_date,
+    search,
+    shop_cards,
+    size_options,
+    upcoming_saturdays,
+)
 from twirl.storage import Storage, get_storage
 from twirl.web.onboarding import CATEGORY_LABELS
 from twirl.web.templating import render
@@ -27,7 +37,8 @@ PAST_DATE = N_("Pick a date from tomorrow on.")
 
 
 def safe_next(target: str | None, default: str = "/") -> str:
-    if target and target.startswith("/") and not target.startswith("//"):
+    # Browsers read "/\host" like "//host": another site, so refuse both.
+    if target and target.startswith("/") and not target.startswith(("//", "/\\")):
         return target
     return default
 
@@ -58,6 +69,30 @@ def _query(filters: Filters, **changes) -> str:
     return f"/?{query}" if query else "/"
 
 
+LOOSEN_LABELS = {
+    "size": N_("Any size"),
+    "city": N_("All of Kosovo"),
+    "category": N_("All categories"),
+    "max_price_cents": N_("Any price"),
+}
+LOOSEN_PARAMS = {"size": "size", "city": "city", "category": "category", "max_price_cents": "max"}
+
+
+def _loosen(db: Session, filters: Filters, today: date) -> list[dict]:
+    """When nothing matches: each filter that could go, with how many dresses that brings back.
+
+    The date is never offered: an event does not move, so other dates would not help.
+    """
+    options = []
+    for field, label in LOOSEN_LABELS.items():
+        if getattr(filters, field):
+            total = search(db, replace(filters, **{field: None}, page=1), today=today).total
+            if total:
+                href = _query(filters, **{LOOSEN_PARAMS[field]: ""})
+                options.append({"href": href, "label": label, "total": total})
+    return options
+
+
 @router.get("/", response_class=HTMLResponse)
 def home(
     request: Request,
@@ -75,6 +110,8 @@ def home(
     sizes = size_options(db)
     cities = city_options(db)
     event_date = _parse_date(date_)
+    # What the date field shows: a past date stays visible so it can be corrected.
+    date_value = event_date.isoformat() if event_date else ""
     date_error = None
     if event_date is not None and event_date <= today:
         event_date, date_error = None, PAST_DATE
@@ -89,6 +126,10 @@ def home(
         page=_parse_int(page) or 1,
     )
     results = search(db, filters, today=today)
+    earliest = earliest_date(db, filters.city, today=today) if results.date_unreachable else None
+    loosen = (
+        _loosen(db, filters, today) if not results.cards and not results.date_unreachable else []
+    )
     detail_query = urlencode(
         {
             key: value
@@ -132,7 +173,11 @@ def home(
             "price_caps": PRICE_CAPS,
             "sorts": SORT_LABELS,
             "date_error": date_error,
+            "date_value": date_value,
+            "earliest": earliest,
+            "loosen": loosen,
             "min_date": (today + timedelta(days=1)).isoformat(),
+            "saturdays": upcoming_saturdays(db, filters.city, today=today),
             "query": lambda **changes: _query(filters, **changes),
         },
     )
