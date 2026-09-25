@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  body { margin: 0; background: #f2efe6; }
+  a { color: #141414; text-decoration-color: #f2b01e; text-underline-offset: 3px; }
+  a:hover { color: #8a6a06; }
+  input, select, textarea, button { font-family: inherit; }
+  input::placeholder, textarea::placeholder { color: #8a857a; }
+</style>
+</helmet>
+
+<div style="--accent: {{ accent }}">
+<div style="min-height: 100vh; background: #f2efe6; padding: 30px 18px 70px; display: flex; flex-direction: column; align-items: center; font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif; color: #141414;">
+
+  <div style="width: {{ frameW }}; max-width: 100%; background: #fafaf7; border: 1px solid #e2dfd5;">
+
+    <!-- ══ header ══ -->
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 15px 20px; border-bottom: 1px solid #e2dfd5;">
+      <div style="display: flex; align-items: center; gap: 11px; min-width: 0;">
+        <svg width="21" height="23" viewBox="0 0 40 44" aria-hidden="true">
+          <path d="M20 13.5V9.6a3.1 3.1 0 1 1 3.1-3.1" fill="none" stroke="#141414" stroke-width="2.8" stroke-linecap="round"></path>
+          <circle cx="20" cy="26.5" r="13" fill="none" stroke="#141414" stroke-width="2.8"></circle>
+          <circle cx="20" cy="26.5" r="5.2" fill="var(--accent, #f2b01e)"></circle>
+        </svg>
+        <span style="font-family: 'Clash Display', ui-sans-serif, system-ui, sans-serif; font-weight: 600; font-size: 13px; letter-spacing: .22em; text-transform: uppercase; padding-left: .22em;">Vesha</span>
+        <span style="font-family: var(--font-mono); font-size: 9px; letter-spacing: .26em; text-transform: uppercase; color: #8a857a; border-left: 1px solid #e2dfd5; padding-left: 11px; white-space: nowrap;">Listo veshjen</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 13px;">
+        <span style="font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #8a857a; white-space: nowrap;">{{ stepCounter }}</span>
+        <div style="display: flex; border: 1px solid #e2dfd5; border-radius: 999px; overflow: hidden; flex: none;">
+          <button type="button" onClick="{{ setDesktop }}" style="border: 0; cursor: pointer; padding: 7px 13px; font-family: var(--font-mono); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; background: {{ deskBg }}; color: {{ deskFg }};">Desktop</button>
+          <button type="button" onClick="{{ setPhone }}" style="border: 0; border-left: 1px solid #e2dfd5; cursor: pointer; padding: 7px 13px; font-family: var(--font-mono); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; background: {{ phoneBg }}; color: {{ phoneFg }};">Telefon</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ phone-mode progress ══ -->
+    <sc-if value="{{ showBar }}" hint-placeholder-val="{{ false }}">
+      <div style="height: 3px; background: #e2dfd5;">
+        <div style="height: 3px; background: var(--accent, #f2b01e); width: {{ progress }};"></div>
+      </div>
+    </sc-if>
+
+    <div style="display: grid; grid-template-columns: {{ cols }};">
+
+      <!-- ══ rail ══ -->
+      <sc-if value="{{ showRail }}" hint-placeholder-val="{{ true }}">
+        <aside style="border-right: 1px solid #e2dfd5; background: #f2efe6; padding: 28px 24px; display: flex; flex-direction: column; gap: 26px;">
+          <div>
+            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #8a857a;">Hapat</div>
+            <div style="display: flex; flex-direction: column; margin-top: 12px;">
+              <sc-for list="{{ railItems }}" as="it" hint-placeholder-count="5">
+                <div style="display: flex; gap: 11px; align-items: center; padding: 9px 0;">
+                  <span style="width: 23px; height: 23px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex: none; font-family: var(--font-mono); font-size: 10px; border: 1px solid {{ it.dotBorder }}; background: {{ it.dotBg }}; color: {{ it.dotFg }};">{{ it.num }}</span>
+                  <span style="font-size: 15px; line-height: 1.3; color: {{ it.fg }};">{{ it.label }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="margin-top: auto; border-top: 1px solid #e2dfd5; padding-top: 16px;">
+            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #8a857a;">{{ railNoteLabel }}</div>
+            <p style="font-size: 14px; line-height: 1.5; color: #44403a; margin: 7px 0 0; text-wrap: pretty;">{{ railNote }}</p>
+          </div>
+        </aside>
+      </sc-if>
+
+      <!-- ══ main ══ -->
+      <main style="padding: {{ mainPad }}; min-width: 0;">
+
+        <!-- ── fork ── -->
+        <sc-if value="{{ isFork }}" hint-placeholder-val="{{ true }}">
+          <div data-screen-label="01 Fork">
+            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #8a857a;">Hapi i parë</div>
+            <h1 style="font-family: 'Clash Display', ui-sans-serif, system-ui, sans-serif; font-weight: 600; font-size: 38px; line-height: 1.06; letter-spacing: -0.024em; margin: 12px 0 0; max-width: 22ch; text-wrap: balance;">Kush e jep veshjen me qera?</h1>
+            <p style="font-size: 18px; line-height: 1.55; color: #44403a; max-width: 56ch; margin: 14px 0 0; text-wrap: pretty;">Dy rrugë të ndara. Kaparja, verifikimi dhe dorëzimi ndryshojnë — zgjedhja e tashme përcakton pyetjet e radhës.</p>
+
+            <div style="display: grid; grid-template-columns: {{ forkCols }}; gap: 16px; margin-top: 28px;">
+              <button type="button" onClick="{{ pickIndividual }}" style="text-align: left; cursor: pointer; border: 1px solid #e2dfd5; background: #fafaf7; padding: 24px 22px; display: flex; flex-direction: column; gap: 15px;" style-hover="border-color: #141414;">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7.5V6.2a2.1 2.1 0 1 1 2.1-2.1"></path><path d="M12 7.5 3.6 15.6a1 1 0 0 0 .7 1.7h15.4a1 1 0 0 0 .7-1.7L12 7.5Z"></path></svg>
+                <div>
+                  <div style="font-family: 'Clash Display', ui-sans-serif, system-ui, sans-serif; font-weight: 600; font-size: 25px; letter-spacing: -0.02em;">Veshjet e mia</div>
+                  <p style="font-size: 16px; line-height: 1.5; color: #44403a; margin: 7px 0 0;">Një fustan që e kam veshur, ose dy. E listoj vetë, e dorëzoj vetë.</p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #e2dfd5; padding-top: 14px; width: 100%;">
+                  <span style="font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: #44403a;">Kaparë e kthyeshme · 48h</span>
+                  <span style="font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: #44403a;">Çmimin dhe datat i caktoj unë</span>
+                  <span style="font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: #8a857a;">Vetëm numri i telefonit</span>
+                </div>
+              </button>
+
+              <button type="button" onClick="{{ pickSalon }}" style="text-align: left; cursor: pointer; border: 1px solid #e2dfd5; background: #fafaf7; padding: 24px 22px; display: flex; flex-direction: column; gap: 15px;" style-hover="border-color: #141414;">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 8.5h11l1.3 11.5H5.2L6.5 8.5Z"></path><path d="M9.2 8.5V6.8a2.8 2.8 0 0 1 5.6 0v1.7"></path></svg>
+                <div>
+                  <div style="font-family: 'Clash Display', ui-sans-serif, system-ui, sans-serif; font-weight: 600; font-size: 25px; letter-spacing: -0.02em;">Sallon ose biznes</div>
+                  <p style="font-size: 16px; line-height: 1.5; color: #44403a; margin: 7px 0 0;">Inventar me numër. Adresa, orari dhe provat në sallon.</p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #e2dfd5; padding-top: 14px; width: 100%;">
+                  <span style="font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: #44403a;">Kaparë 30% online</span>
+                  <span style="font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: #44403a;">Adresa, orari, WhatsApp</span>
+                  <span style="font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: #8a857a;">Shenja e verifikimit pas kontrollit</span>
+                </div>
+              </button>
+            </div>
+
+            <p style="font-size: 15px; line-height: 1.55; color: #44403a; max-width: 64ch; margin: 26px 0 0; padding-left: 15px; border-left: 3px solid var(--accent, #f2b01e);">Nuk ke vendosur? Zgjidh <em>Veshjet e mia</em>. Salloni hapet më vonë nga profili, pa e humbur listimin e parë.</p>
+          </div>
+        </sc-if>
+
+        <!-- ── phone ── -->
+        <sc-if value="{{ isPhone }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="02 Phone" style="max-width: 460px;">
+            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #8a857a;">{{ pathLabel }}</div>
+            <h1 style="font-family: 'Clash Display', ui-sans-serif, system-ui, sans-serif; font-weight: 600; font-size: 32px; line-height: 1.08; letter-spacing: -0.022em; margin: 11px 0 0;">Numri i telefonit</h1>
+            <p style="font-size: 17px; line-height: 1.55; color: #44403a; margin: 12px 0 0; text-wrap: pretty;">{{ phoneLede }}</p>
+
+            <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 26px;">
+              <label for="v-phone" style="font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #8a857a;">Numri</label>
+              <input id="v-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="044 123 456" value="{{ phone }}" onChange="{{ onPhone }}" style="font-size: 17px; color: #141414; background: #fafaf7; border: 1px solid {{ phoneBorder }}; border-radius: 10px; padding: 13px 14px; width: 100%; box-sizing: border-box; font-variant-numeric: tabular-nums; letter-spacing: .04em;" style-focus="outline: 2px solid #f2b01e; outline-offset: 2px; border-color: transparent;">
+              <span style="font-size: 13px; line-height: 1.45; color: {{ phoneHintFg }};">{{ phoneHint }}</span>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ── code ── -->
+        <sc-if value="{{ isCode }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="03 Code" style="max-width: 460px;">
+            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #8a857a;">{{ pathLabel }}</div>
+            <h1 style="font-family: 'Clash Display', ui-sans-serif, system-ui, sans-serif; font-weight: 600; font-size: 32px; line-height: 1.08; letter-spacing: -0.022em; margin: 11px 0 0;">Kodi nga SMS</h1>
+            <p style="font-size: 17px; line-height: 1.55; color: #44403a; margin: 12px 0 0;">{{ codeSentLine }}</p>
+
+            <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 26px;">
+              <label for="v-code" style="font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #8a857a;">Gjashtë numra</label>
+              <input id="v-code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="––––––" value="{{ code }}" onChange="{{ onCode }}" style="font-family: var(--font-mono); font-size: 26px; letter-spacing: .34em; color: #141414; background: #fafaf7; border: 1px solid {{ codeBorder }}; border-radius: 10px; padding: 13px 14px; width: 100%; box-sizing: border-box; font-variant-numeric: tabular-nums;" style-focus="outline: 2px solid #f2b01e; outline-offset: 2px; border-color: transparent;">
+              <span style="font-size: 13px; line-height: 1.45; color: {{ codeHintFg }};">{{ codeHint }}</span>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 16px; margin-top: 18px; flex-wrap: wrap;">
+              <button type="button" onClick="{{ resend }}" style="border: 0; background: transparent; cursor: pointer; padding: 0; font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: {{ resendFg }};">{{ resendLabel }}</button>
+              <button type="button" onClick="{{ editPhone }}" style="border: 0; background: transparent; cursor: pointer; padding: 0; font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #8a857a;" style-hover="color: #141414;">Ndrysho numrin</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ── individual profile ── -->
+        <sc-if value="{{ isProfile }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="04 Profile individual" style="max-width: 500px;">
+            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #8a857a;">Veshjet e mia</div>
+            <h1 style="font-family: 'Clash Display', ui-sans-serif, system-ui, sans-serif; font-weight: 600; font-size: 32px; line-height: 1.08; letter-spacing: -0.022em; margin: 11px 0 0;">Kush je dhe ku je</h1>
+            <p style="font-size: 17px; line-height: 1.55; color: #44403a; margin: 12px 0 0; text-wrap: pretty;">Publikohen vetëm emri dhe qyteti. Adresa jepet vetëm pasi rezervimi konfirmohet.</p>
+
+            <div style="display: flex; flex-direction: column; gap: 18px; margin-top: 26px;">
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <label for="v-name" style="font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #8a857a;">Emri dhe mbiemri</label>
+                <input id="v-name" type="text" placeholder="Elira Krasniqi" value="{{ name }}" onChange="{{ onName }}" style="font-size: 17px; color: #141414; background: #fafaf7; border: 1px solid {{ nameBorder }}; border-radius: 10px; padding: 13px 14px; width: 100%; box-sizing: border-box;" style-focus="outline: 2px solid #f2b01e; outline-offset: 2px; border-color: transparent;">
+                <span style="font-size: 13px; line-height: 1.45; color: {{ nameHintFg }};">{{ nameHint }}</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <label for="v-city" style="font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #8a857a;">Qyteti</label>
+                <select id="v-city" value="{{ city }}" onChange="{{ onCity }}" style="font-size: 17px; color: #141414; background: #fafaf7; border: 1px solid {{ cityBorder }}; border-radius: 10px; padding: 13px 14px; width: 100%; box-sizing: border-box;" style-focus="outline: 2px solid #f2b01e; outline-offset: 2px; border-color: transparent;">
+                  <option value="">Zgjidh qytetin</option>
+                  <sc-for list="{{ cityList }}" as="c" hint-placeholder-count="6">
+                    <option value="{{ c }}">{{ c }}</option>
+                  </sc-for>
+                </select>
+                <span style="font-size: 13px; line-height: 1.45; color: {{ cityHintFg }};">{{ cityHint }}</span>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ── id check (optional) ── -->
+        <sc-if value="{{ isId }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="05 ID check" style="max-width: 500px;">
+            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #8a857a;">Veshjet e mia</div>
+            <h1 style="font-family: 'Clash Display', ui-sans-serif, system-ui, sans-serif; font-weight: 600; font-size: 32px; line-height: 1.08; letter-spacing: -0.022em; margin: 11px 0 0;">Një dokument, një selfie</h1>
+            <p style="font-size: 17px; line-height: 1.55; color: #44403a; margin: 12px 0 0; text-wrap: pretty;">Dokumenti nuk publikohet dhe nuk u tregohet qiramarrësve. Shërben vetëm nëse hapet një ankesë për veshjen.</p>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+              <sc-for list="{{ idSlots }}" as="s" hint-placeholder-count="2">
+                <button type="button" onClick="{{ s.onClick }}" style="width: 150px; height: 104px; cursor: pointer; border-radius: 10px; border: 1px {{ s.borderStyle }} {{ s.border }}; background: {{ s.bg }}; color: {{ s.fg }}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase;">
+                  <span>{{ s.mark }}</span>
+                  <span>{{ s.label }}</span>
+                </button>
+              </sc-for>
+            </div>
+            <span style="display: block; font-size: 13px; line-height: 1.45; color: {{ idHintFg }}; margin-top: 10px;">{{ idHint }}</span>
+          </div>
+        </sc-if>
+
+        <!-- ── salon profile ── -->
+        <sc-if value="{{ isSalon }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="04 Profile salon" style="max-width: 620px;">
+            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #8a857a;">Sallon ose biznes</div>
+            <h1 style="font-family: 'Clash Display', ui-sans-serif, system-ui, sans-serif; font-weight: 600; font-size: 32px; line-height: 1.08; letter-spacing: -0.022em; margin: 11px 0 0;">Salloni, adresa, orari</h1>
+            <p style="font-size: 17px; line-height: 1.55; color: #44403a; margin: 12px 0 0; text-wrap: pretty;">Kjo është pjesa që kërkojnë klientët përpara se të nisen: ku je dhe kur hapesh. Orari shfaqet në çdo listim.</p>
+
+            <div style="display: flex; flex-direction: column; gap: 18px; margin-top: 26px;">
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <label for="v-salon" style="font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #8a857a;">Emri i sallonit</label>
+                <input id="v-salon" type="text" placeholder="Sallon Nusërie Dea" value="{{ salonName }}" onChange="{{ onSalonName }}" style="font-size: 17px; color: #141414; background: #fafaf7; border: 1px solid {{ salonBorder }}; border-radius: 10px; padding: 13px 14px; width: 100%; box-sizing: border-box;" style-focus="outline: 2px solid #f2b01e; outline-offset: 2px; border-color: transparent;">
+                <span style="font-size: 13px; line-height: 1.45; color: {{ salonHintFg }};">{{ salonHint }}</span>
+              </div>
+
+              <div style="display: grid; grid-template-columns: {{ twoCols }}; gap: 14px;">
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                  <label for="v-addr" style="font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #8a857a;">Rruga dhe numri</label>
+                  <input id="v-addr" type="text" placeholder="Rr. Bill Clinton 14" value="{{ address }}" onChange="{{ onAddress }}" style="font-size: 17px; color: #141414; background: #fafaf7; border: 1px solid {{ addrBorder }}; border-radius: 10px; padding: 13px 14px; width: 100%; box-sizing: border-box;" style-focus="outline: 2px solid #f2b01e; outline-offset: 2px; border-color: transparent;">
+                  <span style="font-size: 13px; line-height: 1.45; color: {{ addrHintFg }};">{{ addrHint }}</span>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                  <label for="v-scity" style="font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #8a857a;">Qyteti</label>
+                  <select id="v-scity" value="{{ city }}" onChange="{{ onCity }}" style="font-size: 17px; color: #141414; background: #fafaf7; border: 1px solid {{ cityBorder }}; border-radius: 10px; padding: 13px 14px; width: 100%; box-sizing: border-box;" style-focus="outline: 2px solid #f2b01e; outline-offset: 2px; border-color: transparent;">
+                    <option value="">Zgjidh qytetin</option>
+                    <sc-for list="{{ cityList }}" as="c" hint-placeholder-count="6">
+                      <option value="{{ c }}">{{ c }}</option>
+                    </sc-for>
+                  </select>
+                  <span style="font-size: 13px; line-height: 1.45; color: {{ cityHintFg }};">{{ cityHint }}</span>
+                </div>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <label for="v-wa" style="font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #8a857a;">WhatsApp i sallonit</label>
+                <input id="v-wa" type="tel" inputmode="tel" placeholder="044 123 456" value="{{ wa }}" onChange="{{ onWa }}" style="font-size: 17px; color: #141414; background: #fafaf7; border: 1px solid {{ waBorder }}; border-radius: 10px; padding: 13px 14px; width: 100%; box-sizing: border-box; font-variant-numeric: tabular-nums; letter-spacing: .04em;" style-focus="outline: 2px solid #f2b01e; outline-offset: 2px; border-color: transparent;">
+                <span style="font-size: 13px; line-height: 1.45; color: {{ waHintFg }};">{{ waHint }}</span>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 10px; border: 1px solid #e2dfd5; padding: 16px 16px 18px;">
+                <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #8a857a;">Orari</div>
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                  <span style="font-size: 15px; width: 92px;">Hënë–Premte</span>
+                  <input type="time" value="{{ hours.wdOpen }}" onChange="{{ onWdOpen }}" style="font-family: var(--font-mono); font-size: 15px; color: #141414; background: #fafaf7; border: 1px solid #e2dfd5; border-radius: 8px; padding: 8px 10px;" style-focus="outline: 2px solid #f2b01e; outline-offset: 2px;">
+                  <span style="color: #8a857a;">–</span>
+                  <input type="time" value="{{ hours.wdClose }}" onChange="{{ onWdClose }}" style="font-family: var(--font-mono); font-size: 15px; color: #141414; background: #fafaf7; border: 1px solid #e2dfd5; border-radius: 8px; padding: 8px 10px;" style-focus="outline: 2px solid #f2b01e; outline-offset: 2px;">
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                  <span style="font-size: 15px; width: 92px;">Shtunë</span>
+                  <input type="time" value="{{ hours.satOpen }}" onChange="{{ onSatOpen }}" style="font-family: var(--font-mono); font-size: 15px; color: #141414; background: #fafaf7; border: 1px solid #e2dfd5; border-radius: 8px; padding: 8px 10px;" style-focus="outline: 2px solid #f2b01e; outline-offset: 2px;">
+                  <span style="color: #8a857a;">–</span>
+                  <input type="time" value="{{ hours.satClose }}" onChange="{{ onSatClose }}" style="font-family: var(--font-mono); font-size: 15px; color: #141414; background: #fafaf7; border: 1px solid #e2dfd5; border-radius: 8px; padding: 8px 10px;" style-focus="outline: 2px solid #f2b01e; outline-offset: 2px;">
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                  <span style="font-size: 15px; width: 92px;">E dielë</span>
+                  <div style="display: flex; border: 1px solid #e2dfd5; border-radius: 999px; overflow: hidden;">
+                    <button type="button" onClick="{{ sunOpenSet }}" style="border: 0; cursor: pointer; padding: 8px 15px; font-size: 14px; font-weight: 600; background: {{ sunOpenBg }}; color: {{ sunOpenFg }};">Hapur</button>
+                    <button type="button" onClick="{{ sunClosedSet }}" style="border: 0; border-left: 1px solid #e2dfd5; cursor: pointer; padding: 8px 15px; font-size: 14px; font-weight: 600; background: {{ sunClosedBg }}; color: {{ sunClosedFg }};">Mbyllur</button>
+                  </div>
+                </div>
+                <span style="font-size: 13px; line-height: 1.45; color: {{ hoursHintFg }};">{{ hoursHint }}</span>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ── dress ── -->
+        <sc-if value="{{ isDress }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="06 Dress" style="max-width: 640px;">
+            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #8a857a;">{{ pathLabel }} · veshja e parë</div>
+            <h1 style="font-family: 'Clash Display', ui-sans-serif, system-ui, sans-serif; font-weight: 600; font-size: 32px; line-height: 1.08; letter-spacing: -0.022em; margin: 11px 0 0;">Veshja e parë</h1>
+            <p style="font-size: 17px; line-height: 1.55; color: #44403a; margin: 12px 0 0; text-wrap: pretty;">{{ dressLede }}</p>
+
+            <div style="display: flex; flex-direction: column; gap: 24px; margin-top: 26px;">
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <label style="font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #8a857a;">Fotot</label>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                  <sc-for list="{{ photoSlots }}" as="p" hint-placeholder-count="4">
+                    <button type="button" onClick="{{ p.onClick }}" style="width: 104px; height: 128px; cursor: pointer; border-radius: 10px; border: 1px {{ p.borderStyle }} {{ p.border }}; background: {{ p.bg }}; color: {{ p.fg }}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; padding: 6px;">
+                      <span style="font-size: 15px;">{{ p.mark }}</span>
+                      <span>{{ p.label }}</span>
+                    </button>
+                  </sc-for>
+                </div>
+                <span style="font-size: 13px; line-height: 1.45; color: {{ photoHintFg }};">{{ photoHint }}</span>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <label style="font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #8a857a;">Kategoria</label>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                  <sc-for list="{{ catChips }}" as="c" hint-placeholder-count="5">
+                    <button type="button" onClick="{{ c.onClick }}" style="cursor: pointer; border-radius: 999px; padding: 10px 17px; font-size: 15px; font-weight: 600; border: 1px solid {{ c.border }}; background: {{ c.bg }}; color: {{ c.fg }};">{{ c.label }}</button>
+                  </sc-for>
+                </div>
+                <span style="font-size: 13px; line-height: 1.45; color: {{ catHintFg }};">{{ catHint }}</span>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <label style="font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #8a857a;">{{ sizeLabel }}</label>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                  <sc-for list="{{ sizeChips }}" as="s" hint-placeholder-count="8">
+                    <button type="button" onClick="{{ s.onClick }}" style="cursor: pointer; border-radius: 999px; padding: 10px 16px; font-family: var(--font-mono); font-size: 14px; font-variant-numeric: tabular-nums; border: 1px solid {{ s.border }}; background: {{ s.bg }}; color: {{ s.fg }};">{{ s.label }}</button>
+                  </sc-for>
+                </div>
+                <span style="font-size: 13px; line-height: 1.45; color: {{ sizeHintFg }};">{{ sizeHint }}</span>
+              </div>
+
+              <div style="display: grid; grid-template-columns: {{ descCols }}; gap: 14px;">
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                  <label for="v-desc" style="font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #8a857a;">Përshkrimi</label>
+                  <textarea id="v-desc" placeholder="Fustan mbrëmjeje, qëndisje dore në pjesën e sipërme, mëngë tre-të-katërtat. Veshur dy herë." value="{{ desc }}" onChange="{{ onDesc }}" style="font-size: 16px; line-height: 1.5; color: #141414; background: #fafaf7; border: 1px solid #e2dfd5; border-radius: 10px; padding: 12px 13px; width: 100%; box-sizing: border-box; min-height: 92px; resize: vertical;" style-focus="outline: 2px solid #f2b01e; outline-offset: 2px; border-color: transparent;"></textarea>
+                  <span style="font-size: 13px; line-height: 1.45; color: #8a857a;">Materiali, gjatësia, sa herë është veshur. Pa mbiemra reklamues.</span>
+                </div>
+                <sc-if value="{{ isSalonPath }}" hint-placeholder-val="{{ false }}">
+                  <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <label for="v-ref" style="font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #8a857a;">Kodi i brendshëm</label>
+                    <input id="v-ref" type="text" placeholder="NR-38" value="{{ ref }}" onChange="{{ onRef }}" style="font-family: var(--font-mono); font-size: 16px; color: #141414; background: #fafaf7; border: 1px solid #e2dfd5; border-radius: 10px; padding: 13px 14px; width: 100%; box-sizing: border-box;" style-focus="outline: 2px solid #f2b01e; outline-offset: 2px; border-color: transparent;">
+                    <span style="font-size: 13px; line-height: 1.45; color: #8a857a;">Opsionale. Shfaqet vetëm për sallonin, në raftin dhe në porosi.</span>
+                  </div>
+                </sc-if>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ── price + dates ── -->
+        <sc-if value="{{ isPrice }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="07 Price and dates" style="max-width: 640px;">
+            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #8a857a;">{{ pathLabel }} · veshja e parë</div>
+            <h1 style="font-family: 'Clash Display', ui-sans-serif, system-ui, sans-serif; font-weight: 600; font-size: 32px; line-height: 1.08; letter-spacing: -0.022em; margin: 11px 0 0;">Çmimi dhe datat</h1>
+            <p style="font-size: 17px; line-height: 1.55; color: #44403a; margin: 12px 0 0; text-wrap: pretty;">Kaparja llogaritet vetë dhe shpjegohet me një rresht — të njëjtin rresht që lexon qiramarrësi.</p>
+
+            <div style="display: flex; flex-direction: column; gap: 24px; margin-top: 26px;">
+              <div style="display: grid; grid-template-columns: {{ twoCols }}; gap: 14px; align-items: start;">
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                  <label for="v-price" style="font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #8a857a;">Qera për 3 ditë (€)</label>
+                  <input id="v-price" type="text" inputmode="numeric" placeholder="55" value="{{ price }}" onChange="{{ onPrice }}" style="font-family: var(--font-mono); font-size: 22px; color: #141414; background: #fafaf7; border: 1px solid {{ priceBorder }}; border-radius: 10px; padding: 12px 14px; width: 100%; box-sizing: border-box; font-variant-numeric: tabular-nums;" style-focus="outline: 2px solid #f2b01e; outline-offset: 2px; border-color: transparent;">
+                  <span style="font-size: 13px; line-height: 1.45; color: {{ priceHintFg }};">{{ priceHint }}</span>
+                </div>
+                <div style="border-left: 3px solid var(--accent, #f2b01e); background: #f2efe6; padding: 14px 16px;">
+                  <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #8a857a;">Kaparja</div>
+                  <div style="font-family: var(--font-mono); font-size: 20px; font-variant-numeric: tabular-nums; margin-top: 6px;">{{ depositFigure }}</div>
+                  <p style="font-size: 14px; line-height: 1.5; color: #44403a; margin: 8px 0 0; text-wrap: pretty;">{{ depositLine }}</p>
+                </div>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                <label style="font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #8a857a;">Datat e zëna · korrik 2026</label>
+                <div style="border: 1px solid #e2dfd5; padding: 16px;">
+                  <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px;">
+                    <sc-for list="{{ weekdays }}" as="w" hint-placeholder-count="7">
+                      <div style="font-family: var(--font-mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: #8a857a; text-align: center; padding-bottom: 4px;">{{ w }}</div>
+                    </sc-for>
+                    <sc-for list="{{ days }}" as="d" hint-placeholder-count="35">
+                      <button type="button" onClick="{{ d.onClick }}" disabled="{{ d.blank }}" style="aspect-ratio: 1 / 1; cursor: {{ d.cursor }}; border: 1px solid {{ d.border }}; background: {{ d.bg }}; color: {{ d.fg }}; font-family: var(--font-mono); font-size: 13px; font-variant-numeric: tabular-nums; text-decoration: {{ d.strike }}; border-radius: 6px; padding: 0;">{{ d.label }}</button>
+                    </sc-for>
+                  </div>
+                  <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 14px; border-top: 1px solid #e2dfd5; padding-top: 12px;">
+                    <span style="display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #4e7d3f;"><span style="width: 9px; height: 9px; border: 1px solid #4e7d3f;"></span>E lirë</span>
+                    <span style="display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #c0392b;"><span style="width: 9px; height: 9px; background: #c0392b;"></span>E zënë</span>
+                    <span style="font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #8a857a;">{{ blockedSummary }}</span>
+                  </div>
+                </div>
+                <span style="font-size: 13px; line-height: 1.45; color: #8a857a;">Prek datat kur veshja nuk mund të merret. Të tjerat shfaqen si të lira në kërkim.</span>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ── review ── -->
+        <sc-if value="{{ isReview }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="08 Review" style="max-width: 640px;">
+            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: #8a857a;">{{ pathLabel }}</div>
+            <h1 style="font-family: 'Clash Display', ui-sans-serif, system-ui, sans-serif; font-weight: 600; font-size: 32px; line-height: 1.08; letter-spacing: -0.022em; margin: 11px 0 0;">Kontrolli i fundit</h1>
+            <p style="font-size: 17px; line-height: 1.55; color: #44403a; margin: 12px 0 0;">Kjo është ajo që shihet publikisht. Çdo rresht mund të ndryshohet edhe pas publikimit.</p>
+
+            <div style="border: 1px solid #e2dfd5; margin-top: 24px;">
+              <sc-for list="{{ reviewRows }}" as="r" hint-placeholder-count="7">
+                <div style="display: grid; grid-template-columns: {{ reviewCols }}; border-bottom: 1px solid #e2dfd5;">
+                  <div style="padding: 13px 16px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #8a857a; background: #f2efe6;">{{ r.k }}</div>
+                  <div style="padding: 13px 16px; font-size: 16px; line-height: 1.45; font-family: {{ r.ff }}; font-variant-numeric: tabular-nums;">{{ r.v }}</div>
+                </div>
+              </sc-for>
+              <label style="display: flex; gap: 12px; align-items: flex-start; padding: 16px; cursor: pointer;">
+                <input type="checkbox" checked="{{ terms }}" onChange="{{ onTerms }}" style="width: 20px; height: 20px; margin: 1px 0 0; accent-color: #f2b01e; flex: none; cursor: pointer;">
+                <span style="font-size: 15px; line-height: 1.5; color: #44403a;"><strong style="color: #141414; font-weight: 600;">Si në foto.</strong> {{ termsLine }}</span>
+              </label>
+            </div>
+            <span style="display: block; font-size: 13px; line-height: 1.45; color: {{ termsHintFg }}; margin-top: 8px;">{{ termsHint }}</span>
+          </div>
+        </sc-if>
+
+        <!-- ── done ── -->
+        <sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+          <div data-screen-label="09 Done" style="max-width: 660px;">
+            <div style="display: inline-flex; align-items: center; gap: 8px; border: 1px solid {{ doneBadgeBorder }}; background: {{ doneBadgeBg }}; color: {{ doneBadgeFg }}; padding: 8px 14px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase;">{{ doneBadge }}</div>
+            <h1 style="font-family: 'Clash Display', ui-sans-serif, system-ui, sans-serif; font-weight: 600; font-size: 40px; line-height: 1.05; letter-spacing: -0.026em; margin: 18px 0 0; max-width: 24ch; text-wrap: balance;">{{ doneTitle }}</h1>
+            <p style="font-size: 18px; line-height: 1.55; color: #44403a; max-width: 58ch; margin: 14px 0 0; text-wrap: pretty;">{{ doneLede }}</p>
+
+            <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 28px; align-items: flex-start;">
+              <div style="width: 250px; border: 1px solid #e2dfd5; background: #f2efe6; padding: 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                    <svg width="13" height="15" viewBox="0 0 40 44" aria-hidden="true"><path d="M20 13.5V9.6a3.1 3.1 0 1 1 3.1-3.1" fill="none" stroke="#141414" stroke-width="3.6" stroke-linecap="round"></path><circle cx="20" cy="26.5" r="13" fill="none" stroke="#141414" stroke-width="3.6"></circle></svg>
+                    <span style="font-family: 'Clash Display', ui-sans-serif, system-ui, sans-serif; font-weight: 600; font-size: 10px; letter-spacing: .22em; text-transform: uppercase;">Vesha</span>
+                  </div>
+                  <span style="font-family: var(--font-mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: #8a857a;">{{ cardMeta }}</span>
+                </div>
+                <div style="height: 150px; background: #e2dfd5; margin: 12px 0; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 10px;">
+                  <span style="font-family: var(--font-mono); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: #8a857a;">Foto 1 nga {{ photoCount }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 10px;">
+                  <div style="font-family: 'Clash Display', ui-sans-serif, system-ui, sans-serif; font-weight: 600; font-size: 17px; letter-spacing: -0.02em; line-height: 1.1;">{{ cardTitle }}</div>
+                  <div style="font-family: var(--font-mono); font-size: 15px; font-variant-numeric: tabular-nums; background: var(--accent, #f2b01e); padding: 4px 8px; white-space: nowrap;">{{ cardPrice }}</div>
+                </div>
+              </div>
+
+              <div style="flex: 1; min-width: 240px; display: flex; flex-direction: column; gap: 12px;">
+                <sc-for list="{{ nextSteps }}" as="n" hint-placeholder-count="3">
+                  <div style="display: flex; gap: 11px; align-items: baseline; border-bottom: 1px solid #e2dfd5; padding-bottom: 11px;">
+                    <span style="font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; color: #8a857a; flex: none;">{{ n.num }}</span>
+                    <span style="font-size: 15px; line-height: 1.45; color: #44403a;">{{ n.text }}</span>
+                  </div>
+                </sc-for>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px;">
+                  <button type="button" onClick="{{ addAnother }}" style="cursor: pointer; border: 1px solid transparent; border-radius: 999px; padding: 13px 22px; font-size: 15px; font-weight: 600; background: var(--accent, #f2b01e); color: #141414;" style-hover="transform: translateY(-1px);">Shto veshje tjetër</button>
+                  <button type="button" onClick="{{ restart }}" style="cursor: pointer; border: 1px solid #cfcabb; border-radius: 999px; padding: 13px 22px; font-size: 15px; font-weight: 600; background: transparent; color: #141414;" style-hover="border-color: #141414;">Fillo nga fillimi</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ── footer nav ── -->
+        <sc-if value="{{ showNav }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 34px; border-top: 1px solid #e2dfd5; padding-top: 20px; flex-wrap: wrap;">
+            <button type="button" onClick="{{ back }}" style="cursor: pointer; border: 0; background: transparent; padding: 12px 4px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #8a857a;" style-hover="color: #141414;">← Prapa</button>
+            <button type="button" onClick="{{ next }}" style="cursor: pointer; border: 1px solid transparent; border-radius: 999px; padding: 14px 26px; font-size: 16px; font-weight: 600; background: var(--accent, #f2b01e); color: #141414;" style-hover="transform: translateY(-1px);">{{ nextLabel }}</button>
+          </div>
+        </sc-if>
+
+      </main>
+    </div>
+  </div>
+
+  <div style="width: {{ frameW }}; max-width: 100%; display: flex; justify-content: space-between; gap: 14px; margin-top: 12px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #8a857a; flex-wrap: wrap;">
+    <span>Vesha · onboarding i ofruesit</span>
+    <span>{{ pathFooter }}</span>
+  </div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#f2b01e&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#f2b01e&quot;,&quot;#141414&quot;,&quot;#4e7d3f&quot;],&quot;section&quot;:&quot;Marka&quot;},&quot;requireIdCheck&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Rrjedha&quot;},&quot;photoMin&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:3,&quot;min&quot;:1,&quot;max&quot;:6,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Rrjedha&quot;}}">
+class Component extends DCLogic {
+  cityList = ['Prishtinë', 'Prizren', 'Pejë', 'Gjakovë', 'Gjilan', 'Mitrovicë', 'Ferizaj', 'Vushtrri', 'Podujevë', 'Suharekë', 'Rahovec', 'Lipjan', 'Fushë Kosovë', 'Tjetër'];
+  cats = ['Mbrëmje', 'Nusërie', 'Fejesë', 'Kostum burrash', 'Tradicionale'];
+  sizes = ['34', '36', '38', '40', '42', '44', '46', 'Me masë'];
+  photoNames = ['Përpara', 'Anash', 'Detaji', 'Shtesë', 'Shtesë', 'Shtesë'];
+  weekdays = ['Hën', 'Mar', 'Mër', 'Enj', 'Pre', 'Sht', 'Die'];
+
+  state = {
+    device: 'desktop', path: null, step: 'fork',
+    phone: '', code: '', name: '', city: '',
+    salonName: '', address: '', wa: '',
+    hours: { wdOpen: '09:00', wdClose: '20:00', satOpen: '09:00', satClose: '18:00', sunClosed: true },
+    idFront: false, idSelfie: false,
+    photos: [false, false, false, false, false, false],
+    cat: null, size: [], desc: '', ref: '',
+    price: '', blocked: [], terms: false,
+    errors: {}, resendIn: 0, submitting: false
+  };
+
+  componentWillUnmount() { clearInterval(this.timer); }
+
+  get reqId() { return !!(this.props.requireIdCheck ?? false); }
+  get photoMin() { return Math.max(1, Math.min(6, this.props.photoMin ?? 3)); }
+  get isSalonPath() { return this.state.path === 'salon'; }
+
+  get steps() {
+    const s = ['fork', 'phone', 'code'];
+    s.push(this.isSalonPath ? 'salon' : 'profile');
+    if (!this.isSalonPath && this.reqId) s.push('id');
+    s.push('dress', 'price', 'review', 'done');
+    return s;
+  }
+
+  digits(v) { return String(v || '').replace(/\D/g, ''); }
+  phoneOk(v) { return /^(383)?0?4[3-9]\d{6}$/.test(this.digits(v)); }
+  get priceNum() { return parseInt(this.digits(this.state.price), 10) || 0; }
+  get hold() { return this.priceNum ? Math.max(30, Math.ceil(this.priceNum * 1.2 / 5) * 5) : 0; }
+  get upfront() { return this.priceNum ? Math.round(this.priceNum * 0.3) : 0; }
+  get photoCount() { return this.state.photos.filter(Boolean).length; }
+
+  set(k) { return e => this.setState({ [k]: e.target.value, errors: { ...this.state.errors, [k]: null } }); }
+  setHour(k) { return e => this.setState({ hours: { ...this.state.hours, [k]: e.target.value }, errors: { ...this.state.errors, hours: null } }); }
+
+  validate() {
+    const s = this.state, e = {};
+    if (s.step === 'phone' && !this.phoneOk(s.phone)) e.phone = 'Shkruaj numrin si 044 123 456.';
+    if (s.step === 'code' && this.digits(s.code).length !== 6) e.code = 'Kodi ka gjashtë numra.';
+    if (s.step === 'profile') {
+      if (s.name.trim().split(/\s+/).filter(Boolean).length < 2) e.name = 'Shkruaj emrin dhe mbiemrin.';
+      if (!s.city) e.city = 'Zgjidh qytetin.';
+    }
+    if (s.step === 'id' && !(s.idFront && s.idSelfie)) e.id = 'Shto foton e dokumentit dhe një selfie.';
+    if (s.step === 'salon') {
+      if (s.salonName.trim().length < 3) e.salonName = 'Shkruaj emrin si në tabelë.';
+      if (s.address.trim().length < 4) e.address = 'Shkruaj rrugën dhe numrin.';
+      if (!s.city) e.city = 'Zgjidh qytetin.';
+      if (!this.phoneOk(s.wa)) e.wa = 'Shkruaj numrin e WhatsApp si 044 123 456.';
+      if (s.hours.wdClose <= s.hours.wdOpen || s.hours.satClose <= s.hours.satOpen) e.hours = 'Ora e mbylljes duhet të jetë pas orës së hapjes.';
+    }
+    if (s.step === 'dress') {
+      if (this.photoCount < this.photoMin) e.photos = 'Duhen së paku ' + this.photoMin + ' foto: përpara, anash, detaji.';
+      if (!s.cat) e.cat = 'Zgjidh një kategori.';
+      if (!s.size.length) e.size = 'Zgjidh së paku një madhësi.';
+    }
+    if (s.step === 'price' && (this.priceNum < 5 || this.priceNum > 2000)) e.price = 'Shkruaj qeranë në euro, vetëm numra — nga 5 deri 2000.';
+    if (s.step === 'review' && !s.terms) e.terms = 'Konfirmo garancinë para publikimit.';
+    if (Object.keys(e).length) { this.setState({ errors: e }); return false; }
+    return true;
+  }
+
+  startTimer() {
+    clearInterval(this.timer);
+    this.setState({ resendIn: 30 });
+    this.timer = setInterval(() => {
+      const n = this.state.resendIn - 1;
+      if (n <= 0) clearInterval(this.timer);
+      this.setState({ resendIn: Math.max(0, n) });
+    }, 1000);
+  }
+
+  go(step) { this.setState({ step, errors: {} }); }
+
+  next = () => {
+    if (!this.validate()) return;
+    const s = this.state, i = this.steps.indexOf(s.step);
+    if (s.step === 'phone') this.startTimer();
+    if (s.step === 'review') {
+      this.setState({ submitting: true });
+      setTimeout(() => this.setState({ step: 'done', submitting: false, errors: {} }), 700);
+      return;
+    }
+    this.go(this.steps[Math.min(i + 1, this.steps.length - 1)]);
+  };
+
+  back = () => {
+    const i = this.steps.indexOf(this.state.step);
+    if (this.state.step === 'phone') { this.setState({ path: null, step: 'fork', errors: {} }); return; }
+    this.go(this.steps[Math.max(0, i - 1)]);
+  };
+
+  renderVals() {
+    const s = this.state, e = s.errors, salon = this.isSalonPath;
+    const phone = s.device === 'phone';
+    const step = s.step;
+    const idx = this.steps.indexOf(step);
+    const hint = (key, fallback) => e[key] || fallback;
+    const hintFg = key => (e[key] ? '#c0392b' : '#8a857a');
+    const border = key => (e[key] ? '#c0392b' : '#e2dfd5');
+
+    const railDef = [
+      { keys: ['phone', 'code'], label: 'Numri i telefonit' },
+      salon ? { keys: ['salon'], label: 'Salloni dhe orari' } : { keys: ['profile'], label: 'Profili' },
+      ...(!salon && this.reqId ? [{ keys: ['id'], label: 'Identiteti' }] : []),
+      { keys: ['dress'], label: 'Veshja e parë' },
+      { keys: ['price'], label: 'Çmimi dhe datat' },
+      { keys: ['review'], label: 'Publikimi' }
+    ];
+    const activeRail = railDef.findIndex(r => r.keys.includes(step));
+    const railItems = railDef.map((r, i) => {
+      const done = step === 'done' || (activeRail > -1 && i < activeRail);
+      const now = i === activeRail;
+      return {
+        num: done ? '✓' : String(i + 1).padStart(2, '0'),
+        label: r.label,
+        dotBg: done ? '#141414' : now ? 'var(--accent, #f2b01e)' : 'transparent',
+        dotBorder: done ? '#141414' : now ? 'var(--accent, #f2b01e)' : '#cfcabb',
+        dotFg: done ? '#fafaf7' : now ? '#141414' : '#8a857a',
+        fg: now ? '#141414' : done ? '#44403a' : '#8a857a'
+      };
+    });
+
+    const total = railDef.length;
+    const shown = activeRail > -1 ? activeRail + 1 : step === 'done' ? total : 0;
+
+    const photoSlots = s.photos.slice(0, Math.max(4, this.photoMin + 1)).map((filled, i) => ({
+      label: filled ? this.photoNames[i] : i < this.photoMin ? this.photoNames[i] : '+ Shto',
+      mark: filled ? '✓' : '+',
+      filled,
+      borderStyle: filled ? 'solid' : 'dashed',
+      border: filled ? '#141414' : e.photos ? '#c0392b' : '#cfcabb',
+      bg: filled ? '#e2dfd5' : '#f2efe6',
+      fg: filled ? '#141414' : '#8a857a',
+      onClick: () => {
+        const p = [...s.photos]; p[i] = !p[i];
+        this.setState({ photos: p, errors: { ...e, photos: null } });
+      }
+    }));
+
+    const idSlots = [
+      { key: 'idFront', label: 'Dokumenti', on: s.idFront },
+      { key: 'idSelfie', label: 'Selfie', on: s.idSelfie }
+    ].map(it => ({
+      label: it.label,
+      mark: it.on ? '✓' : '+',
+      borderStyle: it.on ? 'solid' : 'dashed',
+      border: it.on ? '#141414' : e.id ? '#c0392b' : '#cfcabb',
+      bg: it.on ? '#e2dfd5' : '#f2efe6',
+      fg: it.on ? '#141414' : '#8a857a',
+      onClick: () => this.setState({ [it.key]: !it.on, errors: { ...e, id: null } })
+    }));
+
+    const catChips = this.cats.map(c => {
+      const on = s.cat === c;
+      return {
+        label: c, bg: on ? '#141414' : 'transparent', fg: on ? '#fafaf7' : '#44403a',
+        border: on ? '#141414' : e.cat ? '#c0392b' : '#cfcabb',
+        onClick: () => this.setState({ cat: c, errors: { ...e, cat: null } })
+      };
+    });
+
+    const sizeChips = this.sizes.map(z => {
+      const on = s.size.includes(z);
+      return {
+        label: z, bg: on ? 'var(--accent, #f2b01e)' : 'transparent', fg: '#141414',
+        border: on ? 'var(--accent, #f2b01e)' : e.size ? '#c0392b' : '#cfcabb',
+        onClick: () => this.setState({
+          size: on ? s.size.filter(x => x !== z) : [...s.size, z],
+          errors: { ...e, size: null }
+        })
+      };
+    });
+
+    const days = [];
+    for (let i = 0; i < 2; i++) days.push({ label: '', blank: true, cursor: 'default', border: 'transparent', bg: 'transparent', fg: '#8a857a', strike: 'none', onClick: () => {} });
+    for (let d = 1; d <= 31; d++) {
+      const on = s.blocked.includes(d);
+      days.push({
+        label: String(d), blank: false, cursor: 'pointer',
+        border: on ? '#c0392b' : '#e2dfd5',
+        bg: on ? '#c0392b' : '#fafaf7',
+        fg: on ? '#fafaf7' : '#44403a',
+        strike: 'none',
+        onClick: () => this.setState({ blocked: on ? s.blocked.filter(x => x !== d) : [...s.blocked, d] })
+      });
+    }
+    const bl = [...s.blocked].sort((a, b) => a - b);
+    const blockedSummary = bl.length ? bl.join(', ') + ' korrik të zëna' : 'Asnjë datë e zënë';
+
+    const depositFigure = salon
+      ? (this.priceNum ? this.upfront + ' € tani online' : '30% tani online')
+      : (this.priceNum ? this.hold + ' € e kthyeshme' : 'E kthyeshme');
+    const depositLine = salon
+      ? 'Tridhjetë përqind tani online, pjesa tjetër në sallon. Nuk kthehet, por e zhvendos në çdo fustan tjetër të sallonit.'
+      : 'Kaparë e kthyeshme. Kthehet 48 orë pasi konfirmon që veshja u kthye.';
+
+    const reviewRows = [
+      { k: salon ? 'Salloni' : 'Pronarja', v: salon ? (s.salonName || '—') : (s.name || '—'), ff: 'inherit' },
+      ...(salon ? [{ k: 'Adresa', v: (s.address || '—') + ', ' + (s.city || '—'), ff: 'inherit' }] : [{ k: 'Qyteti', v: s.city || '—', ff: 'inherit' }]),
+      ...(salon ? [{ k: 'Orari', v: 'Hën–Pre ' + s.hours.wdOpen + '–' + s.hours.wdClose + ' · Sht ' + s.hours.satOpen + '–' + s.hours.satClose + (s.hours.sunClosed ? ' · Die mbyllur' : ' · Die hapur'), ff: 'var(--font-mono)' }] : []),
+      ...(salon ? [{ k: 'WhatsApp', v: s.wa || '—', ff: 'var(--font-mono)' }] : [{ k: 'Telefoni', v: (s.phone || '—') + ' · i verifikuar', ff: 'var(--font-mono)' }]),
+      { k: 'Veshja', v: (s.cat || '—') + ' · ' + (s.size.join(', ') || '—') + (salon && s.ref ? ' · ' + s.ref : ''), ff: 'inherit' },
+      { k: 'Fotot', v: this.photoCount + ' foto', ff: 'var(--font-mono)' },
+      { k: 'Qera', v: (this.priceNum || '—') + ' € / 3 ditë', ff: 'var(--font-mono)' },
+      { k: 'Kaparja', v: depositFigure, ff: 'var(--font-mono)' },
+      { k: 'Datat', v: blockedSummary, ff: 'var(--font-mono)' }
+    ];
+
+    const nextSteps = salon
+      ? [{ num: '01', text: 'Verifikimi i sallonit kryhet brenda 48 orëve; deri atje listimi është live pa shenjën.' },
+         { num: '02', text: 'Rezervimet vijnë në WhatsApp ' + (s.wa || 'të sallonit') + ' dhe në panel.' },
+         { num: '03', text: 'Shto pjesën tjetër të inventarit — kodi i brendshëm i mban raftet të pastra.' }]
+      : [{ num: '01', text: 'Kërkesat vijnë me datë të saktë; pranon ose refuzon pa shpjegim.' },
+         { num: '02', text: 'Kaparja mbahet nga Vesha derisa ta konfirmon kthimin e veshjes.' },
+         { num: '03', text: 'Bëj foto para dhe pas dorëzimit — është e vetmja provë që numëron.' }];
+
+    return {
+      accent: this.props.accent ?? '#f2b01e',
+      frameW: phone ? '430px' : '1140px',
+      cols: (phone || step === 'fork' || step === 'done') ? '1fr' : '292px 1fr',
+      mainPad: phone ? '24px 20px 30px' : '34px 40px 40px',
+      forkCols: phone ? '1fr' : '1fr 1fr',
+      twoCols: phone ? '1fr' : '1fr 1fr',
+      descCols: phone || !salon ? '1fr' : '1.6fr 1fr',
+      reviewCols: phone ? '120px 1fr' : '150px 1fr',
+      showRail: !phone && step !== 'fork' && step !== 'done',
+      showBar: phone && step !== 'fork',
+      progress: Math.round((shown / total) * 100) + '%',
+      stepCounter: step === 'fork' ? 'Hapi 0 / ' + total : step === 'done' ? 'Publikuar' : 'Hapi ' + shown + ' / ' + total,
+      deskBg: phone ? 'transparent' : '#141414', deskFg: phone ? '#8a857a' : '#fafaf7',
+      phoneBg: phone ? '#141414' : 'transparent', phoneFg: phone ? '#fafaf7' : '#8a857a',
+      setDesktop: () => this.setState({ device: 'desktop' }),
+      setPhone: () => this.setState({ device: 'phone' }),
+
+      isFork: step === 'fork', isPhone: step === 'phone', isCode: step === 'code',
+      isProfile: step === 'profile', isId: step === 'id', isSalon: step === 'salon',
+      isDress: step === 'dress', isPrice: step === 'price', isReview: step === 'review', isDone: step === 'done',
+      isSalonPath: salon,
+      showNav: step !== 'fork' && step !== 'done',
+      nextLabel: s.submitting ? 'Po publikohet…'
+        : step === 'phone' ? 'Dërgo kodin'
+        : step === 'code' ? 'Verifiko numrin'
+        : step === 'review' ? 'Publiko veshjen'
+        : step === 'price' ? 'Shiko përmbledhjen'
+        : 'Vazhdo',
+      next: this.next, back: this.back,
+      pickIndividual: () => this.setState({ path: 'individual', step: 'phone', errors: {} }),
+      pickSalon: () => this.setState({ path: 'salon', step: 'phone', errors: {} }),
+      pathLabel: salon ? 'Sallon ose biznes' : 'Veshjet e mia',
+      pathFooter: salon ? 'Rruga: sallon · kaparë 30% online' : 'Rruga: individ · kaparë e kthyeshme',
+
+      railItems, railNoteLabel: salon ? 'Kaparja në sallon' : 'Kaparja mes personave',
+      railNote: depositLine,
+
+      phone: s.phone, onPhone: this.set('phone'),
+      phoneBorder: border('phone'), phoneHintFg: hintFg('phone'),
+      phoneHint: hint('phone', 'Nuk shfaqet publikisht. Shërben për kodin dhe për rezervimet.'),
+      phoneLede: salon
+        ? 'Numri i pronarit të sallonit. WhatsApp-in e sallonit e shtojmë veçmas në hapin tjetër.'
+        : 'Verifikimi me numër është i vetmi që kërkohet për të listuar një veshje.',
+
+      code: s.code, onCode: this.set('code'),
+      codeBorder: border('code'), codeHintFg: hintFg('code'),
+      codeHint: hint('code', 'Për demo: shkruaj gjashtë numra çfarëdo.'),
+      codeSentLine: 'Kodi u dërgua në ' + (s.phone || 'numrin tënd') + '.',
+      resend: () => { if (!s.resendIn) this.startTimer(); },
+      resendLabel: s.resendIn ? 'Dërgo prapë pas ' + s.resendIn + 's' : 'Dërgo kodin prapë',
+      resendFg: s.resendIn ? '#8a857a' : '#141414',
+      editPhone: () => this.go('phone'),
+
+      name: s.name, onName: this.set('name'), nameBorder: border('name'), nameHintFg: hintFg('name'),
+      nameHint: hint('name', 'Shfaqet si emri i pronares në listim.'),
+      city: s.city, onCity: this.set('city'), cityBorder: border('city'), cityHintFg: hintFg('city'),
+      cityHint: hint('city', 'Kërkimi filtrohet me qytetin.'), cityList: this.cityList,
+
+      idSlots, idHintFg: hintFg('id'), idHint: hint('id', 'Ruhet i kriptuar, fshihet pas 12 muajsh.'),
+
+      salonName: s.salonName, onSalonName: this.set('salonName'),
+      salonBorder: border('salonName'), salonHintFg: hintFg('salonName'),
+      salonHint: hint('salonName', 'Emri që shkruhet në tabelë dhe në fatura.'),
+      address: s.address, onAddress: this.set('address'),
+      addrBorder: border('address'), addrHintFg: hintFg('address'),
+      addrHint: hint('address', 'Shfaqet vetëm pasi kaparja paguhet.'),
+      wa: s.wa, onWa: this.set('wa'), waBorder: border('wa'), waHintFg: hintFg('wa'),
+      waHint: hint('wa', 'Butoni «Shkruaj në WhatsApp» hapet drejt këtij numri.'),
+      hours: s.hours,
+      onWdOpen: this.setHour('wdOpen'), onWdClose: this.setHour('wdClose'),
+      onSatOpen: this.setHour('satOpen'), onSatClose: this.setHour('satClose'),
+      sunOpenSet: () => this.setState({ hours: { ...s.hours, sunClosed: false } }),
+      sunClosedSet: () => this.setState({ hours: { ...s.hours, sunClosed: true } }),
+      sunOpenBg: s.hours.sunClosed ? 'transparent' : 'var(--accent, #f2b01e)',
+      sunOpenFg: s.hours.sunClosed ? '#44403a' : '#141414',
+      sunClosedBg: s.hours.sunClosed ? '#141414' : 'transparent',
+      sunClosedFg: s.hours.sunClosed ? '#fafaf7' : '#44403a',
+      hoursHintFg: hintFg('hours'),
+      hoursHint: hint('hours', 'Provat pranohen brenda orarit; datat e zëna caktohen për çdo veshje.'),
+
+      dressLede: salon
+        ? 'Një copë tani, pjesa tjetër me shumicë nga paneli. Fotot e sallonit duhet të tregojnë veshjen që dorëzohet, jo katalogun e prodhuesit.'
+        : 'Tri foto e mbyllin punën: përpara, anash, dhe një detaj i qëndisjes ose i pëlhurës.',
+      photoSlots, photoHintFg: hintFg('photos'),
+      photoHint: hint('photos', 'Së paku ' + this.photoMin + ' foto. Dritë dite, pa filtra — garancia «si në foto» matet me këto.'),
+      catChips, catHintFg: hintFg('cat'), catHint: hint('cat', 'Një kategori për listim.'),
+      sizeChips, sizeHintFg: hintFg('size'),
+      sizeLabel: salon ? 'Madhësitë në stok' : 'Madhësia',
+      sizeHint: hint('size', salon ? 'Zgjidh çdo madhësi që salloni e ka fizikisht.' : 'Nëse është ndryshuar nga rrobaqepësi, zgjidh madhësinë e tanishme.'),
+      desc: s.desc, onDesc: this.set('desc'), ref: s.ref, onRef: this.set('ref'),
+
+      price: s.price, onPrice: this.set('price'), priceBorder: border('price'), priceHintFg: hintFg('price'),
+      priceHint: hint('price', 'Çmimi për tri ditë, dorëzim dhe kthim brenda. Pastrimi përfshihet.'),
+      depositFigure, depositLine,
+      weekdays: this.weekdays, days, blockedSummary,
+
+      reviewRows, terms: s.terms,
+      onTerms: ev => this.setState({ terms: ev.target.checked, errors: { ...e, terms: null } }),
+      termsLine: salon
+        ? 'Veshja dorëzohet si në foto dhe në masën e shkruar. Nëse nuk është, Vesha kthen kaparen e klientit dhe e mban nga salloni.'
+        : 'Veshja dorëzohet si në foto dhe në masën e shkruar. Nëse nuk është, Vesha kthen kaparen e qiramarrësit.',
+      termsHintFg: hintFg('terms'), termsHint: hint('terms', 'Ky rresht shfaqet edhe në faqen e listimit.'),
+
+      doneBadge: salon ? 'Verifikimi i sallonit · në shqyrtim 48h' : 'Numri i verifikuar',
+      doneBadgeBg: salon ? '#fce7b3' : 'transparent',
+      doneBadgeBorder: salon ? '#e2dfd5' : '#4e7d3f',
+      doneBadgeFg: salon ? '#141414' : '#4e7d3f',
+      doneTitle: salon ? 'Listimi i sallonit është live.' : 'Veshja është live.',
+      doneLede: salon
+        ? 'Shfaqet në kërkim për datat e lira. Shenja «Sallon i verifikuar» shtohet pasi kontrollohet adresa.'
+        : 'Shfaqet në kërkim për datat e lira. Kërkesat vijnë me datë të saktë dhe me kaparen e mbajtur.',
+      cardMeta: (s.ref || 'Nr. 38') + ' · ' + (s.city || 'Prishtinë'),
+      cardTitle: s.cat ? 'Fustan ' + s.cat.toLowerCase() : 'Fustan mbrëmjeje',
+      cardPrice: (this.priceNum || 55) + ' €',
+      photoCount: this.photoCount || 3,
+      nextSteps,
+      addAnother: () => this.setState({ step: 'dress', photos: [false, false, false, false, false, false], cat: null, size: [], desc: '', ref: '', price: '', blocked: [], terms: false, errors: {} }),
+      restart: () => this.setState({ step: 'fork', path: null, phone: '', code: '', name: '', city: '', salonName: '', address: '', wa: '', photos: [false, false, false, false, false, false], cat: null, size: [], desc: '', ref: '', price: '', blocked: [], terms: false, idFront: false, idSelfie: false, errors: {} })
+    };
+  }
+}
+</script>
+</body>
+</html>
