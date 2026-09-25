@@ -16,15 +16,18 @@ from twirl.models.catalog import (
     ItemStatus,
     Occasion,
     Style,
+    StyleCategory,
     StyleImage,
 )
 from twirl.models.notifications import Channel, Notification, NotificationStatus
+from twirl.models.phone_codes import CodePurpose, PhoneCode
 from twirl.models.shops import (
     BookingMode,
     Shop,
     ShopClosure,
     ShopCustomer,
     ShopHours,
+    ShopKind,
     ShopRole,
     ShopStatus,
     ShopUser,
@@ -32,6 +35,10 @@ from twirl.models.shops import (
 from twirl.models.users import User, UserKind
 
 __all__ = [
+    "CodePurpose",
+    "PhoneCode",
+    "ShopKind",
+    "StyleCategory",
     "ACTIVE_STATUSES",
     "ActorKind",
     "Base",

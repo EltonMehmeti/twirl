@@ -32,6 +32,11 @@ class BookingMode(StrEnum):
     INSTANT = "instant"
 
 
+class ShopKind(StrEnum):
+    SALON = "salon"
+    INDIVIDUAL = "individual"
+
+
 class ShopRole(StrEnum):
     OWNER = "owner"
     STAFF = "staff"
@@ -46,6 +51,7 @@ class Shop(Timestamps, Base):
     __table_args__ = (
         check_in("status", ShopStatus),
         check_in("booking_mode", BookingMode),
+        check_in("kind", ShopKind),
         CheckConstraint("pickup_lead_days BETWEEN 0 AND 5", name="pickup_lead_days"),
         CheckConstraint("return_after_days BETWEEN 0 AND 3", name="return_after_days"),
         CheckConstraint("prep_days BETWEEN 0 AND 2", name="prep_days"),
@@ -74,6 +80,13 @@ class Shop(Timestamps, Base):
     status: Mapped[str] = mapped_column(
         String(16), default=ShopStatus.DRAFT.value, server_default=text("'draft'")
     )
+    kind: Mapped[str] = mapped_column(
+        String(16), default=ShopKind.SALON.value, server_default=text("'salon'")
+    )
+    verified_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    terms_accepted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    terms_version: Mapped[str | None] = mapped_column(String(20))
+    onboarding_completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
     hours: Mapped[list["ShopHours"]] = relationship(
         back_populates="shop", order_by="ShopHours.weekday", cascade="all, delete-orphan"

@@ -29,6 +29,14 @@ class Occasion(StrEnum):
     EVENING = "evening"
 
 
+class StyleCategory(StrEnum):
+    EVENING = "evening"
+    BRIDAL = "bridal"
+    ENGAGEMENT = "engagement"
+    MENS_SUIT = "mens_suit"
+    TRADITIONAL = "traditional"
+
+
 class ColourFamily(StrEnum):
     BLACK = "black"
     WHITE = "white"
@@ -62,6 +70,7 @@ class Style(Timestamps, Base):
     __table_args__ = (
         UniqueConstraint("shop_id", "code"),
         CheckConstraint("price_cents >= 0", name="price"),
+        check_in("category", StyleCategory),
     )
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -73,6 +82,8 @@ class Style(Timestamps, Base):
     occasion_tags: Mapped[list[str]] = mapped_column(
         ARRAY(String(20)), default=list, server_default=text("'{}'")
     )
+    category: Mapped[str | None] = mapped_column(String(16))
+    internal_ref: Mapped[str | None] = mapped_column(String(20))
     colour_family: Mapped[str | None] = mapped_column(String(16))
     length: Mapped[str | None] = mapped_column(String(8))
     stretch: Mapped[bool] = mapped_column(Boolean, default=False, server_default=text("false"))

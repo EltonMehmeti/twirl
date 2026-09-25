@@ -25,3 +25,4 @@ class User(Timestamps, Base):
     password_hash: Mapped[str | None] = mapped_column(String(255))
     locale: Mapped[str] = mapped_column(String(5), default="sq", server_default=text("'sq'"))
     blocked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    phone_verified_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
