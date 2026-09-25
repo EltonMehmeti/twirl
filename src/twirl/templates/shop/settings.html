@@ -1,0 +1,55 @@
+{% extends "shop/base.html" %}
+{% block content %}
+{% macro field(name, label, type="text") %}
+<label>{{ _(label) }}
+  <input type="{{ type }}" name="{{ name }}" value="{{ values[name] }}">
+  {% if errors[name] %}<span class="error">{{ errors[name] }}</span>{% endif %}
+</label>
+{% endmacro %}
+<h1>{{ _("Shop settings") }}</h1>
+{% if saved %}<p role="status">{{ _("Saved.") }}</p>{% endif %}
+<form method="post" action="/shop/settings">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+  {{ field("name", "Shop name") }}
+  {{ field("city", "City") }}
+  {{ field("address", "Address") }}
+  {{ field("phone", "Phone", "tel") }}
+  {{ field("whatsapp", "WhatsApp number", "tel") }}
+  {{ field("viber", "Viber number", "tel") }}
+  {{ field("instagram", "Instagram handle") }}
+  <label>{{ _("Your terms (deposit, ID, late fee, damage)") }}
+    <textarea name="terms_text" rows="4">{{ values.terms_text }}</textarea></label>
+  <fieldset><legend>{{ _("Rental rules") }}</legend>
+    {{ field("pickup_lead_days", "Pickup: days before the event", "number") }}
+    {{ field("return_after_days", "Return: days after the event", "number") }}
+    {{ field("prep_days", "Preparation days before pickup", "number") }}
+    {{ field("cleaning_days", "Cleaning days after return", "number") }}
+    {{ field("max_rental_days", "Longest rental in days", "number") }}
+  </fieldset>
+  <fieldset><legend>{{ _("Closed every week on") }}</legend>
+    {% for number, day in weekdays %}
+    <label class="inline"><input type="checkbox" name="closed_weekdays" value="{{ number }}"
+      {% if number in values.closed_weekdays %}checked{% endif %}> {{ _(day) }}</label>
+    {% endfor %}
+  </fieldset>
+  <button>{{ _("Save") }}</button>
+</form>
+
+<h2>{{ _("Closures") }}</h2>
+{% if errors.get('ends_on') or errors.get('__all__') %}<p class="error">{{ _("The end date must be on or after the start date.") }}</p>{% endif %}
+<ul>
+{% for closure in closures %}
+  <li>{{ closure.starts_on|date }} – {{ closure.ends_on|date }} {{ closure.reason }}
+    <form method="post" action="/shop/settings/closures/{{ closure.id }}/delete" class="inline">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+      <button>{{ _("Remove") }}</button></form></li>
+{% endfor %}
+</ul>
+<form method="post" action="/shop/settings/closures">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+  <label>{{ _("From") }} <input type="date" name="starts_on" required></label>
+  <label>{{ _("To") }} <input type="date" name="ends_on" required></label>
+  <label>{{ _("Reason") }} <input name="reason" maxlength="200"></label>
+  <button>{{ _("Add closure") }}</button>
+</form>
+{% endblock %}
