@@ -11,6 +11,13 @@ def test_admin_requires_login(client):
     assert "/admin/login" in response.headers["location"]
 
 
+def test_admin_without_trailing_slash_opens_the_console(client):
+    # Without its own route, "/admin" falls through to the storefront's /{slug} and 404s.
+    response = client.get("/admin", follow_redirects=False)
+    assert response.status_code in (302, 303, 307)
+    assert response.headers["location"].endswith("/admin/")
+
+
 def test_admin_login_and_lists(committed, settings):
     with sessionmaker(committed)() as session:
         cmd_create_admin(session, email="me@twirl.test", name="Me", password="pw-123456")

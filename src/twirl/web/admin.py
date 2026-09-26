@@ -4,6 +4,7 @@ from sqladmin.authentication import AuthenticationBackend
 from sqlalchemy import select
 from starlette.concurrency import run_in_threadpool
 from starlette.requests import Request
+from starlette.responses import RedirectResponse
 
 from twirl.auth.passwords import verify_password
 from twirl.config import Settings
@@ -195,4 +196,10 @@ def mount_admin(app: FastAPI, db: Database, settings: Settings) -> Admin:
         NotificationAdmin,
     ):
         admin.add_view(view)
+    # The console lives at "/admin/"; without this, "/admin" reaches the storefront's /{slug}.
+    app.add_api_route("/admin", _to_console, include_in_schema=False)
     return admin
+
+
+def _to_console() -> RedirectResponse:
+    return RedirectResponse("/admin/")
