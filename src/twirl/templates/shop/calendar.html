@@ -3,13 +3,13 @@
 <div class="v-pagehead">
   <div><div class="v-eyebrow">{{ days[0]|date }} – {{ days[-1]|date }}</div><h1>{{ _("Calendar") }}</h1></div>
   <div class="v-calnav">
-    <a class="v-action v-action--ghost" href="/shop/calendar?start={{ prev }}">← {{ _("Previous week") }}</a>
-    <a class="v-action v-action--ghost" href="/shop/calendar?start={{ next }}">{{ _("Next week") }} →</a>
+    <a class="v-action v-action--ghost" rel="prev" href="/shop/calendar?start={{ prev }}">← {{ _("Previous week") }}</a>
+    <a class="v-action v-action--ghost" rel="next" href="/shop/calendar?start={{ next }}">{{ _("Next week") }} →</a>
   </div>
 </div>
-<div class="v-table-wrap">
+<div class="v-table-frame"><div class="v-table-wrap">
 <table class="calendar">
-  <thead><tr><th>{{ _("Dress") }}</th>{% for day in days %}<th>{{ day|date }}</th>{% endfor %}</tr></thead>
+  <thead><tr><th>{{ _("Dress") }}</th>{% for day in days %}<th{% if day == today %} class="is-today"{% endif %}>{{ day|date }}</th>{% endfor %}</tr></thead>
   <tbody>
   {% for row in rows %}
     <tr>
@@ -25,6 +25,6 @@
   {% endfor %}
   </tbody>
 </table>
-</div>
+</div></div>
 <p class="v-row" style="margin-top:14px"><span class="v-pill v-pill--gold">{{ _("Confirmed") }}</span><span class="v-pill">{{ _("Waiting for your answer") }}</span><span class="v-pill v-pill--ink">{{ _("Picked up") }}</span><span class="v-pill">▨ {{ _("Block") }}</span></p>
 {% endblock %}

@@ -254,6 +254,19 @@ def walk_in_form(
     return _walk_in_page(request, db, ctx, values)
 
 
+@router.get("/walk-in/item", response_class=HTMLResponse)
+def walk_in_item(
+    request: Request,
+    code: str = "",
+    ctx: ShopContext = Depends(require_shop),
+    db: Session = Depends(get_db),
+):
+    """The dress behind a code, shown under the field while the owner types it."""
+    code = code.strip().upper()
+    item = staff.find_item_by_code(db, ctx.shop.id, code) if len(code) == 4 else None
+    return render(request, "shop/_item_hit.html", {"item": item, "code": code})
+
+
 @router.post("/walk-in", dependencies=[Depends(verify_csrf)])
 def create_walk_in(
     request: Request,
@@ -362,6 +375,7 @@ def calendar(
             "ctx": ctx,
             "days": days,
             "rows": rows,
+            "today": clock.today(),
             "prev": (first - timedelta(days=7)).isoformat(),
             "next": (first + timedelta(days=7)).isoformat(),
         },

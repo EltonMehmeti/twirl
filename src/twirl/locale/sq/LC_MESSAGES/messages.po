@@ -1937,3 +1937,6 @@ msgstr "Kopjo linkun"
 
 msgid "Copied"
 msgstr "U kopjua"
+
+msgid "The size you picked is taken on this date. Choose another size or another date."
+msgstr "Masa që zgjodhe është e zënë në këtë datë. Zgjidh një masë tjetër ose një datë tjetër."

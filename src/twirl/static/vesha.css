@@ -809,3 +809,67 @@ html:active-view-transition-type(back)::view-transition-new(step) { animation-na
   .v-reason::details-content { transition: none; }
   .v-sheet, .v-sheet[open] { transform: none; }
 }
+
+/* ── Motion, round 2: the screens round 1 didn't touch ── */
+@keyframes v-fade-out { to { opacity: 0; } }
+
+/* R2·F1 · after Accept, Decline, Picked up…: only the status pill and the history move */
+::view-transition-group(booking-status), ::view-transition-group(booking-history) { animation-duration: var(--dur-base); animation-timing-function: var(--ease-out); }
+::view-transition-old(booking-status) { animation: v-fade-out var(--dur-short) var(--ease-exit) both; }
+::view-transition-new(booking-status) { animation: v-hint-in var(--dur-base) var(--ease-out) both; }
+
+/* R2·F2 · SMS code: six slots fill as you type; the sixth digit sends */
+.v-code__slots { display: flex; gap: 6px; width: min(100%, 240px); margin: 8px auto 0; }
+.v-code__slots span { flex: 1; height: 2px; background: var(--color-line-strong); overflow: hidden; }
+.v-code__slots span::after { content: ""; display: block; height: 100%; background: var(--color-ink); transform: scaleX(0); transform-origin: 0 50%; transition: transform var(--dur-short) var(--ease-out); }
+.v-code__slots span.is-filled::after { transform: scaleX(1); }
+.v-field--error .v-code__slots span.is-filled::after { background: var(--color-danger); }
+
+/* R2·F3 · the size you picked just got taken on the new date */
+.v-size-taken { display: none; }
+.v-container .v-book:has(#size-select option:checked:disabled) .v-size-taken { display: block; margin-top: -8px; }
+.v-app .v-book #size-select:has(option:checked:disabled) { border-color: var(--color-danger); }
+
+/* R2·G1 · calendar on a phone: the dress column stays, the edge says "more" */
+/* separate borders: a collapsed border leaves a 1px gap beside a sticky cell */
+.v-container table.calendar { border-collapse: separate; border-spacing: 0; }
+.calendar th:first-child, .calendar td:first-child { position: sticky; left: 0; z-index: 1; background: var(--color-paper); }
+.calendar thead th:first-child { background: var(--color-paper-2); }
+.calendar th:first-child::after { content: ""; position: absolute; top: 0; right: 0; bottom: 0; width: 1px; background: var(--color-line-strong); }
+.v-table-frame { position: relative; timeline-scope: --week; view-transition-name: week; }
+.v-table-frame .v-table-wrap { scroll-timeline: --week x; }
+.v-table-frame::after { content: ""; position: absolute; top: 1px; right: 0; bottom: 1px; width: 28px; pointer-events: none; border-right: 1px solid var(--color-line-strong); border-radius: 0 var(--radius-card) var(--radius-card) 0;
+  background: linear-gradient(90deg, transparent, color-mix(in oklch, var(--color-paper) 90%, transparent)); animation: v-fade-out linear both; animation-timeline: --week; }
+@supports not (animation-timeline: scroll()) { .v-table-frame::after { animation: none; } }
+@media (min-width: 960px) { .v-table-frame::after { display: none; } }
+::view-transition-old(week) { animation: v-step-out var(--dur-short) var(--ease-exit) both; }
+::view-transition-new(week) { animation: v-step-in var(--dur-base) var(--ease-out) both; }
+html:active-view-transition-type(back)::view-transition-old(week) { animation-name: v-step-out-back; }
+html:active-view-transition-type(back)::view-transition-new(week) { animation-name: v-step-in-back; }
+
+/* R2·N1 · each count on Today jumps to its lane; the lane head is underlined for a moment */
+html { scroll-behavior: smooth; }
+.v-app a.v-stat { display: block; color: inherit; text-decoration: none; transition: transform var(--dur-press) var(--ease-out), border-color var(--dur-short) var(--ease-out); }
+.v-app a.v-stat:hover { color: inherit; border-color: var(--color-ink); }
+.v-app a.v-stat:active { transform: scale(var(--press-lg)); transition-duration: 0ms; }
+.v-lane { scroll-margin-top: 76px; }
+.v-lane:focus { outline: none; }
+.v-lane__head { position: relative; }
+.v-lane:target .v-lane__head::after { content: ""; position: absolute; left: 16px; right: 16px; bottom: -1px; height: 2px; background: var(--accent); transform-origin: 0 50%;
+  animation: v-strike var(--dur-base) var(--ease-out) 120ms backwards, v-fade-out var(--dur-base) var(--ease-out) 1600ms forwards; }
+
+/* R2·L1 · Today refreshes itself: counts change in place, new rows rise with a wash */
+::view-transition-group(stat-pending), ::view-transition-group(stat-pickups), ::view-transition-group(stat-returns), ::view-transition-group(stat-late) { animation-duration: var(--dur-base); }
+.v-lane li.is-new > a { animation: v-hint-in var(--dur-base) var(--ease-out) backwards; }
+.v-lane li.is-new { animation: v-new-row 2000ms linear; }
+@keyframes v-new-row { 0%, 40% { background: var(--color-gold-wash); } 100% { background: transparent; } }
+
+/* R2·C1 · walk-in: the code resolves while you type it */
+#v-code-hit { min-height: 26px; margin: -12px 0 6px; transition: opacity var(--dur-short) var(--ease-out); }
+#v-code-hit.htmx-request { opacity: .45; }
+#v-code-hit .v-hit { margin: 0; white-space: normal; animation: v-hint-in var(--dur-short) var(--ease-out) backwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .v-lane:target .v-lane__head::after { animation: v-fade-out var(--dur-base) 1600ms forwards; }
+}

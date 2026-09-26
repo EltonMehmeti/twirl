@@ -11,19 +11,22 @@
   <a class="v-action" href="/listo/veshja">{{ _("Add your first item") }} →</a>
 </div>
 {% endif %}
-<div class="v-stats">
-  <div class="v-stat{% if board.pending %} v-stat--alert{% endif %}"><div class="v-stat__n">{{ board.pending|length }}</div><div class="v-stat__l">{{ _("Requests waiting for you") }}</div></div>
-  <div class="v-stat"><div class="v-stat__n">{{ board.pickups_today|length }}</div><div class="v-stat__l">{{ _("Pickups today") }}</div></div>
-  <div class="v-stat"><div class="v-stat__n">{{ board.returns_today|length }}</div><div class="v-stat__l">{{ _("Returns today") }}</div></div>
+<div id="board" hx-get="/shop" hx-select="#board" hx-swap="outerHTML transition:true" hx-trigger="every 60s [document.visibilityState === 'visible']">
   {% set late = board.at_risk|length + board.overdue_pickups|length + board.overdue_returns|length %}
-  <div class="v-stat{% if late %} v-stat--danger{% endif %}"><div class="v-stat__n">{{ late }}</div><div class="v-stat__l">{{ _("Need attention") }}</div></div>
-</div>
-<div class="v-board">
-  {{ booking_list(_("Requests waiting for you"), board.pending, _("No requests waiting."), "alert") }}
-  {{ booking_list(_("At risk: find another dress"), board.at_risk, _("Nothing at risk."), "danger") }}
-  {{ booking_list(_("Pickups today"), board.pickups_today, _("No pickups today.")) }}
-  {{ booking_list(_("Returns today"), board.returns_today, _("No returns today.")) }}
-  {{ booking_list(_("Overdue pickups"), board.overdue_pickups, _("None."), "danger") }}
-  {{ booking_list(_("Overdue returns"), board.overdue_returns, _("None."), "danger") }}
+  {% set attention = "lane-at-risk" if board.at_risk else ("lane-overdue-pickups" if board.overdue_pickups else ("lane-overdue-returns" if board.overdue_returns else "lane-at-risk")) %}
+  <div class="v-stats">
+    <a class="v-stat{% if board.pending %} v-stat--alert{% endif %}" href="#lane-pending"><div class="v-stat__n" style="view-transition-name: stat-pending">{{ board.pending|length }}</div><div class="v-stat__l">{{ _("Requests waiting for you") }}</div></a>
+    <a class="v-stat" href="#lane-pickups"><div class="v-stat__n" style="view-transition-name: stat-pickups">{{ board.pickups_today|length }}</div><div class="v-stat__l">{{ _("Pickups today") }}</div></a>
+    <a class="v-stat" href="#lane-returns"><div class="v-stat__n" style="view-transition-name: stat-returns">{{ board.returns_today|length }}</div><div class="v-stat__l">{{ _("Returns today") }}</div></a>
+    <a class="v-stat{% if late %} v-stat--danger{% endif %}" href="#{{ attention }}"><div class="v-stat__n" style="view-transition-name: stat-late">{{ late }}</div><div class="v-stat__l">{{ _("Need attention") }}</div></a>
+  </div>
+  <div class="v-board">
+    {{ booking_list(_("Requests waiting for you"), board.pending, _("No requests waiting."), "alert", id="lane-pending") }}
+    {{ booking_list(_("At risk: find another dress"), board.at_risk, _("Nothing at risk."), "danger", id="lane-at-risk") }}
+    {{ booking_list(_("Pickups today"), board.pickups_today, _("No pickups today."), id="lane-pickups") }}
+    {{ booking_list(_("Returns today"), board.returns_today, _("No returns today."), id="lane-returns") }}
+    {{ booking_list(_("Overdue pickups"), board.overdue_pickups, _("None."), "danger", id="lane-overdue-pickups") }}
+    {{ booking_list(_("Overdue returns"), board.overdue_returns, _("None."), "danger", id="lane-overdue-returns") }}
+  </div>
 </div>
 {% endblock %}

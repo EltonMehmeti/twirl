@@ -164,3 +164,31 @@ def test_calendar_shows_block(owner_client, db, shop):
     assert response.status_code == 200
     assert item.code in response.text
     assert 'data-kind="block"' in response.text
+
+
+def test_calendar_marks_today(owner_client, db, shop):
+    make_item(db, make_style(db, shop))
+    assert 'class="is-today"' in owner_client.get("/shop/calendar").text
+
+
+def test_walk_in_code_lookup_names_the_dress(owner_client, db, shop):
+    item = make_item(db, make_style(db, shop, name="Red silk gown"), size="38")
+    hit = owner_client.get(f"/shop/walk-in/item?code={item.code.lower()}")
+    assert hit.status_code == 200
+    assert "Red silk gown" in hit.text
+    assert "v-hit" not in owner_client.get("/shop/walk-in/item?code=AB").text
+    assert "v-pill--danger" in owner_client.get("/shop/walk-in/item?code=ZZZZ").text
+
+
+def test_walk_in_code_lookup_needs_login(client):
+    response = client.get("/shop/walk-in/item?code=ZZZZ", follow_redirects=False)
+    assert response.status_code == 303
+
+
+def test_today_counts_link_to_their_lanes(owner_client, db, shop):
+    booking = _pending(db, shop)
+    page = owner_client.get("/shop").text
+    assert 'href="#lane-pending"' in page
+    assert 'id="lane-pending"' in page
+    assert f'data-booking="{booking.id}"' in page
+    assert 'id="board"' in page

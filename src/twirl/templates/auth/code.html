@@ -11,7 +11,8 @@
   <div class="v-fields">
     <div class="v-field{% if errors.code %} v-field--error{% endif %}">
       <label class="v-label" for="v-code">{{ _("Six digits") }}</label>
-      <input class="v-input v-input--code" id="v-code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="––––––" required aria-describedby="code-hint" autofocus>
+      <input class="v-input v-input--code" id="v-code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="––––––" required aria-describedby="code-hint" autofocus data-autosubmit>
+      <div class="v-code__slots" aria-hidden="true">{% for i in range(6) %}<span></span>{% endfor %}</div>
       {{ hint(errors, "code", _("The code expires after 5 minutes.")) }}
     </div>
   </div>

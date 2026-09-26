@@ -12,11 +12,7 @@
   <link rel="stylesheet" href="{{ url_for('static', path='vesha.css') }}">
   <script src="{{ url_for('static', path='htmx.min.js') }}" defer></script>
   <script src="{{ url_for('static', path='vesha.js') }}" defer></script>
-  <script>
-    document.documentElement.classList.add("v-js");
-    // Arriving through a page transition: the dress already flew into place, so skip the unveil.
-    addEventListener("pagereveal", function (event) { if (event.viewTransition) document.documentElement.classList.add("v-vt"); });
-  </script>
+  {% include "_head_motion.html" %}
 </head>
 <body class="v-app" hx-headers='{"X-CSRF-Token": "{{ csrf_token(request) }}"}'>
   {% set here = request.url.path ~ ("?" ~ request.url.query if request.url.query else "") %}

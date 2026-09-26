@@ -6,7 +6,8 @@
     if (event.defaultPrevented || form.matches("[hx-get], [hx-post]")) return;
     if (form.dataset.sent) { event.preventDefault(); return; }
     form.dataset.sent = "1";
-    var button = event.submitter || form.querySelector("button[type=submit], button:not([type])");
+    // form.elements skips buttons that belong to another form through form="…"
+    var button = event.submitter || Array.prototype.find.call(form.elements, function (el) { return el.matches("button[type=submit], button:not([type])"); });
     if (button) { button.classList.add("is-busy"); button.setAttribute("aria-busy", "true"); }
   });
   // Back from the next page restores this one from the cache: make its forms usable again.
@@ -93,5 +94,41 @@
     }
     handle.addEventListener("pointerup", end);
     handle.addEventListener("pointercancel", end);
+  });
+
+  // R2·F2 · SMS code: slots fill as you type; the sixth digit sends the form.
+  var code = document.querySelector(".v-input--code[data-autosubmit]");
+  if (code) {
+    var slots = code.closest(".v-field").querySelectorAll(".v-code__slots span");
+    function paint() {
+      var n = code.value.replace(/\D/g, "").length;
+      slots.forEach(function (slot, i) { slot.classList.toggle("is-filled", i < n); });
+      if (n === 6 && code.checkValidity() && !code.form.dataset.sent) code.form.requestSubmit();
+    }
+    code.addEventListener("input", paint);
+    paint(); // iOS may have filled the field from the SMS before this ran
+  }
+
+  // R2·G1 · the calendar opens on today's column.
+  var todayCell = document.querySelector(".calendar .is-today"), week = document.querySelector(".v-table-wrap");
+  if (todayCell && week) week.scrollLeft = Math.max(0, todayCell.offsetLeft - 190 - 16);
+
+  // R2·L1 · Today refreshes itself; rows that weren't there before rise in.
+  var known = null;
+  document.addEventListener("htmx:beforeSwap", function (event) {
+    if (!event.detail.target || event.detail.target.id !== "board") return;
+    // Logged out or an error page: keep the board that is on screen.
+    if (!event.detail.xhr || event.detail.xhr.status !== 200 || event.detail.serverResponse.indexOf('id="board"') === -1) {
+      event.detail.shouldSwap = false;
+      return;
+    }
+    known = Array.prototype.map.call(document.querySelectorAll("#board [data-booking]"), function (li) { return li.dataset.booking; });
+  });
+  document.addEventListener("htmx:afterSettle", function () {
+    if (!known) return;
+    document.querySelectorAll("#board [data-booking]").forEach(function (li) {
+      if (known.indexOf(li.dataset.booking) === -1) li.classList.add("is-new");
+    });
+    known = null;
   });
 })();

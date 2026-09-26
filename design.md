@@ -103,6 +103,14 @@ New rules use the same steps.
   photo fades and shrinks before the list updates; the booking code's characters
   rise 30ms apart. The dress gallery shows its position as a hairline tied to the
   swipe. The customer contact sheet slides up and drags down to close.
+- Shop screens: after an action on a booking only the status pill and the history
+  move. The SMS code fills six hairline slots and sends itself on the sixth digit.
+  A size that becomes taken on the new date turns the select red with a hint. The
+  calendar keeps the dress column fixed, opens on today and fades its "more" edge
+  as Sunday arrives; weeks slide like onboarding steps. Today's counts jump to
+  their lane (gold underline for a moment), and the board refreshes every 60s
+  while visible, new rows rising with a gold wash. Walk-in codes resolve under
+  the field as you type.
 - While HTMX loads: results fade to .45 and a gold line runs under the results
   heading. "More filters" slides open where the browser can animate to auto height.
 - Reduced motion: distance and scale tokens go to zero, so nothing moves or

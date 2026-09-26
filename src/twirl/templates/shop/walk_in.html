@@ -18,8 +18,9 @@
   <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
   <div class="v-cols">
     <div>
-      <label>{{ _("Dress code") }} <input name="code" value="{{ values.code }}" required maxlength="4" autocapitalize="characters" style="font-family:var(--font-mono);font-size:22px;letter-spacing:.3em;text-transform:uppercase"></label>
-      {% if item %}<p class="v-pill v-pill--good">✓ {{ item.style.name }} · {{ _("size") }} {{ item.size }}</p>{% endif %}
+      <label>{{ _("Dress code") }} <input name="code" value="{{ values.code }}" required maxlength="4" autocapitalize="characters" style="font-family:var(--font-mono);font-size:22px;letter-spacing:.3em;text-transform:uppercase"
+        hx-get="/shop/walk-in/item" hx-trigger="input changed delay:150ms" hx-target="#v-code-hit" hx-indicator="#v-code-hit" hx-sync="this:replace"></label>
+      <div id="v-code-hit" aria-live="polite">{% with code = values.code %}{% include "shop/_item_hit.html" %}{% endwith %}</div>
       <label>{{ _("Type") }} <select name="kind">
         <option value="walk_in" {% if values.kind == "walk_in" %}selected{% endif %}>{{ _("In the shop") }}</option>
         <option value="phone" {% if values.kind == "phone" %}selected{% endif %}>{{ _("By phone") }}</option>

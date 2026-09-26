@@ -4,7 +4,7 @@
 <p class="v-crumb"><a href="/shop">← {{ _("Today") }}</a></p>
 <div class="v-pagehead">
   <div><div class="v-eyebrow">{{ b.ref }}</div><h1>{{ b.style.name }} · {{ b.item.size }}</h1></div>
-  {{ status_pill(b.status, status_labels) }}
+  {{ status_pill(b.status, status_labels, name="booking-status") }}
 </div>
 {% if error %}<p class="error" role="alert">{{ _(error) }}</p>{% endif %}
 <div class="v-detail">
@@ -68,7 +68,7 @@
   </div>
   <section class="v-surface">
     <h2 style="margin-top:0">{{ _("History") }}</h2>
-    <ol class="timeline">
+    <ol class="timeline" style="view-transition-name: booking-history">
       {% for e in events %}
       <li><strong>{{ _(status_labels[e.to_status]) }}</strong><br>
         <span class="muted">{{ e.created_at.strftime("%d.%m.%Y %H:%M") }}{% if e.from_status %} · {{ _("from") }} {{ _(status_labels[e.from_status]) }}{% endif %}</span>

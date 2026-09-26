@@ -1,0 +1,23 @@
+<script>
+  document.documentElement.classList.add("v-js");
+  // Page transitions. Arriving through one: the dress already flew into place, so skip the unveil.
+  // "← Back", "Previous week" and the browser's back button slide the other way.
+  (function () {
+    function back(activation) {
+      return sessionStorage.getItem("vBack") === "1" || (activation && activation.navigationType === "traverse");
+    }
+    addEventListener("pageswap", function (event) {
+      if (event.viewTransition && back(event.activation)) event.viewTransition.types.add("back");
+    });
+    addEventListener("pagereveal", function (event) {
+      if (event.viewTransition) {
+        document.documentElement.classList.add("v-vt");
+        if (back(window.navigation && navigation.activation)) event.viewTransition.types.add("back");
+      }
+      sessionStorage.removeItem("vBack");
+    });
+    addEventListener("click", function (event) {
+      if (event.target.closest && event.target.closest(".v-back, a[rel=prev]")) sessionStorage.setItem("vBack", "1");
+    });
+  })();
+</script>

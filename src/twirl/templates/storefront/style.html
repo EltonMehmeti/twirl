@@ -45,6 +45,7 @@
         <div id="availability" class="v-avail" aria-live="polite">{% include "storefront/_availability.html" %}</div>
         <label>{{ _("Size") }}
           {{ size_select(sizes, values.size, availability) }}</label>
+        <p class="error v-size-taken">{{ _("The size you picked is taken on this date. Choose another size or another date.") }}</p>
         <label>{{ _("Your name") }} <input name="name" value="{{ values.name or '' }}" required maxlength="120" autocomplete="name"></label>
         <label>{{ _("Phone") }} <input type="tel" name="phone" value="{{ values.phone or '' }}" required placeholder="044 123 456" autocomplete="tel"></label>
         <label>{{ _("Note for the shop (optional)") }} <textarea name="note" maxlength="500">{{ values.note or '' }}</textarea></label>

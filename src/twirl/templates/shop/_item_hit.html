@@ -1,0 +1,2 @@
+{% if item %}<p class="v-pill v-pill--good v-hit">✓ {{ item.style.name }} · {{ _("size") }} {{ item.size }}</p>
+{% elif code|length == 4 %}<p class="v-pill v-pill--danger v-hit">{{ _("No dress with this code in your shop.") }}</p>{% endif %}
