@@ -1940,3 +1940,34 @@ msgstr "U kopjua"
 
 msgid "The size you picked is taken on this date. Choose another size or another date."
 msgstr "Masa që zgjodhe është e zënë në këtë datë. Zgjidh një masë tjetër ose një datë tjetër."
+
+msgid "Close"
+msgstr "Mbyll"
+
+msgid "Full screen"
+msgstr "Ekran i plotë"
+
+msgid "Exit full screen"
+msgstr "Dil nga ekrani i plotë"
+
+msgid "Zoom in"
+msgstr "Zmadho"
+
+msgid "Zoom out"
+msgstr "Zvogëlo"
+
+msgid "Previous photo"
+msgstr "Fotoja e mëparshme"
+
+msgid "Next photo"
+msgstr "Fotoja tjetër"
+
+msgid "This photo did not load. Check your connection, then close and reopen it."
+msgstr "Kjo foto nuk u ngarkua. Kontrollo lidhjen, pastaj mbylle dhe hape sërish."
+
+#, python-format
+msgid "Open photo %(n)s of %(total)s"
+msgstr "Hap foton %(n)s nga %(total)s"
+
+msgid "Open the photo"
+msgstr "Hap foton"

@@ -4,6 +4,10 @@
 <meta property="og:title" content="{{ style.name }} · {{ shop.name }}">
 <meta property="og:description" content="{{ style.price_cents|money(locale) }} · {{ shop.city }}">
 {% if og_image %}<meta property="og:image" content="{{ og_image }}">{% endif %}
+{% if images %}
+<link rel="stylesheet" href="{{ url_for('static', path='photoswipe/photoswipe.css') }}">
+<script type="module" src="{{ url_for('static', path='viewer.js') }}"></script>
+{% endif %}
 {% endblock %}
 {% block content %}
 {% from "storefront/_size_select.html" import size_select with context %}
@@ -12,8 +16,13 @@
   <div>
     {% if images %}
     <div class="v-gallery-wrap" style="--n: {{ images|length }}">
-      <div class="v-gallery{% if images|length == 1 %} v-gallery--single{% endif %}">
-        {% for image in images %}<img src="{{ image.detail }}" alt="{{ style.name }}" width="900" height="1200" {% if loop.first %}style="view-transition-name: dress-{{ style.id }}" loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}>{% endfor %}
+      <div class="v-gallery{% if images|length == 1 %} v-gallery--single{% endif %}" data-viewer
+        data-label="{{ _('Photos') }}: {{ style.name }}" data-close="{{ _('Close') }}"
+        data-full="{{ _('Full screen') }}" data-full-exit="{{ _('Exit full screen') }}"
+        data-zoom-in="{{ _('Zoom in') }}" data-zoom-out="{{ _('Zoom out') }}"
+        data-prev="{{ _('Previous photo') }}" data-next="{{ _('Next photo') }}"
+        data-error="{{ _('This photo did not load. Check your connection, then close and reopen it.') }}">
+        {% for image in images %}<a href="{{ image.detail }}" data-pswp-width="{{ image.width }}" data-pswp-height="{{ image.height }}" data-pswp-cropped="true" aria-label="{% if images|length > 1 %}{{ _('Open photo %(n)s of %(total)s', n=loop.index, total=images|length) }}{% else %}{{ _('Open the photo') }}{% endif %}"><img src="{{ image.detail }}" alt="{{ style.name }}" width="{{ image.width }}" height="{{ image.height }}" {% if loop.first %}style="view-transition-name: dress-{{ style.id }}" loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}></a>{% endfor %}
       </div>
       {% if images|length > 1 %}<div class="v-gallery__track" aria-hidden="true"><span></span></div>{% endif %}
     </div>

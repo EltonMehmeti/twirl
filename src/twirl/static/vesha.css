@@ -368,8 +368,13 @@ select.v-input { appearance: none; background-image: linear-gradient(45deg, tran
 .v-product h1 { margin-top: 0; overflow-wrap: anywhere; }
 .v-gallery { display: flex; gap: 3px; overflow-x: auto; scroll-snap-type: x mandatory; margin: 0 -18px; padding: 0; scrollbar-width: none; }
 .v-gallery::-webkit-scrollbar { display: none; }
-.v-gallery img { flex: 0 0 88%; min-width: 0; aspect-ratio: 3 / 4; object-fit: cover; scroll-snap-align: start; background: var(--color-line); }
-.v-gallery--single img { flex-basis: 100%; }
+.v-gallery > a { position: relative; flex: 0 0 88%; min-width: 0; scroll-snap-align: start; cursor: zoom-in; }
+.v-gallery img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; background: var(--color-line); }
+.v-gallery--single > a { flex-basis: 100%; }
+/* the strip clips an outside ring, so a photo's focus ring sits inside it: ink, then paper against the photo */
+.v-app .v-gallery > a:focus-visible { outline: none; }
+.v-gallery > a:focus-visible::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+  box-shadow: inset 0 0 0 2px var(--color-focus), inset 0 0 0 4px var(--color-paper); }
 .v-price-line { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin: 0 0 14px; }
 .v-price-line strong { font-family: var(--font-mono); font-weight: 400; font-size: 24px; }
 .v-facts { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0 0 18px; }
@@ -479,8 +484,8 @@ select.v-input { appearance: none; background-image: linear-gradient(45deg, tran
   .v-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .v-product { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 48px; }
   .v-gallery { margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; overflow: visible; }
-  .v-gallery img { width: 100%; border-radius: var(--radius-photo); }
-  .v-gallery img:first-child { grid-column: 1 / -1; }
+  .v-gallery img, .v-gallery > a::after { border-radius: var(--radius-photo); }
+  .v-gallery > a:first-child { grid-column: 1 / -1; }
   .v-gallery--single { grid-template-columns: minmax(0, 1fr); }
   .v-detail { grid-template-columns: 1.3fr 1fr; }
   .v-cols { grid-template-columns: 1fr 1fr; }
@@ -752,7 +757,7 @@ html:active-view-transition-type(back)::view-transition-new(step) { animation-na
 .v-reason[open]::details-content { block-size: auto; }
 
 /* L1 · photos fade in once decoded; a sheen only when they are slow */
-.v-js:not(.v-vt) .v-tile__img img:not(.is-ready), .v-js .v-gallery img:not(:first-child):not(.is-ready) { opacity: 0; }
+.v-js:not(.v-vt) .v-tile__img img:not(.is-ready), .v-js .v-gallery > a:not(:first-child) img:not(.is-ready) { opacity: 0; }
 .v-tile__img img, .v-gallery img { transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-long) var(--ease-out); }
 .v-tile__img::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0;
   background: linear-gradient(100deg, transparent 30%, var(--color-paper-2) 50%, transparent 70%); transform: translateX(-100%); }
@@ -803,9 +808,37 @@ html:active-view-transition-type(back)::view-transition-new(step) { animation-na
 .v-container button.v-contact { background: transparent; border-color: var(--color-line-strong); margin: 0 0 18px; }
 .v-container button.v-contact:hover { border-color: var(--color-ink); background: transparent; }
 
+/* G3 · photo viewer (PhotoSwipe, viewer.js): the photo grows out of the page onto paper; the controls are words */
+.pswp.v-viewer { --pswp-bg: var(--color-paper); --pswp-placeholder-bg: var(--color-line); --pswp-icon-color: var(--color-ink);
+  --pswp-icon-color-secondary: var(--color-paper); --pswp-icon-stroke-color: var(--color-paper); --pswp-error-text-color: var(--color-ink-soft);
+  font-family: var(--font-sans); color: var(--color-ink); }
+/* .v-app img caps an image at its box; the viewer sizes its own, far past it when zoomed */
+.pswp.v-viewer img { max-width: none; }
+@media (min-width: 960px) { .v-viewer .pswp__img { border-radius: var(--radius-photo); } }
+.v-viewer .pswp__top-bar { height: 64px; padding: 0 18px; align-items: center; gap: 8px; transition-timing-function: var(--ease-out); }
+/* the count gets a paper chip once a zoomed photo can slide under it */
+.v-viewer .pswp__counter { height: auto; margin: 0 0 0 -10px; padding: 8px 10px; border-radius: 999px; font-size: 14px; line-height: 1;
+  color: var(--color-ink-soft); font-variant-numeric: tabular-nums; text-shadow: none; opacity: 1; transition: background-color var(--dur-short) var(--ease-out); }
+.v-viewer.pswp--zoomed-in .pswp__counter { background: var(--color-paper); }
+.v-viewer .pswp__button { width: auto; height: 44px; margin: 0; padding: 0 16px; border: 1px solid var(--color-line-strong); border-radius: 999px;
+  background: var(--color-paper); color: var(--color-ink); font: 600 14px/42px var(--font-sans); white-space: nowrap; }
+.v-viewer .pswp__top-bar .pswp__button { opacity: 1; transition: border-color var(--dur-short) var(--ease-out), transform var(--dur-press) var(--ease-out); }
+/* the arrows fade in and out with the other controls, so they keep an opacity transition */
+.v-viewer .pswp__button--arrow { width: 44px; margin-top: -22px; padding: 0; font-size: 18px;
+  transition: opacity var(--pswp-transition-duration) var(--ease-out), border-color var(--dur-short) var(--ease-out), transform var(--dur-press) var(--ease-out); }
+.v-viewer .pswp__button--arrow--prev { left: 18px; }
+.v-viewer .pswp__button--arrow--next { right: 18px; }
+@media (hover: hover) { .v-viewer .pswp__button:hover { border-color: var(--color-ink); } }
+.v-viewer .pswp__top-bar .pswp__button:active, .v-viewer .pswp__button--arrow:active { transform: scale(var(--press)); transition-duration: 0ms; }
+.v-viewer .pswp__button--zoom .v-viewer__out, .v-viewer.pswp--zoomed-in .pswp__button--zoom .v-viewer__in { display: none; }
+.v-viewer.pswp--zoomed-in .pswp__button--zoom .v-viewer__out { display: inline; }
+/* fingers pinch and double-tap; the zoom button is for a mouse */
+.v-viewer.pswp--touch:not(.pswp--has_mouse) .pswp__button--zoom { display: none; }
+.v-viewer .pswp__error-msg { max-width: 36ch; padding: 0 24px; font-size: 15px; line-height: 1.5; text-align: center; text-wrap: balance; }
+
 @media (prefers-reduced-motion: reduce) {
   .v-container button.is-busy::after, .v-btn.is-busy::after { animation: none; opacity: .5; }
-  .v-avail .sizes li.taken::after, .v-ticket__code > span[aria-hidden], .v-tile__img::before { animation: none !important; }
+  .v-avail .sizes li.taken::after, .v-ticket__code > span[aria-hidden], .v-tile__img::before, .v-viewer .pswp__preloader .pswp__icn { animation: none !important; }
   .v-reason::details-content { transition: none; }
   .v-sheet, .v-sheet[open] { transform: none; }
 }

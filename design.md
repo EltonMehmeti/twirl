@@ -103,6 +103,11 @@ New rules use the same steps.
   photo fades and shrinks before the list updates; the booking code's characters
   rise 30ms apart. The dress gallery shows its position as a hairline tied to the
   swipe. The customer contact sheet slides up and drags down to close.
+- Photo viewer (`viewer.js`, PhotoSwipe): a dress photo grows from where it sits to
+  full screen on paper over 240ms and shrinks back onto the photo you ended on over
+  160ms; it fades instead when that photo is off screen, in native full screen, or
+  under reduced motion. Pinch, double-tap, click or wheel zooms; swipe or ← → moves;
+  swipe down, Close, Esc or Back closes. Its controls are words, like everywhere.
 - Shop screens: after an action on a booking only the status pill and the history
   move. The SMS code fills six hairline slots and sends itself on the sixth digit.
   A size that becomes taken on the new date turns the select red with a hint. The

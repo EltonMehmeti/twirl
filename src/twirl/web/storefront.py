@@ -76,7 +76,12 @@ def _style_context(
 ) -> dict:
     sizes = _style_sizes(db, style)
     images = [
-        {"thumb": image_url(storage, i, "thumb"), "detail": image_url(storage, i, "detail")}
+        {
+            "thumb": image_url(storage, i, "thumb"),
+            "detail": image_url(storage, i, "detail"),
+            "width": i.width,
+            "height": i.height,
+        }
         for i in style.images
     ]
     base_url = request.app.state.settings.base_url
