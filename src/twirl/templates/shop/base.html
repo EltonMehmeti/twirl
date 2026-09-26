@@ -9,10 +9,28 @@
 <a href="/shop/calendar"{% if here.startswith("/shop/calendar") %} aria-current="page"{% endif %}>{{ _("Calendar") }}</a>
 <a href="/shop/walk-in"{% if here.startswith("/shop/walk-in") %} aria-current="page"{% endif %}>{{ _("Walk-in") }}</a>
 <a href="/shop/styles"{% if here.startswith("/shop/styles") %} aria-current="page"{% endif %}>{{ _("Dresses") }}</a>
-{% if ctx.is_owner %}<a href="/shop/settings"{% if here.startswith("/shop/settings") %} aria-current="page"{% endif %}>{{ _("Settings") }}</a>{% endif %}
-{% if ctx.shop.status == "published" %}<a href="/{{ ctx.shop.slug }}" target="_blank" rel="noopener">{{ _("My storefront") }} ↗</a>{% endif %}
-<form method="post" action="/logout" class="inline">
-  <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
-  <button class="v-linkbtn">{{ _("Log out") }}</button>
-</form>
+{% endblock %}
+{% block account %}
+<details class="v-account">
+  <summary aria-label="{{ _('Account') }}: {{ ctx.shop.name }}"{% if request.url.path.startswith("/shop/settings") %} aria-current="page"{% endif %}><span aria-hidden="true">{{ ctx.shop.name[:1]|upper }}</span></summary>
+  <div class="v-account__menu">
+    <strong class="v-account__name">{{ ctx.shop.name }}</strong>
+    {% if ctx.shop.status == "published" %}<a href="/{{ ctx.shop.slug }}" target="_blank" rel="noopener">{{ _("My storefront") }} ↗</a>{% endif %}
+    {% if ctx.is_owner %}<a href="/shop/settings">{{ _("Settings") }}</a>{% endif %}
+    <form method="post" action="/logout">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+      <button>{{ _("Log out") }}</button>
+    </form>
+  </div>
+</details>
+<script>
+  // Close the account menu on a tap outside it or on Escape.
+  (function () {
+    var menu = document.querySelector(".v-account");
+    document.addEventListener("click", function (event) { if (menu.open && !menu.contains(event.target)) menu.open = false; });
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && menu.open) { menu.open = false; menu.querySelector("summary").focus(); }
+    });
+  })();
+</script>
 {% endblock %}

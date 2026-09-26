@@ -262,12 +262,29 @@ select.v-input { appearance: none; background-image: linear-gradient(45deg, tran
 .v-nav-links a:hover, .v-linkbtn:hover { background: var(--color-paper-2); color: var(--color-ink); }
 .v-app .v-nav-links a[aria-current="page"] { background: var(--color-ink); color: var(--color-paper); }
 .v-nav-links form { margin: 0; }
+@media (max-width: 719px) { .v-nav-links a { padding: 8px 10px; } }
+/* narrow phones: the account menu already names the shop, so the header drops it */
+@media (max-width: 419px) { .v-appbar .v-brand__tag { display: none; } .v-nav-links a { padding: 8px 8px; } }
 .v-lang { margin-left: auto; display: flex; gap: 2px; font-size: 13px; font-weight: 600; letter-spacing: .04em; }
 .v-app .v-lang a { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; color: var(--color-muted); text-decoration: none; padding: 0 8px; border-radius: 6px; }
 .v-appbar .v-nav-links__wide { display: none; }
 .v-sitefoot a { color: var(--color-muted); font-weight: 600; }
 .v-sitefoot a:hover { color: var(--color-ink); }
 .v-app .v-lang a[aria-current="true"] { color: var(--color-ink); background: var(--color-paper-2); }
+/* shop account menu: the shop's initial opens storefront, settings and log out */
+.v-account { position: relative; flex: none; }
+.v-account summary { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; margin: 2px; border-radius: 50%; background: var(--color-ink); color: var(--color-paper); font-family: var(--font-display); font-weight: 600; font-size: 16px; cursor: pointer; list-style: none; transition: box-shadow var(--dur-short) var(--ease-out); }
+.v-account summary::-webkit-details-marker { display: none; }
+.v-account summary:hover, .v-account[open] summary, .v-account summary[aria-current="page"] { box-shadow: 0 0 0 3px var(--color-gold-soft); }
+.v-account summary:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.v-account__menu { position: absolute; right: 0; top: calc(100% + 8px); z-index: 30; display: flex; flex-direction: column; min-width: 220px; padding: 6px; background: var(--color-paper); border: 1px solid var(--color-line-strong); border-radius: var(--radius-card); box-shadow: 0 12px 32px -12px var(--color-shadow); transform-origin: top right; }
+.v-account[open] .v-account__menu { animation: v-menu-in var(--dur-short) var(--ease-out); }
+@keyframes v-menu-in { from { opacity: 0; transform: translateY(-4px) scale(.98); } }
+.v-account__name { padding: 10px 12px 8px; font-family: var(--font-display); font-weight: 600; font-size: 16px; overflow-wrap: anywhere; }
+.v-app .v-account__menu a, .v-account__menu button { display: flex; align-items: center; min-height: 44px; padding: 0 12px; border-radius: 8px; font: inherit; font-size: 15px; font-weight: 600; color: var(--color-ink); text-decoration: none; background: transparent; border: 0; width: 100%; text-align: left; cursor: pointer; }
+.v-app .v-account__menu a:hover, .v-account__menu button:hover { background: var(--color-paper-2); }
+.v-account__menu form { margin: 6px 0 0; padding-top: 6px; border-top: 1px solid var(--color-line); }
+@media (prefers-reduced-motion: reduce) { .v-account[open] .v-account__menu { animation: none; } .v-account summary { transition: none; } }
 
 .v-container { flex: 1; width: 100%; max-width: 1140px; margin: 0 auto; padding: 24px 18px 56px; }
 .v-container--narrow { max-width: 520px; }

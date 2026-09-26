@@ -827,6 +827,9 @@ msgstr "Faqja ime"
 msgid "Log out"
 msgstr "Dilni"
 
+msgid "Account"
+msgstr "Llogaria"
+
 #: src/twirl/templates/shop/booking.html:13 src/twirl/templates/shop/booking.html:39
 #: src/twirl/templates/shop/calendar.html:12 src/twirl/templates/storefront/confirmation.html:14
 msgid "Dress"

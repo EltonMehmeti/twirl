@@ -26,6 +26,7 @@
         <a href="/lang/sq?next={{ here|urlencode }}"{% if locale == "sq" %} aria-current="true"{% endif %}>SQ</a>
         <a href="/lang/en?next={{ here|urlencode }}"{% if locale == "en" %} aria-current="true"{% endif %}>EN</a>
       </span>
+      {% block account %}{% endblock %}
     </div>
   </header>
   <main class="v-container{% block container_class %}{% endblock %}">{% block content %}{% endblock %}</main>
