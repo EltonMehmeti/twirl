@@ -67,12 +67,23 @@ New rules use the same steps.
 - Pills and buttons 999px.
 
 ## Motion
-- `--ease-out` cubic-bezier(0.16, 1, 0.3, 1); `--dur-short` 160ms; `--dur-long` 420ms.
-- One hover effect per element: photos zoom 1.03 (tiles only); buttons change
-  fill; outlined links darken their border. Nothing lifts.
-- `:active` on buttons: translateY(1px), no transition.
-- Results fade to .45 opacity while HTMX loads.
-- Reduced motion: all transitions off.
+- `--ease-out` cubic-bezier(0.16, 1, 0.3, 1); `--dur-short` 160ms; `--dur-long` 420ms;
+  `--dur-reveal` 640ms.
+- The one authored moment: dress photos unveil top-down (clip-path, like a garment
+  bag being unzipped) while the photo settles from 1.08 to 1; name, price and shop
+  rise in after. 60ms stagger, capped at 8 tiles. Runs on arrival and after every
+  search (`.v-grid--unveil`, `--i` per tile). Renter grids only.
+- Home h1 and lede rise 8px on arrival. The logo swings on its hook once on the
+  home page and on hover.
+- One hover effect per element: photos zoom 1.03 (tiles only); dress and shop
+  names get a 2px gold underline drawn from the left; buttons change fill;
+  outlined links darken their border. Nothing lifts.
+- `:active` on buttons: translateY(1px), no transition. Date and category pills
+  fill over 160ms and press to 0.96.
+- While HTMX loads: results fade to .45 and a gold line runs under the results
+  heading. "More filters" slides open where the browser can animate to auto height.
+- Reduced motion: no unveil, rise, swing or scale; the loading line stays still;
+  colour and opacity feedback remain.
 
 ## Microinteractions stance
 - Silent success — the next page is the confirmation; no toasts.

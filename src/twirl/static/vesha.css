@@ -35,6 +35,7 @@
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --dur-short: 160ms;
   --dur-long: 420ms;
+  --dur-reveal: 640ms;
   --accent: var(--color-gold);
 }
 
@@ -523,8 +524,9 @@ select.v-input { appearance: none; background-image: linear-gradient(45deg, tran
 .v-container label.v-compact { margin: 0; }
 .v-container .v-compact select { min-height: 44px; padding: 7px 34px 7px 11px; font-size: 15px; }
 
-.v-results { margin-top: 30px; transition: opacity var(--dur-short) var(--ease-out); scroll-margin-top: 120px; }
-.v-results.htmx-request { opacity: .45; }
+.v-results { margin-top: 30px; scroll-margin-top: 120px; }
+.v-results > * { transition: opacity var(--dur-short) var(--ease-out); }
+.v-results.htmx-request > :not(.v-results__head) { opacity: .45; }
 .v-results:focus { outline: none; }
 /* after a filter change on a phone: a thumb-reach way down to the results */
 .v-app a.v-jump { display: none; position: fixed; z-index: 20; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom)); transform: translateX(-50%); align-items: center; min-height: 48px; padding: 0 22px; border-radius: 999px; background: var(--color-ink); color: var(--color-paper); font-weight: 600; font-size: 15px; text-decoration: none; white-space: nowrap; box-shadow: 0 6px 20px var(--color-shadow); }
@@ -555,7 +557,6 @@ select.v-input { appearance: none; background-image: linear-gradient(45deg, tran
 .v-shoplist { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); column-gap: 24px; }
 .v-shoplist > li { border-top: 1px solid var(--color-line); min-width: 0; }
 .v-app a.v-shoptile { display: flex; gap: 14px; align-items: center; padding: 12px 0; text-decoration: none; color: var(--color-ink); }
-.v-app a.v-shoptile:hover strong { text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
 .v-shoptile__img { flex: none; width: 54px; height: 72px; border-radius: var(--radius-photo); overflow: hidden; background: var(--color-line); display: flex; align-items: center; justify-content: center; }
 .v-shoptile__img img { width: 100%; height: 100%; object-fit: cover; }
 .v-shoptile__img svg { width: 26px; opacity: .5; }
@@ -580,5 +581,54 @@ select.v-input { appearance: none; background-image: linear-gradient(45deg, tran
 @media (min-width: 960px) { .v-shoplist { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 /* Below 360px two selects side by side cut off their text: stack them. */
 @media (max-width: 359px) { .v-search__main { grid-template-columns: minmax(0, 1fr); grid-template-areas: "date" "picks" "size" "city" "go"; } }
-@media (prefers-reduced-motion: reduce) { .v-app a.v-jump.is-on { animation: none; } .v-results, .v-search .v-chip span, .v-app .v-datepicks a, .v-search__more summary::after, .v-btn, .v-app a.v-cta, .v-app a.v-action { transition: none; } }
+/* Motion. The one authored moment: dress photos unveil top-down, like a garment bag
+   being unzipped, on arrival and after every search. Everything else is feedback. */
+@keyframes v-unveil { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0); } }
+@keyframes v-settle { from { transform: scale(1.08); } }
+@keyframes v-rise { from { opacity: 0; transform: translateY(8px); } }
+.v-grid--unveil > li { --d: calc(var(--i, 0) * 60ms); }
+.v-grid--unveil .v-tile__img { animation: v-unveil var(--dur-reveal) var(--ease-out) var(--d) backwards; }
+.v-grid--unveil .v-tile__img img { animation: v-settle calc(var(--dur-reveal) + 240ms) var(--ease-out) var(--d) backwards; }
+.v-grid--unveil .v-tile > :not(.v-tile__img) { animation: v-rise var(--dur-long) var(--ease-out) calc(var(--d) + 220ms) backwards; }
+.v-find h1 { animation: v-rise var(--dur-reveal) var(--ease-out) backwards; }
+.v-find__lede { animation: v-rise var(--dur-reveal) var(--ease-out) 80ms backwards; }
+/* the mark hangs from its hook: it swings once on the home page and when pointed at */
+@keyframes v-swing { 20% { transform: rotate(9deg); } 45% { transform: rotate(-6deg); } 70% { transform: rotate(2.5deg); } }
+@keyframes v-swing-again { 20% { transform: rotate(9deg); } 45% { transform: rotate(-6deg); } 70% { transform: rotate(2.5deg); } }
+.v-brand svg { transform-origin: 50% 8%; }
+.v-app:has(.v-find) .v-brand svg { animation: v-swing 1100ms ease-in-out 250ms; }
+.v-app .v-brand:hover svg { animation: v-swing-again 1000ms ease-in-out; }
+/* a search is running: a gold line runs under the results heading */
+@keyframes v-loading { 0% { transform: scaleX(0); transform-origin: 0 50%; } 50% { transform: scaleX(1); transform-origin: 0 50%; } 50.01% { transform: scaleX(1); transform-origin: 100% 50%; } 100% { transform: scaleX(0); transform-origin: 100% 50%; } }
+.v-results__head { position: relative; }
+.v-results__head::after { content: ""; position: absolute; left: 0; right: 0; bottom: -7px; height: 2px; background: var(--accent); transform: scaleX(0); opacity: 0; pointer-events: none; }
+.v-results.htmx-request .v-results__head::after { opacity: 1; animation: v-loading 1100ms var(--ease-out) infinite; }
+/* names get a gold underline drawn from the left on hover */
+.v-tile__name, .v-shoptile__body strong { padding-bottom: 3px; background: linear-gradient(var(--accent), var(--accent)) 0 100% / 0 2px no-repeat; transition: background-size var(--dur-long) var(--ease-out); }
+.v-tile:hover .v-tile__name, .v-app a.v-shoptile:hover strong { background-size: 100% 2px; }
+/* pills fill instead of snapping, and give a little when pressed */
+.v-app .v-datepicks a, .v-search .v-chip span { transition: border-color var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out), transform 100ms var(--ease-out); }
+.v-app .v-datepicks a:active, .v-search .v-chip:active span { transform: scale(.96); }
+/* "More filters" slides open where the browser can animate to auto height */
+:root { interpolate-size: allow-keywords; }
+.v-search__more::details-content { block-size: 0; overflow: clip; transition: block-size var(--dur-long) var(--ease-out), content-visibility var(--dur-long) allow-discrete; }
+.v-search__more[open]::details-content { block-size: auto; }
+/* Page transitions: a dress photo and name fly from the grid into the dress page and back;
+   after a search, dresses that stay free slide to their new place instead of unveiling again. */
+@view-transition { navigation: auto; }
+::view-transition-group(*) { animation-duration: 520ms; animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 240ms; }
+.v-vt .v-grid--unveil .v-tile__img, .v-vt .v-grid--unveil .v-tile__img img, .v-vt .v-grid--unveil .v-tile > :not(.v-tile__img), .v-vt .v-find h1, .v-vt .v-find__lede, .v-vt .v-app .v-brand svg,
+.v-grid--unveil > li.is-kept .v-tile__img, .v-grid--unveil > li.is-kept .v-tile__img img, .v-grid--unveil > li.is-kept .v-tile > :not(.v-tile__img) { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .v-grid--unveil .v-tile__img, .v-grid--unveil .v-tile__img img, .v-grid--unveil .v-tile > :not(.v-tile__img), .v-find h1, .v-find__lede, .v-app .v-brand svg { animation: none; }
+  .v-results.htmx-request .v-results__head::after { animation: none; transform: none; }
+  .v-tile__name, .v-shoptile__body strong, .v-search__more::details-content { transition: none; }
+  .v-app .v-datepicks a:active, .v-search .v-chip:active span { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) { .v-app a.v-jump.is-on { animation: none; } .v-results > *, .v-search .v-chip span, .v-app .v-datepicks a, .v-search__more summary::after, .v-btn, .v-app a.v-cta, .v-app a.v-action { transition: none; } }
 .v-avail .v-avail__none { margin: 10px 0 0; color: var(--color-danger); font-weight: 600; }

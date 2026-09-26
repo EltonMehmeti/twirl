@@ -12,14 +12,14 @@
   <div>
     {% if images %}
     <div class="v-gallery{% if images|length == 1 %} v-gallery--single{% endif %}">
-      {% for image in images %}<img src="{{ image.detail }}" alt="{{ style.name }}" width="900" height="1200" {% if loop.first %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}>{% endfor %}
+      {% for image in images %}<img src="{{ image.detail }}" alt="{{ style.name }}" width="900" height="1200" {% if loop.first %}style="view-transition-name: dress-{{ style.id }}" loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}>{% endfor %}
     </div>
     {% else %}
-    <div class="v-noimg">{% include "_logo.html" %}<span>{{ _("Photos coming soon") }}</span></div>
+    <div class="v-noimg" style="view-transition-name: dress-{{ style.id }}">{% include "_logo.html" %}<span>{{ _("Photos coming soon") }}</span></div>
     {% endif %}
   </div>
   <div>
-    <h1>{{ style.name }}</h1>
+    <h1 style="view-transition-name: dress-name-{{ style.id }}">{{ style.name }}</h1>
     <p class="v-price-line"><strong>{{ style.price_cents|money(locale) }}</strong> <span class="muted">{{ _("per rental, paid in the shop") }}</span></p>
     <ul class="v-facts">
       {% if shop.verified_at %}<li class="v-pill v-pill--good">{{ _("Verified salon") }}</li>{% endif %}

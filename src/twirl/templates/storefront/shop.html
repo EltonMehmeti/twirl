@@ -17,12 +17,12 @@
   </div>
 </header>
 {% if cards %}
-<ul class="v-grid">
+<ul class="v-grid v-grid--unveil">
   {% for card in cards %}
-  <li>
+  <li style="--i: {{ [loop.index0, 7]|min }}">
     <a class="v-tile" href="/{{ shop.slug }}/{{ card.style.code }}">
-      <div class="v-tile__img">{% if card.thumb %}<img src="{{ card.thumb }}" alt="{{ card.style.name }}" width="400" height="533" loading="{{ 'eager' if loop.index <= 4 else 'lazy' }}"{% if loop.first %} fetchpriority="high"{% endif %}>{% else %}<div class="v-noimg">{% include "_logo.html" %}</div>{% endif %}</div>
-      <div class="v-tile__body"><span class="v-tile__name">{{ card.style.name }}</span><span class="v-tile__price">{{ card.style.price_cents|money(locale) }}</span></div>
+      <div class="v-tile__img" style="view-transition-name: dress-{{ card.style.id }}">{% if card.thumb %}<img src="{{ card.thumb }}" alt="{{ card.style.name }}" width="400" height="533" loading="{{ 'eager' if loop.index <= 4 else 'lazy' }}"{% if loop.first %} fetchpriority="high"{% endif %}>{% else %}<div class="v-noimg">{% include "_logo.html" %}</div>{% endif %}</div>
+      <div class="v-tile__body"><span class="v-tile__name" style="view-transition-name: dress-name-{{ card.style.id }}">{{ card.style.name }}</span><span class="v-tile__price">{{ card.style.price_cents|money(locale) }}</span></div>
     </a>
   </li>
   {% endfor %}

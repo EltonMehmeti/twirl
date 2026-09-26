@@ -11,7 +11,7 @@
   <p class="v-find__lede">{{ _("Pick the date and we show only what is free that day. No payment online: the shop confirms, you pay when you pick it up.") }}</p>
 
   <form class="v-search" method="get" action="/" role="search"
-    hx-get="/" hx-trigger="change, submit" hx-target="#results" hx-select="#results" hx-swap="outerHTML" hx-push-url="true"
+    hx-get="/" hx-trigger="change, submit" hx-target="#results" hx-select="#results" hx-swap="outerHTML transition:true" hx-push-url="true"
     hx-sync="this:replace" hx-indicator="#results" onsubmit="window.vScrollToResults = true">
     <div class="v-search__main">
       <label class="v-search__date">{{ _("Event date") }}
@@ -84,12 +84,12 @@
     {%- if filters.event_date %}{{ _("The sizes under each dress are the ones free that day.") }}
     {%- else %}{{ _("The sizes under each dress are the ones the shop has. Add your event date to see only what is free that day.") }}{% endif -%}
   </p>
-  <ul class="v-grid">
+  <ul class="v-grid v-grid--unveil">
     {% for row in cards %}{% set card = row.card %}
-    <li>
+    <li style="--i: {{ [loop.index0, 7]|min }}" data-style="{{ card.style.id }}">
       <a class="v-tile" href="{{ row.href }}">
-        <div class="v-tile__img">{% if row.thumb %}<img src="{{ row.thumb }}" alt="{{ card.style.name }}" width="400" height="533" loading="{{ 'eager' if loop.index <= 4 else 'lazy' }}"{% if loop.first %} fetchpriority="high"{% endif %}>{% else %}<div class="v-noimg">{% include "_logo.html" %}</div>{% endif %}</div>
-        <div class="v-tile__body"><span class="v-tile__name">{{ card.style.name }}</span><span class="v-tile__price">{{ card.style.price_cents|money(locale) }}</span></div>
+        <div class="v-tile__img" style="view-transition-name: dress-{{ card.style.id }}">{% if row.thumb %}<img src="{{ row.thumb }}" alt="{{ card.style.name }}" width="400" height="533" loading="{{ 'eager' if loop.index <= 4 else 'lazy' }}"{% if loop.first %} fetchpriority="high"{% endif %}>{% else %}<div class="v-noimg">{% include "_logo.html" %}</div>{% endif %}</div>
+        <div class="v-tile__body"><span class="v-tile__name" style="view-transition-name: dress-name-{{ card.style.id }}">{{ card.style.name }}</span><span class="v-tile__price">{{ card.style.price_cents|money(locale) }}</span></div>
         <div class="v-tile__shop">{{ card.shop.name }} · {{ card.shop.city }}</div>
         {% if card.sizes %}<div class="v-tile__sizes"><span class="v-sr">{{ _("Free sizes:") if filters.event_date else _("Sizes:") }} </span>
           {% for size in card.sizes[:5] %}<span{% if filters.size == size %} class="is-match"{% endif %}>{{ _("Made to measure") if size == custom_size else size }}</span>{% endfor %}
@@ -213,6 +213,16 @@
       } else {
         offerJump(results);
       }
+    });
+    // Dresses that were already on screen morph to their new place (view transition) instead of unveiling again.
+    var shown = [];
+    document.addEventListener("htmx:beforeSwap", function () {
+      shown = Array.prototype.map.call(document.querySelectorAll("#results [data-style]"), function (li) { return li.dataset.style; });
+    });
+    document.addEventListener("htmx:afterSwap", function () {
+      document.querySelectorAll("#results [data-style]").forEach(function (li) {
+        if (shown.indexOf(li.dataset.style) !== -1) li.classList.add("is-kept");
+      });
     });
     function failed() { netError.hidden = false; }
     document.addEventListener("htmx:sendError", failed);
