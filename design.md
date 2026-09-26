@@ -53,6 +53,8 @@ Gold never carries text contrast on its own (1.8:1 on paper): text on gold is in
 - Body: Hanken Grotesk 400 / 600. Everything else, including form labels,
   table heads, pills, crumbs and footer — **sentence case, no letter-spacing**.
 - Mono: system mono. **Only** for booking codes, prices, dates and day numbers.
+  Exception: on dress tiles the price leads, in Clash Display 600 21px (tabular);
+  the dress name sits under it in Hanken 600 14px, one line, ink-soft.
 - Wordmark: Clash Display 600, uppercase, 0.22em — the one uppercase element.
 - Display tracking: -0.02em. h1 30px phone / 36px desktop; dress page h1 same.
 - No eyebrows. No italic headings. No uppercase mono labels.
@@ -67,8 +69,14 @@ New rules use the same steps.
 - Pills and buttons 999px.
 
 ## Motion
-- `--ease-out` cubic-bezier(0.16, 1, 0.3, 1); `--dur-short` 160ms; `--dur-long` 420ms;
-  `--dur-reveal` 640ms.
+- Easing: `--ease-out` cubic-bezier(0.16, 1, 0.3, 1) for arriving, `--ease-exit`
+  (0.4, 0, 1, 1) for leaving. Durations: `--dur-press` 100ms (press release),
+  `--dur-short` 160ms (fills, fades, hints, exits), `--dur-base` 240ms (entrances,
+  sheets, bars, step slides), `--dur-long` 420ms (hover only, never on a tap),
+  `--dur-reveal` 640ms (the unveil only). Distance `--rise-sm` 4 / `--rise` 8 /
+  `--shift` 16px; press `--press` .97 buttons, `--press-lg` .98 tiles, pills .96.
+- The tap path animates only transform and opacity (block-size only for small
+  disclosures: "More filters", the Decline reason).
 - The one authored moment: dress photos unveil top-down (clip-path, like a garment
   bag being unzipped) while the photo settles from 1.08 to 1; name, price and shop
   rise in after. 60ms stagger, capped at 8 tiles. Runs on arrival and after every
@@ -78,12 +86,29 @@ New rules use the same steps.
 - One hover effect per element: photos zoom 1.03 (tiles only); dress and shop
   names get a 2px gold underline drawn from the left; buttons change fill;
   outlined links darken their border. Nothing lifts.
-- `:active` on buttons: translateY(1px), no transition. Date and category pills
-  fill over 160ms and press to 0.96.
+- `:active`: buttons press to .97 and tiles to .98 instantly, then ease back over
+  100ms. No grey tap flash. Hover effects apply only where the device can hover.
+  Date and category pills fill over 160ms and press to 0.96.
+- Feedback: a plain form's button runs the ink loading line while the next page
+  loads and ignores a second tap. Errors rise 4px; touched invalid fields turn
+  their border red; the first bad field gets focus. The availability answer dims
+  while checking, rises in, and taken sizes get a struck line. "Copy link" turns
+  into "Copied" in place (the one success that has no next page).
+- Navigation: onboarding steps slide 16px the way you are going (back slides the
+  other way) and the progress bar grows; the shop's current-tab pill glides to the
+  new tab. On phones a Request bar (ink pill, the one shadow) rises on the dress
+  page while the booking panel is below the screen.
+- Loading and content: photos fade in once decoded, with a paper sheen only after
+  300ms; uploads fill their slot from the bottom with real progress; a removed
+  photo fades and shrinks before the list updates; the booking code's characters
+  rise 30ms apart. The dress gallery shows its position as a hairline tied to the
+  swipe. The customer contact sheet slides up and drags down to close.
 - While HTMX loads: results fade to .45 and a gold line runs under the results
   heading. "More filters" slides open where the browser can animate to auto height.
-- Reduced motion: no unveil, rise, swing or scale; the loading line stays still;
-  colour and opacity feedback remain.
+- Reduced motion: distance and scale tokens go to zero, so nothing moves or
+  scales; no unveil, swing, sheen or strike animation; the loading lines stay
+  still; colour and opacity feedback, upload progress and the gallery position
+  (both are data) remain.
 
 ## Microinteractions stance
 - Silent success — the next page is the confirmation; no toasts.

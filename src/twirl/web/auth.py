@@ -1,3 +1,5 @@
+from urllib.parse import urlencode
+
 from fastapi import APIRouter, Depends, Form, Query, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy import select
@@ -11,21 +13,30 @@ from twirl.db import get_db
 from twirl.i18n import N_
 from twirl.models import ShopUser, User
 from twirl.otp import OtpError, TooMany, verify_code
-from twirl.phones import InvalidPhone, normalize_phone
+from twirl.phones import InvalidPhone, display_phone, normalize_phone
 from twirl.ratelimit import client_ip
 from twirl.web.pages import safe_next
-from twirl.web.phone_auth import SESSION_ECHO, display_phone, resend_wait, send_code
+from twirl.web.phone_auth import SESSION_ECHO, resend_wait, send_code
 from twirl.web.templating import render
 
 router = APIRouter()
 
 
-@router.get("/login", response_class=HTMLResponse)
+@router.get("/login")
+def login_door(next_: str = Query("/shop", alias="next")):
+    """Shops sign in with their phone: every public login link lands on the code login."""
+    target = safe_next(next_, "/shop")
+    suffix = "" if target == "/shop" else "?" + urlencode({"next": target})
+    return RedirectResponse("/login/telefoni" + suffix, status_code=303)
+
+
+# Email and password: only for shop accounts created from the command line. Not linked anywhere.
+@router.get("/login/email", response_class=HTMLResponse)
 def login_form(request: Request, next_: str = Query("/shop", alias="next")):
     return render(request, "auth/login.html", {"next": safe_next(next_, "/shop"), "error": None})
 
 
-@router.post("/login", dependencies=[Depends(verify_csrf)])
+@router.post("/login/email", dependencies=[Depends(verify_csrf)])
 def login(
     request: Request,
     email: str = Form(...),
@@ -64,15 +75,16 @@ def login(
 @router.post("/logout", dependencies=[Depends(verify_csrf)])
 def logout(request: Request):
     logout_user(request)
-    return RedirectResponse("/login", status_code=303)
+    return RedirectResponse("/login/telefoni", status_code=303)
 
 
 SESSION_LOGIN_PHONE = "login_phone"
+SESSION_LOGIN_NEXT = "login_next"
 PHONE_PAGE = {
     "action": "/login/telefoni",
     "eyebrow": N_("Provider login"),
     "lede": N_("We send a six-digit code to the number you listed with."),
-    "back_url": "/login",
+    "back_url": "/",
 }
 
 
@@ -91,7 +103,9 @@ def _provider_by_phone(db: Session, phone: str) -> User | None:
 
 
 @router.get("/login/telefoni", response_class=HTMLResponse)
-def phone_login_form(request: Request):
+def phone_login_form(request: Request, next_: str | None = Query(None, alias="next")):
+    if next_:
+        request.session[SESSION_LOGIN_NEXT] = safe_next(next_, "/shop")
     return render(request, "auth/phone.html", {**PHONE_PAGE, "phone": "", "errors": {}})
 
 
@@ -190,5 +204,6 @@ def phone_code_login(request: Request, code: str = Form(""), db: Session = Depen
             {**context, "errors": {"code": N_("That code is not right or has expired.")}},
             status_code=400,
         )
+    target = request.session.get(SESSION_LOGIN_NEXT, "/shop")
     login_user(request, user)
-    return RedirectResponse("/shop", status_code=303)
+    return RedirectResponse(safe_next(target, "/shop"), status_code=303)

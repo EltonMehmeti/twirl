@@ -1922,3 +1922,18 @@ msgid ""
 msgstr ""
 "Edhe pa njërin nga filtrat nuk ka asgjë. Hiqi të gjithë për të parë çdo "
 "fustan."
+
+msgid "Request"
+msgstr "Rezervo"
+
+msgid "Contact the customer"
+msgstr "Kontakto klientin"
+
+msgid "Call"
+msgstr "Telefono"
+
+msgid "Copy link"
+msgstr "Kopjo linkun"
+
+msgid "Copied"
+msgstr "U kopjua"

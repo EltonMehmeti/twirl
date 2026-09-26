@@ -13,3 +13,11 @@ def normalize_phone(raw: str, region: str = "XK") -> str:
     if not phonenumbers.is_valid_number(parsed):
         raise InvalidPhone(raw)
     return phonenumbers.format_number(parsed, phonenumbers.PhoneNumberFormat.E164)
+
+
+def display_phone(e164: str) -> str:
+    try:
+        parsed = phonenumbers.parse(e164, None)
+    except phonenumbers.NumberParseException:
+        return e164
+    return phonenumbers.format_number(parsed, phonenumbers.PhoneNumberFormat.NATIONAL)

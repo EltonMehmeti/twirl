@@ -11,7 +11,7 @@
   <div>
     <dl>
       <dt>{{ _("Dress") }}</dt><dd>{{ b.style.name }} · {{ _("size") }} {{ b.item.size }} · {{ _("code") }} {{ b.item.code }}</dd>
-      {% if b.customer %}<dt>{{ _("Customer") }}</dt><dd>{{ b.customer.name }} · <a href="tel:{{ b.customer.phone }}">{{ b.customer.phone }}</a></dd>{% endif %}
+      {% if b.customer %}<dt>{{ _("Customer") }}</dt><dd>{{ b.customer.name }} · <a href="tel:{{ b.customer.phone }}">{{ b.customer.phone|phone }}</a></dd>{% endif %}
       {% if b.event_date %}<dt>{{ _("Event") }}</dt><dd>{{ b.event_date|date }}</dd>{% endif %}
       <dt>{{ _("Pickup") }}</dt><dd>{{ b.pickup_date|date }}</dd>
       <dt>{{ _("Return") }}</dt><dd>{{ b.return_date|date }}</dd>
@@ -19,15 +19,37 @@
       {% if b.customer_note %}<dt>{{ _("Note from the customer") }}</dt><dd>{{ b.customer_note }}</dd>{% endif %}
       {% if b.reason %}<dt>{{ _("Reason") }}</dt><dd>{{ b.reason|reason }}</dd>{% endif %}
     </dl>
+    {% if b.customer %}
+    <button type="button" class="v-contact" data-sheet="contact">{{ _("Contact the customer") }}</button>
+    <dialog class="v-sheet" id="contact" aria-labelledby="contact-who">
+      <div class="v-sheet__handle" aria-hidden="true"></div>
+      <p class="v-sheet__who" id="contact-who">{{ b.customer.name }} · {{ _("size") }} {{ b.item.size }}</p>
+      <p class="v-sheet__tel">{{ b.customer.phone|phone }}</p>
+      <div class="v-ctas">
+        <a class="v-cta" href="tel:{{ b.customer.phone }}">{{ _("Call") }}</a>
+        <a class="v-cta v-cta--ghost" href="https://wa.me/{{ b.customer.phone|replace('+', '') }}">WhatsApp</a>
+      </div>
+    </dialog>
+    {% endif %}
     {% if actions %}
     <div class="v-surface">
       <div class="actions">
       {% for action, label, needs_reason in actions %}
+        {% if needs_reason %}
+        <details class="v-reason">
+          <summary>{{ _(label) }}</summary>
+          <form method="post" action="/shop/bookings/{{ b.id }}/{{ action }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
+            <label>{{ _("Reason") }} <input name="reason" required maxlength="300"></label>
+            <button>{{ _(label) }}</button>
+          </form>
+        </details>
+        {% else %}
         <form method="post" action="/shop/bookings/{{ b.id }}/{{ action }}">
           <input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}">
-          {% if needs_reason %}<label>{{ _("Reason") }} <input name="reason" required maxlength="300"></label>{% endif %}
           <button>{{ _(label) }}</button>
         </form>
+        {% endif %}
       {% endfor %}
       </div>
     </div>

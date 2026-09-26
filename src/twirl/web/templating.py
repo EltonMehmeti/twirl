@@ -9,6 +9,7 @@ from starlette.responses import HTMLResponse
 
 from twirl.auth.csrf import get_csrf_token
 from twirl.i18n import MONTHS, get_translations, pick_locale
+from twirl.phones import display_phone
 
 _NULL_TRANSLATIONS = NullTranslations()
 _current: ContextVar[NullTranslations | None] = ContextVar("twirl_translations", default=None)
@@ -80,6 +81,7 @@ def _build_env() -> Environment:
     env.filters["date"] = format_date
     env.filters["day_month"] = format_day_month
     env.filters["reason"] = translate_reason
+    env.filters["phone"] = display_phone
     env.globals["csrf_token"] = get_csrf_token
     return env
 

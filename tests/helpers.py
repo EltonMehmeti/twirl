@@ -20,9 +20,9 @@ PASSWORD = "pw-123456"
 
 
 def login(client, email: str, password: str = PASSWORD):
-    token = csrf_from(client, "/login")
+    token = csrf_from(client, "/login/email")
     response = client.post(
-        "/login",
+        "/login/email",
         data={"email": email, "password": password, "csrf_token": token, "next": "/shop"},
         follow_redirects=False,
     )

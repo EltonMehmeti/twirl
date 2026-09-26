@@ -7,9 +7,9 @@ from twirl.ratelimit import RateLimiter
 
 
 def _login_post(client, email, password):
-    token = csrf_from(client, "/login")
+    token = csrf_from(client, "/login/email")
     return client.post(
-        "/login",
+        "/login/email",
         data={"email": email, "password": password, "csrf_token": token},
         follow_redirects=False,
     )
@@ -18,7 +18,7 @@ def _login_post(client, email, password):
 def test_shop_page_requires_login(client):
     response = client.get("/shop", follow_redirects=False)
     assert response.status_code == 303
-    assert response.headers["location"] == "/login?next=/shop"
+    assert response.headers["location"] == "/login/telefoni?next=/shop"
 
 
 def test_owner_logs_in_and_sees_shop(client, owner):
@@ -33,7 +33,7 @@ def test_wrong_password_is_rejected(client, owner):
 
 
 def test_login_without_csrf_is_forbidden(client, owner):
-    response = client.post("/login", data={"email": owner.email, "password": PASSWORD})
+    response = client.post("/login/email", data={"email": owner.email, "password": PASSWORD})
     assert response.status_code == 403
 
 

@@ -11,7 +11,9 @@
   <link rel="preload" href="{{ url_for('static', path='fonts/hanken-grotesk-400.woff2') }}" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="{{ url_for('static', path='vesha.css') }}">
   <script src="{{ url_for('static', path='htmx.min.js') }}" defer></script>
+  <script src="{{ url_for('static', path='vesha.js') }}" defer></script>
   <script>
+    document.documentElement.classList.add("v-js");
     // Arriving through a page transition: the dress already flew into place, so skip the unveil.
     addEventListener("pagereveal", function (event) { if (event.viewTransition) document.documentElement.classList.add("v-vt"); });
   </script>
@@ -21,7 +23,7 @@
   <header class="v-appbar">
     <div class="v-appbar__inner">
       <a href="{% block home_url %}/{% endblock %}" class="v-brand">{% include "_logo.html" %}<span class="v-brand__name">{{ brand }}</span>{% block tagline %}{% endblock %}</a>
-      <nav class="v-nav-links{% block nav_class %} v-nav-links--inline{% endblock %}" aria-label="{{ _('Main') }}">{% block nav %}<a href="/listo">{{ _("List your clothes") }}</a><a class="v-nav-links__wide" href="/login">{{ _("Shop login") }}</a>{% endblock %}</nav>
+      <nav class="v-nav-links{% block nav_class %} v-nav-links--inline{% endblock %}" aria-label="{{ _('Main') }}">{% block nav %}<a href="/listo">{{ _("List your clothes") }}</a><a class="v-nav-links__wide" href="/login/telefoni">{{ _("Shop login") }}</a>{% endblock %}</nav>
       <span class="v-lang">
         <a href="/lang/sq?next={{ here|urlencode }}"{% if locale == "sq" %} aria-current="true"{% endif %}>SQ</a>
         <a href="/lang/en?next={{ here|urlencode }}"{% if locale == "en" %} aria-current="true"{% endif %}>EN</a>
@@ -30,7 +32,7 @@
     </div>
   </header>
   <main class="v-container{% block container_class %}{% endblock %}">{% block content %}{% endblock %}</main>
-  <footer class="v-sitefoot"><span>{{ brand }}</span><span>{{ _("Dress rental shops in Kosovo. Request online, pay at pickup.") }}</span>{% block footnav %}<a href="/login">{{ _("Shop login") }}</a>{% endblock %}</footer>
+  <footer class="v-sitefoot"><span>{{ brand }}</span><span>{{ _("Dress rental shops in Kosovo. Request online, pay at pickup.") }}</span>{% block footnav %}<a href="/login/telefoni">{{ _("Shop login") }}</a>{% endblock %}</footer>
 <script>
   // Searches update the address bar without reloading: take the current one along when switching language.
   document.querySelectorAll(".v-lang a").forEach(function (link) {

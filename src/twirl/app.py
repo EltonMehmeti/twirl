@@ -84,7 +84,7 @@ async def _http_error_page(request: Request, exc: StarletteHTTPException):
 
 
 async def _login_redirect(request: Request, exc: LoginRequired) -> RedirectResponse:
-    return RedirectResponse(f"/login?next={quote(exc.next_path)}", status_code=303)
+    return RedirectResponse(f"/login/telefoni?next={quote(exc.next_path)}", status_code=303)
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:

@@ -32,10 +32,16 @@
   --font-mono: ui-monospace, "DejaVu Sans Mono", "SFMono-Regular", Menlo, monospace;
   --radius-card: 14px;
   --radius-photo: 4px;
+  /* motion: tap path animates transform and opacity only */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --dur-press: 100ms;
   --dur-short: 160ms;
+  --dur-base: 240ms;
   --dur-long: 420ms;
   --dur-reveal: 640ms;
+  --rise-sm: 4px; --rise: 8px; --shift: 16px;
+  --press: .97; --press-lg: .98; --leave-scale: .92;
   --accent: var(--color-gold);
 }
 
@@ -136,7 +142,6 @@ select.v-input { appearance: none; background-image: linear-gradient(45deg, tran
 .v-photo__label { position: absolute; left: 0; right: 0; bottom: 0; background: var(--color-veil); color: var(--color-ink); text-align: center; padding: 4px; }
 .v-photo__remove { position: absolute; top: 5px; right: 5px; width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--color-line); background: var(--color-paper); color: var(--color-ink); cursor: pointer; font-size: 15px; line-height: 1; }
 .v-field--error .v-photo:not(.v-photo--filled) { border-color: var(--color-danger); }
-.htmx-request .v-photo, .v-photo.htmx-request { opacity: .6; }
 
 /* ── salon hours ── */
 .v-hours { display: flex; flex-direction: column; gap: 10px; border: 1px solid var(--color-line); padding: 16px 16px 18px; }
@@ -191,7 +196,6 @@ select.v-input { appearance: none; background-image: linear-gradient(45deg, tran
 .v-btn { cursor: pointer; border: 1px solid transparent; border-radius: 999px; padding: 14px 26px; font-size: 16px; font-weight: 600; background: var(--accent); color: var(--color-ink); text-decoration: none; display: inline-block; transition: background-color var(--dur-short) var(--ease-out), border-color var(--dur-short) var(--ease-out); }
 .v-page a.v-btn { color: var(--color-ink); text-decoration: none; }
 .v-btn:hover { background: var(--color-gold-hover); }
-.v-btn:active { transform: translateY(1px); }
 .v-btn:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 .v-btn--small { padding: 13px 22px; font-size: 15px; }
 .v-btn--ghost { background: transparent; border-color: var(--color-line); }
@@ -306,7 +310,6 @@ select.v-input { appearance: none; background-image: linear-gradient(45deg, tran
 .v-container legend { font-family: var(--font-sans); font-size: 14px; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--color-ink-soft); padding: 0 6px; }
 .v-container button { font: inherit; font-weight: 600; font-size: 15px; cursor: pointer; border: 1px solid transparent; border-radius: 999px; padding: 11px 22px; min-height: 44px; background: var(--accent); color: var(--color-ink); transition: background-color var(--dur-short) var(--ease-out), border-color var(--dur-short) var(--ease-out); }
 .v-container button:hover { background: var(--color-gold-hover); }
-.v-container button:active { transform: translateY(1px); }
 .v-container button:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 .v-container .v-btn-ghost, .v-container .actions form:not(:first-child) button { background: transparent; border-color: var(--color-line-strong); }
 .v-container .v-btn-ghost:hover, .v-container .actions form:not(:first-child) button:hover { background: transparent; border-color: var(--color-ink); }
@@ -355,9 +358,10 @@ select.v-input { appearance: none; background-image: linear-gradient(45deg, tran
 .v-tile__img { aspect-ratio: 3 / 4; background: var(--color-line); border-radius: var(--radius-photo); overflow: hidden; }
 .v-tile__img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform var(--dur-long) var(--ease-out); }
 .v-tile:hover .v-tile__img img { transform: scale(1.03); }
-.v-tile__body { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; padding: 10px 0 0; }
-.v-tile__name { font-family: var(--font-display); font-weight: 600; font-size: 17px; letter-spacing: -0.015em; line-height: 1.15; min-width: 0; overflow-wrap: break-word; }
-.v-tile__price { font-family: var(--font-mono); font-size: 14px; white-space: nowrap; }
+/* names repeat across shops ("Fustan mbrëmjeje"); the price is what renters compare, so it leads */
+.v-tile__body { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; padding: 10px 0 0; }
+.v-tile__price { order: -1; font-family: var(--font-display); font-weight: 600; font-size: 21px; letter-spacing: -0.01em; line-height: 1.1; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.v-tile__name { max-width: 100%; font-size: 14px; font-weight: 600; line-height: 1.3; color: var(--color-ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* ── storefront: dress page (photographic) ── */
 .v-product { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; }
@@ -485,7 +489,7 @@ select.v-input { appearance: none; background-image: linear-gradient(45deg, tran
 @media (prefers-reduced-motion: reduce) { .v-container button, .v-tile__img img { transition: none; } .v-container button:active { transform: none; } .v-tile:hover .v-tile__img img { transform: none; } }
 
 /* ── fixes after visual review ── */
-.v-container h1, .v-container h2, .v-tile__name, .v-choice__title, .v-title, .v-card__title { word-spacing: .12em; }
+.v-container h1, .v-container h2, .v-choice__title, .v-title, .v-card__title { word-spacing: .12em; }
 .v-noimg { aspect-ratio: 3 / 4; border-radius: var(--radius-photo); background: var(--color-line); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; color: var(--color-muted); font-size: 14px; font-weight: 600; }
 .v-noimg svg { width: 44px; height: 48px; opacity: .55; }
 .v-tile__img .v-noimg { border-radius: 0; height: 100%; }
@@ -649,3 +653,159 @@ select.v-input { appearance: none; background-image: linear-gradient(45deg, tran
 }
 @media (prefers-reduced-motion: reduce) { .v-app a.v-jump.is-on { animation: none; } .v-results > *, .v-search .v-chip span, .v-app .v-datepicks a, .v-search__more summary::after, .v-btn, .v-app a.v-cta, .v-app a.v-action { transition: none; } }
 .v-avail .v-avail__none { margin: 10px 0 0; color: var(--color-danger); font-weight: 600; }
+
+/* ════════════════════════════════════════════════════════════════════
+   Motion on phones (Vesha Motion Proposals). Reduced motion zeroes the
+   distance and scale tokens: movement goes, colour and opacity stay.
+   ════════════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  :root { --rise-sm: 0px; --rise: 0px; --shift: 0px; --press: 1; --press-lg: 1; --leave-scale: 1; }
+}
+@keyframes v-hint-in { from { opacity: 0; transform: translateY(var(--rise-sm)); } }
+
+/* N1 · onboarding: the step slides the way you are going, the progress bar grows */
+.v-main { view-transition-name: step; }
+.v-progress__bar { view-transition-name: progress; }
+::view-transition-old(step) { animation: v-step-out var(--dur-short) var(--ease-exit) both; }
+::view-transition-new(step) { animation: v-step-in var(--dur-base) var(--ease-out) both; }
+::view-transition-group(step), ::view-transition-group(progress) { animation-duration: var(--dur-base); }
+@keyframes v-step-out { to { opacity: 0; transform: translateX(calc(var(--shift) * -1)); } }
+@keyframes v-step-in { from { opacity: 0; transform: translateX(var(--shift)); } }
+html:active-view-transition-type(back)::view-transition-old(step) { animation-name: v-step-out-back; }
+html:active-view-transition-type(back)::view-transition-new(step) { animation-name: v-step-in-back; }
+@keyframes v-step-out-back { to { opacity: 0; transform: translateX(var(--shift)); } }
+@keyframes v-step-in-back { from { opacity: 0; transform: translateX(calc(var(--shift) * -1)); } }
+
+/* N2 · dress page on phones: a Request bar while the booking panel is out of view */
+.v-book { scroll-margin-top: 84px; }
+.v-app a.v-bookbar { position: fixed; z-index: 20; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom));
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 8px 8px 20px; border-radius: 999px; text-decoration: none;
+  background: var(--color-ink); color: var(--color-paper); box-shadow: 0 6px 20px var(--color-shadow);
+  transform: translateY(calc(100% + 24px)); opacity: 0; visibility: hidden;
+  transition: transform var(--dur-base) var(--ease-exit), opacity var(--dur-short), visibility 0s var(--dur-base); }
+.v-app a.v-bookbar.is-on { transform: none; opacity: 1; visibility: visible;
+  transition: transform var(--dur-base) var(--ease-out), opacity var(--dur-short), visibility 0s; }
+.v-app a.v-bookbar:hover { color: var(--color-paper); }
+.v-bookbar__price { font-family: var(--font-display); font-weight: 600; font-size: 19px; font-variant-numeric: tabular-nums; }
+.v-bookbar__cta { border-radius: 999px; padding: 11px 20px; font-weight: 600; font-size: 15px; background: var(--accent); color: var(--color-ink); }
+@media (min-width: 960px) { .v-app a.v-bookbar { display: none; } }
+@media (prefers-reduced-motion: reduce) { .v-app a.v-bookbar { transform: none; } }
+
+/* N3 · shop admin: the current-page pill glides to the new tab */
+.v-app .v-nav-links a[aria-current="page"] { view-transition-name: nav-pill; }
+::view-transition-group(nav-pill) { animation-duration: var(--dur-base); animation-timing-function: var(--ease-out); }
+
+/* F1 · one tap language: instant press, eased release; hover only where there is hover */
+.v-app, .v-page { -webkit-tap-highlight-color: transparent; }
+.v-container button, .v-btn, .v-app a.v-cta, .v-app a.v-action {
+  transition: background-color var(--dur-short) var(--ease-out), border-color var(--dur-short) var(--ease-out), transform var(--dur-press) var(--ease-out); }
+.v-container button:active, .v-btn:active, .v-app a.v-cta:active, .v-app a.v-action:active { transform: scale(var(--press)); transition-duration: 0ms; }
+.v-tile__img { position: relative; transition: transform var(--dur-press) var(--ease-out); }
+.v-tile:active .v-tile__img { transform: scale(var(--press-lg)); transition-duration: 0ms; }
+.v-app a.v-row-link:active, .v-app a.v-shoptile:active { background: var(--color-paper-2); }
+@media (hover: none) {
+  .v-tile:hover .v-tile__img img { transform: none; }
+  .v-tile:hover .v-tile__name, .v-app a.v-shoptile:hover strong { background-size: 0 2px; }
+}
+
+/* F2 · a full-page form is on its way: the button runs the search's gold line, in ink */
+.v-container button.is-busy, .v-btn.is-busy { position: relative; overflow: hidden; pointer-events: none; }
+.v-container button.is-busy::after, .v-btn.is-busy::after { content: ""; position: absolute; left: 24px; right: 24px; bottom: 7px; height: 2px;
+  background: var(--color-ink); animation: v-loading 1100ms var(--ease-out) infinite; }
+.v-account__menu button.is-busy::after { left: 12px; right: 12px; }
+
+/* F3 · errors arrive, they don't shout */
+.v-hint--error, .v-container p.error, .v-alert { animation: v-hint-in var(--dur-short) var(--ease-out) backwards; }
+.v-input, .v-container input, .v-container select, .v-container textarea { transition: border-color var(--dur-short) var(--ease-out); }
+.v-input:user-invalid,
+.v-app .v-container input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=hidden]):user-invalid,
+.v-app .v-container select:user-invalid, .v-app .v-container textarea:user-invalid { border-color: var(--color-danger); }
+
+/* F4 · the availability answer: the old one dims, the new one rises, taken sizes get struck */
+#availability { transition: opacity var(--dur-short) var(--ease-out); }
+#availability.htmx-request { opacity: .45; }
+#availability > * { animation: v-hint-in var(--dur-short) var(--ease-out) backwards; }
+@keyframes v-strike { from { transform: scaleX(0); } }
+.v-avail .sizes li.taken { position: relative; text-decoration: none; }
+.v-avail .sizes li.taken::after { content: ""; position: absolute; left: 8px; right: 8px; top: 50%; height: 1px; background: currentColor;
+  transform-origin: 0 50%; animation: v-strike var(--dur-base) var(--ease-out) 120ms backwards; }
+
+/* F5 · "Copied" replaces the label in place: no toast */
+.v-share { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin: 0; padding: 0 0 11px; border-bottom: 1px solid var(--color-line); font-size: 15px; color: var(--color-ink-soft); }
+.v-share__url { font-family: var(--font-mono); font-size: 13px; color: var(--color-ink); overflow-wrap: anywhere; }
+.v-copy { display: inline-grid; }
+.v-copy[hidden] { display: none; }
+.v-copy > span { grid-area: 1 / 1; transition: opacity var(--dur-short) var(--ease-out), transform var(--dur-short) var(--ease-out); }
+.v-copy__b { opacity: 0; transform: translateY(var(--rise-sm)); }
+.v-copy.is-done .v-copy__a { opacity: 0; transform: translateY(calc(var(--rise-sm) * -1)); }
+.v-copy.is-done .v-copy__b { opacity: 1; transform: none; }
+
+/* F6 · Decline, Cancel and "returned with an issue" open their own reason */
+.v-reason > summary { display: inline-flex; align-items: center; min-height: 44px; padding: 11px 22px; border-radius: 999px; border: 1px solid var(--color-line-strong); font-size: 15px; font-weight: 600; cursor: pointer; list-style: none; transition: border-color var(--dur-short) var(--ease-out), transform var(--dur-press) var(--ease-out); }
+.v-reason > summary::-webkit-details-marker { display: none; }
+.v-reason > summary:hover, .v-reason[open] > summary { border-color: var(--color-ink); }
+.v-reason > summary:active { transform: scale(var(--press)); transition-duration: 0ms; }
+.v-reason > summary:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.v-container .v-reason form { margin-top: 12px; }
+.v-reason[open] { flex-basis: 100%; }
+.v-reason::details-content { block-size: 0; overflow: clip; transition: block-size var(--dur-base) var(--ease-out), content-visibility var(--dur-base) allow-discrete; }
+.v-reason[open]::details-content { block-size: auto; }
+
+/* L1 · photos fade in once decoded; a sheen only when they are slow */
+.v-js:not(.v-vt) .v-tile__img img:not(.is-ready), .v-js .v-gallery img:not(:first-child):not(.is-ready) { opacity: 0; }
+.v-tile__img img, .v-gallery img { transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-long) var(--ease-out); }
+.v-tile__img::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0;
+  background: linear-gradient(100deg, transparent 30%, var(--color-paper-2) 50%, transparent 70%); transform: translateX(-100%); }
+.v-js:not(.v-vt) .v-tile__img:has(img:not(.is-ready))::before { opacity: 1; animation: v-sheen 1400ms linear 300ms infinite; }
+@keyframes v-sheen { to { transform: translateX(100%); } }
+
+/* L2 · an upload fills its slot from the bottom with real progress */
+.v-photo { transition: opacity var(--dur-short) var(--ease-exit), transform var(--dur-short) var(--ease-exit); }
+.v-photo::after { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; background: var(--color-gold-soft);
+  transform-origin: 50% 100%; transform: scaleY(var(--p, 0)); opacity: 0; transition: transform var(--dur-short) linear; }
+.v-photo:has(input.htmx-request)::after { opacity: 1; }
+.v-photo > :not(input) { position: relative; z-index: 1; }
+.v-photo > .v-photo__label, .v-photo > .v-photo__remove { position: absolute; z-index: 2; }
+.v-photo:has(input.htmx-request) .v-photo__mark { font-family: var(--font-mono); font-size: 14px; color: var(--color-ink); font-variant-numeric: tabular-nums; }
+
+/* C1 · a removed photo leaves before the list is swapped */
+.v-photo.is-leaving { opacity: 0; transform: scale(var(--leave-scale)); }
+
+/* C2 · the booking code settles, one character after another */
+.v-ticket__code > span[aria-hidden] { display: inline-block; animation: v-rise var(--dur-base) var(--ease-out) calc(var(--i) * 30ms + 120ms) backwards; }
+
+/* G1 · a hairline shows which photo you are on, tied to the swipe */
+.v-gallery-wrap { timeline-scope: --gal; }
+.v-gallery-wrap .v-gallery { scroll-timeline: --gal x; }
+.v-gallery__track { height: 2px; margin: 10px 0 0; background: var(--color-line); overflow: hidden; }
+.v-gallery__track span { display: block; height: 100%; width: calc(100% / var(--n)); background: var(--color-ink); animation: v-gal linear both; animation-timeline: --gal; }
+@keyframes v-gal { to { transform: translateX(calc((var(--n) - 1) * 100%)); } }
+@supports not (animation-timeline: scroll()) { .v-gallery__track { display: none; } }
+@media (min-width: 960px) { .v-gallery__track { display: none; } }
+
+/* G2 · contact sheet: call or message the customer, drag down to dismiss */
+.v-sheet { position: fixed; inset: auto 0 0; margin: 0 auto; width: 100%; max-width: 520px; max-height: none; border: 0; border-radius: var(--radius-card) var(--radius-card) 0 0;
+  padding: 0 18px calc(18px + env(safe-area-inset-bottom)); background: var(--color-paper); color: var(--color-ink); font-family: var(--font-sans);
+  transform: translateY(100%);
+  transition: transform var(--dur-base) var(--ease-exit), overlay var(--dur-base) allow-discrete, display var(--dur-base) allow-discrete; }
+.v-sheet[open] { transform: translateY(var(--drag, 0px)); transition-timing-function: var(--ease-out); }
+@starting-style { .v-sheet[open] { transform: translateY(100%); } }
+.v-sheet.is-dragging { transition: none; }
+.v-sheet::backdrop { background: oklch(19.1% 0 0 / 0); transition: background-color var(--dur-base), overlay var(--dur-base) allow-discrete, display var(--dur-base) allow-discrete; }
+.v-sheet[open]::backdrop { background: oklch(19.1% 0 0 / .32); }
+@starting-style { .v-sheet[open]::backdrop { background: oklch(19.1% 0 0 / 0); } }
+.v-sheet__handle { width: 100%; height: 30px; margin: 0; padding: 0; border: 0; background: transparent; cursor: grab; touch-action: none; display: flex; align-items: center; justify-content: center; }
+.v-sheet__handle::before { content: ""; width: 36px; height: 4px; border-radius: 999px; background: var(--color-line-strong); }
+.v-sheet__who { margin: 0; font-size: 14px; color: var(--color-muted); }
+.v-sheet__tel { margin: 2px 0 16px; font-family: var(--font-mono); font-size: 22px; font-variant-numeric: tabular-nums; }
+.v-sheet .v-ctas { margin: 0; }
+.v-sheet .v-ctas a { flex: 1; justify-content: center; }
+.v-container button.v-contact { background: transparent; border-color: var(--color-line-strong); margin: 0 0 18px; }
+.v-container button.v-contact:hover { border-color: var(--color-ink); background: transparent; }
+
+@media (prefers-reduced-motion: reduce) {
+  .v-container button.is-busy::after, .v-btn.is-busy::after { animation: none; opacity: .5; }
+  .v-avail .sizes li.taken::after, .v-ticket__code > span[aria-hidden], .v-tile__img::before { animation: none !important; }
+  .v-reason::details-content { transition: none; }
+  .v-sheet, .v-sheet[open] { transform: none; }
+}

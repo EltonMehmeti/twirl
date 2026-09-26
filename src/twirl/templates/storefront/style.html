@@ -11,8 +11,11 @@
 <div class="v-product">
   <div>
     {% if images %}
-    <div class="v-gallery{% if images|length == 1 %} v-gallery--single{% endif %}">
-      {% for image in images %}<img src="{{ image.detail }}" alt="{{ style.name }}" width="900" height="1200" {% if loop.first %}style="view-transition-name: dress-{{ style.id }}" loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}>{% endfor %}
+    <div class="v-gallery-wrap" style="--n: {{ images|length }}">
+      <div class="v-gallery{% if images|length == 1 %} v-gallery--single{% endif %}">
+        {% for image in images %}<img src="{{ image.detail }}" alt="{{ style.name }}" width="900" height="1200" {% if loop.first %}style="view-transition-name: dress-{{ style.id }}" loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}>{% endfor %}
+      </div>
+      {% if images|length > 1 %}<div class="v-gallery__track" aria-hidden="true"><span></span></div>{% endif %}
     </div>
     {% else %}
     <div class="v-noimg" style="view-transition-name: dress-{{ style.id }}">{% include "_logo.html" %}<span>{{ _("Photos coming soon") }}</span></div>
@@ -30,7 +33,7 @@
     </ul>
     {% if style.description %}<p>{{ style.description }}</p>{% endif %}
 
-    <div class="v-book">
+    <div class="v-book" id="book">
       <h2>{{ _("Request this dress") }}</h2>
       {% if error %}<p class="error" role="alert">{{ _(error) }}</p>{% endif %}
       <form method="post" action="/{{ shop.slug }}/{{ style.code }}/request" class="request">
@@ -38,7 +41,7 @@
         <label>{{ _("Event date") }}
           <input type="date" name="event_date" min="{{ min_date }}" value="{{ values.event_date or '' }}" required
             hx-get="/{{ shop.slug }}/{{ style.code }}/availability" hx-trigger="change" hx-target="#availability"
-            hx-include="this, #size-select"></label>
+            hx-include="this, #size-select" hx-indicator="#availability"></label>
         <div id="availability" class="v-avail" aria-live="polite">{% include "storefront/_availability.html" %}</div>
         <label>{{ _("Size") }}
           {{ size_select(sizes, values.size, availability) }}</label>
@@ -60,4 +63,8 @@
     </section>
   </div>
 </div>
+<a class="v-bookbar" href="#book" aria-hidden="true" tabindex="-1">
+  <span class="v-bookbar__price">{{ style.price_cents|money(locale) }}</span>
+  <span class="v-bookbar__cta">{{ _("Request") }}</span>
+</a>
 {% endblock %}

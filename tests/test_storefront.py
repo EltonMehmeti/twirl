@@ -118,7 +118,7 @@ def test_requests_are_rate_limited(client, app, db, shop):
 
 
 def test_fixed_paths_are_not_shadowed(client):
-    assert client.get("/login").status_code == 200
+    assert client.get("/login/telefoni").status_code == 200
     assert client.get("/healthz").status_code == 200
 
 

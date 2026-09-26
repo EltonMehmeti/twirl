@@ -9,6 +9,25 @@
   <link rel="preload" href="{{ url_for('static', path='fonts/hanken-grotesk-400.woff2') }}" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="{{ url_for('static', path='vesha.css') }}">
   <script src="{{ url_for('static', path='htmx.min.js') }}" defer></script>
+  <script src="{{ url_for('static', path='vesha.js') }}" defer></script>
+  <script>
+    document.documentElement.classList.add("v-js");
+    // Steps slide the way you are going: "← Back" and the browser's back button slide the other way.
+    (function () {
+      function back(activation) {
+        var goingBack = sessionStorage.getItem("vBack") === "1";
+        return goingBack || (activation && activation.navigationType === "traverse");
+      }
+      addEventListener("pageswap", function (event) {
+        if (event.viewTransition && back(event.activation)) event.viewTransition.types.add("back");
+      });
+      addEventListener("pagereveal", function (event) {
+        if (event.viewTransition && back(window.navigation && navigation.activation)) event.viewTransition.types.add("back");
+        sessionStorage.removeItem("vBack");
+      });
+      addEventListener("click", function (event) { if (event.target.closest(".v-back")) sessionStorage.setItem("vBack", "1"); });
+    })();
+  </script>
 </head>
 <body class="v-page" hx-headers='{"X-CSRF-Token": "{{ csrf_token(request) }}"}'>
   <div class="v-frame">

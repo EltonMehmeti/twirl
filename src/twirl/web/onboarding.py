@@ -47,10 +47,10 @@ from twirl.onboarding import (
     weekly_hours,
 )
 from twirl.otp import OtpError, TooMany, verify_code
-from twirl.phones import InvalidPhone, normalize_phone
+from twirl.phones import InvalidPhone, display_phone, normalize_phone
 from twirl.storage import Storage, get_storage
 from twirl.web.forms import form_data
-from twirl.web.phone_auth import SESSION_ECHO, display_phone, resend_wait, send_code
+from twirl.web.phone_auth import SESSION_ECHO, resend_wait, send_code
 from twirl.web.templating import format_money, render
 
 router = APIRouter(prefix="/listo")

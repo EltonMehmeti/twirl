@@ -1,6 +1,5 @@
 """Sending SMS codes from web routes, shared by provider login and onboarding."""
 
-import phonenumbers
 from sqlalchemy.orm import Session
 from starlette.requests import Request
 
@@ -21,11 +20,3 @@ def send_code(request: Request, db: Session, phone: str, purpose: str) -> None:
 
 def resend_wait(db: Session, phone: str) -> int:
     return seconds_until_resend(db, phone=phone, now=clock.now())
-
-
-def display_phone(e164: str) -> str:
-    try:
-        parsed = phonenumbers.parse(e164, None)
-    except phonenumbers.NumberParseException:
-        return e164
-    return phonenumbers.format_number(parsed, phonenumbers.PhoneNumberFormat.NATIONAL)

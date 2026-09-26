@@ -7,7 +7,8 @@
         <img src="{{ slot.url }}" alt="{{ _(slot.label) }}" width="104" height="128">
         <span class="v-photo__label">✓ {{ _(slot.label) }}</span>
         <button type="button" class="v-photo__remove" aria-label="{{ _('Remove photo') }}"
-          hx-post="/listo/veshja/foto/{{ slot.image.id }}/fshi" hx-target="#v-photos" hx-swap="outerHTML">×</button>
+          hx-post="/listo/veshja/foto/{{ slot.image.id }}/fshi" hx-target="#v-photos" hx-swap="outerHTML swap:160ms"
+          hx-on::before-request="this.closest('.v-photo').classList.add('is-leaving')">×</button>
       </div>
       {% else %}
       <label class="v-photo">

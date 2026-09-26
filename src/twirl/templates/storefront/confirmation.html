@@ -3,7 +3,7 @@
 {% block content %}
 <h1>{{ _("Request sent") }}</h1>
 <div class="v-ticket">
-  <div class="v-ticket__code" aria-label="{{ _('Your code') }}">{{ booking.ref }}</div>
+  <div class="v-ticket__code"><span class="v-sr">{{ _("Your code") }}: {{ booking.ref }}</span>{% for ch in booking.ref %}<span aria-hidden="true" style="--i: {{ loop.index0 }}">{{ ch }}</span>{% endfor %}</div>
   <p>{{ _(status_text) }}</p>
 </div>
 <div class="v-ctas">

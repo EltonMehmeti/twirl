@@ -31,6 +31,11 @@
     <li><span class="v-steps__num">02</span>{{ _("The renter pays you at handover. Agree any deposit face to face.") }}</li>
     <li><span class="v-steps__num">03</span>{{ _("Take photos before and after each handover. They are the only proof that counts.") }}</li>
     {% endif %}
+    <li class="v-share">
+      <span class="v-share__url">{{ request.base_url|string|trim("/") }}{{ listing_url }}</span>
+      <button type="button" class="v-copy v-textbtn" data-url="{{ listing_url }}" hidden><span class="v-copy__a">{{ _("Copy link") }}</span><span class="v-copy__b" aria-hidden="true">{{ _("Copied") }}</span></button>
+      <span class="v-sr" aria-live="polite" id="v-copy-status"></span>
+    </li>
     <li class="v-row" style="border:0">
       <form method="post" action="/listo/veshja/e-re"><input type="hidden" name="csrf_token" value="{{ csrf_token(request) }}"><button class="v-btn v-btn--small" type="submit">{{ _("Add another item") }}</button></form>
       <a class="v-btn v-btn--small v-btn--ghost" href="/shop">{{ _("Go to my dashboard") }}</a>
