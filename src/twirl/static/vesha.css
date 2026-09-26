@@ -305,6 +305,13 @@ select.v-input { appearance: none; background-image: linear-gradient(45deg, tran
   font: inherit; font-family: var(--font-sans); font-size: 16px; letter-spacing: normal; text-transform: none; color: var(--color-ink); background: var(--color-paper); border: 1px solid var(--color-line); border-radius: 10px; padding: 11px 13px; width: 100%; min-height: 46px; }
 .v-container input:focus, .v-container select:focus, .v-container textarea:focus { outline: 2px solid var(--color-focus); outline-offset: 2px; border-color: transparent; }
 .v-container textarea { min-height: 96px; resize: vertical; }
+/* iOS (the one engine with -webkit-touch-callout) sizes a native date field content-box, so width: 100% plus the
+   padding ran out of its box. Drawn plain it stays border-box; min-width keeps the room iOS reserved for a date. */
+@supports (-webkit-touch-callout: none) {
+  .v-container input[type=date] { -webkit-appearance: none; appearance: none; min-width: 9em; }
+  /* iOS centres the date; the fields around it start at the left */
+  .v-container input[type=date]::-webkit-date-and-time-value { text-align: start; }
+}
 .v-container input[type=checkbox], .v-container input[type=radio] { width: 18px; height: 18px; accent-color: var(--color-gold); }
 .v-container fieldset { border: 1px solid var(--color-line); border-radius: var(--radius-card); padding: 16px 18px 6px; margin: 0 0 18px; background: var(--color-paper); }
 .v-container legend { font-family: var(--font-sans); font-size: 14px; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--color-ink-soft); padding: 0 6px; }
