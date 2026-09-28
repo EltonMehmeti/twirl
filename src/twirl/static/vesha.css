@@ -910,7 +910,3 @@ html { scroll-behavior: smooth; }
   .v-lane:target .v-lane__head::after { animation: v-fade-out var(--dur-base) 1600ms forwards; }
 }
 
-/* Date fields: iPhone Safari draws an empty date input as its own tall, fixed-width widget that
-   ignores width: 100% and spills out of the card. Drop the native look and keep the value line. */
-.v-container input[type=date], .v-page input[type=date] { -webkit-appearance: none; appearance: none; display: block; min-width: 0; max-width: 100%; }
-.v-container input[type=date]::-webkit-date-and-time-value, .v-page input[type=date]::-webkit-date-and-time-value { text-align: left; min-height: 1.5em; }
