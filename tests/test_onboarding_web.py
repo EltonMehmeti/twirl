@@ -194,6 +194,49 @@ def test_provider_can_finish_later_and_resume(client, db, sms):
     db.execute(update(PhoneCode).values(created_at=PhoneCode.created_at - timedelta(minutes=2)))
     _post(client, "/login/telefoni", {"phone": "044 123 456"})
     assert _post(client, "/login/kodi", {"code": sms.last_code()}).headers["location"] == "/shop"
-    assert client.get("/listo", follow_redirects=False).headers["location"] == "/listo/veshja"
+    start = client.get("/listo")  # an unpublished provider may still change path
+    assert start.status_code == 200 and 'href="/listo/veshja"' in start.text  # "continue"
     resumed = client.get("/listo/veshja").text
     assert resumed.count("v-photo--filled") == 1
+
+
+def test_draft_provider_can_go_back_to_the_first_step_and_switch_path(client, db, sms):
+    _verify(client, sms)
+    _post(client, "/listo/profili", SALON)
+    client.get("/listo/veshja")
+    _photos(client, 2)
+    assert 'href="/listo"' in client.get("/listo/profili").text  # back to the first step
+    start = client.get("/listo")
+    assert "Kush e jep veshjen me qera?" in start.text
+    assert 'href="/listo/veshja"' in start.text  # continue where you left off
+    assert _post(client, "/listo", {"path": "individual"}).headers["location"] == "/listo/profili"
+    # the profile must be confirmed for the new path before the later steps open
+    assert client.get("/listo/veshja", follow_redirects=False).headers["location"] == (
+        "/listo/profili"
+    )
+    assert "Ferizaj" in client.get("/listo/profili").text  # what was typed is kept
+    saved = _post(client, "/listo/profili", {"name": "Dea Gashi", "city": "Ferizaj"})
+    assert saved.headers["location"] == "/listo/veshja"
+    shop = db.scalar(select(Shop).where(Shop.phone == "+38344123456"))
+    db.refresh(shop)
+    assert shop.kind == "individual" and shop.address == ""
+    assert client.get("/listo/veshja").text.count("v-photo--filled") == 2
+
+
+def test_published_provider_keeps_its_path(client, db, sms):
+    _verify(client, sms)
+    _post(client, "/listo/profili", SALON)
+    db.execute(update(Shop).values(status="published"))
+    assert client.get("/listo", follow_redirects=False).headers["location"] == "/listo/veshja"
+    _post(client, "/listo", {"path": "individual"})
+    assert client.get("/listo/veshja").status_code == 200
+    assert db.scalar(select(Shop.kind)) == "salon"
+
+
+def test_wizard_offers_log_out_once_signed_in(client, sms):
+    assert 'action="/logout"' not in client.get("/listo").text
+    _verify(client, sms)
+    page = client.get("/listo/profili").text
+    assert 'action="/logout"' in page and "Dil" in page
+    _post(client, "/logout")
+    assert client.get("/listo/profili", follow_redirects=False).headers["location"] == "/listo"

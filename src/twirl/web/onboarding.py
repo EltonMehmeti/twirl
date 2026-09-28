@@ -21,7 +21,16 @@ from twirl.catalog import delete_style_image, image_url, save_style_image
 from twirl.db import get_db
 from twirl.i18n import MONTHS, N_
 from twirl.images import MAX_UPLOAD_BYTES, InvalidImage
-from twirl.models import ActorKind, ItemStatus, Shop, ShopKind, Style, StyleImage, User
+from twirl.models import (
+    ActorKind,
+    ItemStatus,
+    Shop,
+    ShopKind,
+    ShopStatus,
+    Style,
+    StyleImage,
+    User,
+)
 from twirl.onboarding import (
     CITIES,
     CUSTOM_SIZE,
@@ -121,6 +130,11 @@ class Flow:
     def is_salon(self) -> bool:
         return self.path == ShopKind.SALON
 
+    @property
+    def is_draft(self) -> bool:
+        """A shop not yet published may still go back to the first step and change path."""
+        return self.shop is not None and self.shop.status == ShopStatus.DRAFT.value
+
     def reached(self) -> str:
         """The furthest step this provider may open right now."""
         if self.user is None:
@@ -129,6 +143,8 @@ class Flow:
             return "code" if self.pending_phone else "phone"
         if self.shop is None:
             return "profile" if self.path else "fork"
+        if self.path != ShopKind(self.shop.kind):
+            return "profile"  # a new path: its profile must be confirmed first
         style = self.style
         if style is not None and style.published:
             return "done"
@@ -148,7 +164,7 @@ def _flow(request: Request, db: Session) -> Flow:
             user = None
     shop = provider_shop(db, user) if user else None
     path = PATHS.get(request.session.get(SESSION_PATH, ""))
-    if shop is not None:
+    if shop is not None and (path is None or shop.status != ShopStatus.DRAFT.value):
         path = ShopKind(shop.kind)
     style = None
     style_id = request.session.get(SESSION_STYLE)
@@ -258,17 +274,20 @@ def _errors(codes: list[str], salon: bool = False) -> dict[str, str]:
 @router.get("", response_class=HTMLResponse)
 def fork(request: Request, db: Session = Depends(get_db)):
     flow = _flow(request, db)
-    if flow.user is not None and flow.shop is not None:
+    if flow.shop is not None and not flow.is_draft:
         return _go("dress")
-    return _page(request, flow, "fork", "onboarding/fork.html")
+    resume = URLS[flow.reached()] if flow.shop is not None else None
+    return _page(request, flow, "fork", "onboarding/fork.html", {"resume_url": resume})
 
 
 @router.post("", dependencies=[Depends(verify_csrf)])
 def choose_path(request: Request, path: str = Form(""), db: Session = Depends(get_db)):
     if path not in PATHS:
         raise HTTPException(status_code=400)
-    request.session[SESSION_PATH] = path
     flow = _flow(request, db)
+    if flow.shop is not None and not flow.is_draft:
+        return _go("dress")  # a published shop keeps its path
+    request.session[SESSION_PATH] = path
     return _go("profile" if flow.user is not None else "phone")
 
 
@@ -420,8 +439,10 @@ def _parse_time(value: str, fallback: time) -> time:
 def _profile_values(flow: Flow) -> dict:
     shop = flow.shop
     hours = weekly_hours(shop) if shop else weekly_hours(Shop())
+    same_path = shop is not None and ShopKind(shop.kind) == flow.path
     return {
-        "name": shop.name if shop else "",
+        # a salon name is no person's name, and the reverse: ask again after a path change
+        "name": shop.name if same_path else "",
         "city": shop.city if shop else "",
         "address": shop.address if shop else "",
         "whatsapp": display_phone(shop.whatsapp) if shop and shop.whatsapp else "",

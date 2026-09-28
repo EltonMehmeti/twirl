@@ -1971,3 +1971,6 @@ msgstr "Hap foton %(n)s nga %(total)s"
 
 msgid "Open the photo"
 msgstr "Hap foton"
+
+msgid "Continue where you left off"
+msgstr "Vazhdo aty ku e le"

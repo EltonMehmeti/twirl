@@ -32,5 +32,9 @@
   </button>
 </form>
 <p class="v-note">{{ _("Not sure? Choose “My own clothes”. If you open a salon later, write to us and we move your listings across.") }}</p>
+{% if resume_url %}
+<p class="v-row"><a class="v-textbtn" href="{{ resume_url }}">{{ _("Continue where you left off") }} →</a></p>
+{% elif not flow.user %}
 <p class="v-row"><a class="v-textbtn" href="/login/telefoni">{{ _("Already listing? Log in") }}</a></p>
+{% endif %}
 {% endblock %}

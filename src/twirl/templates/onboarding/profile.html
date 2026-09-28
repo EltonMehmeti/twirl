@@ -76,6 +76,6 @@
     </div>
   </div>
   {% endif %}
-  {{ nav(None, _("Continue")) }}
+  {{ nav("/listo" if flow.shop is none or flow.is_draft else None, _("Continue")) }}
 </form>
 {% endblock %}
