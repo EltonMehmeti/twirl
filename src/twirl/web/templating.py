@@ -1,9 +1,12 @@
+import hashlib
 from contextvars import ContextVar
 from datetime import date
+from functools import cache
+from pathlib import Path
 
 from babel.support import NullTranslations
 from fastapi.templating import Jinja2Templates
-from jinja2 import Environment, PackageLoader, select_autoescape
+from jinja2 import Environment, PackageLoader, pass_context, select_autoescape
 from starlette.requests import Request
 from starlette.responses import HTMLResponse
 
@@ -87,6 +90,31 @@ def _build_env() -> Environment:
 
 
 templates = Jinja2Templates(env=_build_env())
+
+STATIC_DIR = Path(__file__).parent.parent / "static"
+
+
+@cache
+def _static_version(path: str) -> str:
+    try:
+        return hashlib.sha256((STATIC_DIR / path).read_bytes()).hexdigest()[:10]
+    except OSError:
+        return ""
+
+
+def _versioned_url_for(url_for):
+    """Static URLs carry a hash of the file, so a phone never keeps last deploy's CSS or JS."""
+
+    def versioned(context, name: str, /, **params):
+        url = url_for(context, name, **params)
+        if name == "static" and (version := _static_version(params.get("path", ""))):
+            return f"{url}?v={version}"
+        return url
+
+    return pass_context(versioned)
+
+
+templates.env.globals["url_for"] = _versioned_url_for(templates.env.globals["url_for"])
 
 
 def _brand(request: Request) -> str:

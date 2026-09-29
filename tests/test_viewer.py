@@ -32,8 +32,10 @@ def test_each_photo_opens_the_viewer_at_its_stored_size(client, app, db, shop):
         (image_url(storage, small, "detail"), "600", "800"),
     ]
     assert 'aria-label="Hap foton 1 nga 2"' in page
-    assert re.search(r'<script type="module" src="[^"]*/static/viewer\.js"></script>', page)
-    stylesheet = r'<link rel="stylesheet" href="[^"]*/static/photoswipe/photoswipe\.css">'
+    version = r"\?v=[0-9a-f]{10}"
+    script = rf'<script type="module" src="[^"]*/static/viewer\.js{version}"></script>'
+    assert re.search(script, page)
+    stylesheet = rf'<link rel="stylesheet" href="[^"]*/static/photoswipe/photoswipe\.css{version}">'
     assert re.search(stylesheet, page)
 
 
@@ -75,3 +77,10 @@ def test_viewer_imports_resolve_to_vendored_files():
     assert len(specifiers) == 2, specifiers
     for specifier in specifiers:
         assert (STATIC_DIR / specifier).is_file(), specifier
+
+
+def test_static_urls_change_when_the_file_does(client):
+    page = client.get("/").text
+    href = re.search(r'href="([^"]*/static/vesha\.css\?v=[0-9a-f]{10})"', page)
+    assert href, "vesha.css is linked without a version"
+    assert client.get(href.group(1)).status_code == 200
